@@ -20,7 +20,7 @@ namespace StoryBooks.Api.Controllers
         }
 
         [HttpGet]
-        public Task<IReadOnlyCollection<Campaign>> ListAll()
+        public Task<IEnumerable<Campaign>> ListAll()
         {
             return _mediatR.Send(new ListCampaignHandler.ListCampaignsCommand());
         }
