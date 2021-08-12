@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Azure.Cosmos;
-using StoryBooks.Api.Infra;
+using StoryBooks.Api.Infra.CosmosDb;
+using StoryBooks.Api.Infra.CosmosDb.Containers;
 
 namespace StoryBooks.Api.Business.Campaign
 {
@@ -13,9 +13,11 @@ namespace StoryBooks.Api.Business.Campaign
     {
 
         private readonly Container _container;
+        private readonly CosmosDbContext _dbContext;
 
-        public ListCampaignHandler(CampaignContainer container)
+        public ListCampaignHandler(CampaignContainer container, CosmosDbContext dbContext)
         {
+            _dbContext = dbContext;
             _container = container.Container;
         }
 

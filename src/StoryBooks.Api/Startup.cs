@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using StoryBooks.Api.Infra;
+using StoryBooks.Api.Infra.CosmosDb;
 
 namespace StoryBooks.Api
 {

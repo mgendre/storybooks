@@ -1,7 +1,8 @@
-using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.DependencyInjection;
+using StoryBooks.Api.Infra.CosmosDb;
+using StoryBooks.Api.Infra.CosmosDb.Containers;
 using StoryBooks.Models;
 
 namespace StoryBooks.Api.Infra
@@ -29,31 +30,21 @@ namespace StoryBooks.Api.Infra
             var endpoint = settings.EndpointUrl;
             var key = settings.PrimaryKey;
 
-            var options = new CosmosClientOptions();
-            if (endpoint.Contains("localhost"))
-            {
-                // We disable SSL check with the emulator
-                options.HttpClientFactory = () =>
-                {
-                    HttpMessageHandler httpMessageHandler = new HttpClientHandler
-                    {
-                        ServerCertificateCustomValidationCallback = (req, cert, chain, errors) => true
-                    };
-                    return new HttpClient(httpMessageHandler);
-                };
-                options.ConnectionMode = ConnectionMode.Gateway;
-            }
-
-            var client = new CosmosClient(endpoint, key, options);
+            var client = new CosmosClient(endpoint, key);
             var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
 
             await InitializeContainers(services, database);
+            
+            // Initialize EF core context for Cosmos
+            var dbContext = new CosmosDbContext(settings);
+            await dbContext.Database.EnsureCreatedAsync();
+            services.AddSingleton(dbContext);
         }
 
         private static async Task InitializeContainers(IServiceCollection services, DatabaseResponse db)
         {
             var container = await db.Database.CreateContainerIfNotExistsAsync(
-                nameof(Campaign), "/id");
+                nameof(Campaign), "/PartitionKey");
             var campaignContainer = new CampaignContainer(container);
             services.AddSingleton(campaignContainer);
         }

@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace StoryBooks.Api.Infra
+namespace StoryBooks.Api.Infra.CosmosDb
 {
     public class CosmosDbSettings
     {

@@ -1,6 +1,6 @@
 using Microsoft.Azure.Cosmos;
 
-namespace StoryBooks.Api.Infra
+namespace StoryBooks.Api.Infra.CosmosDb.Containers
 {
     public interface ICosmosContainer
     {

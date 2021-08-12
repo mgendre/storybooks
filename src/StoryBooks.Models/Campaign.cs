@@ -6,11 +6,13 @@ namespace StoryBooks.Models
     {
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
+        
+        public string PartitionKey { get; set; }
 
-        [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
-        [JsonProperty(PropertyName = "status")]
         public CampaignStatus Status { get; set; }
+        
+        public Story[] Stories { get; set; }
     }
 }
