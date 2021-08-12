@@ -1,14 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using StoryBooks.Api.Business.Campaign;
-using StoryBooks.Models;
+using StoryBooks.Api.Dto;
 
 namespace StoryBooks.Api.Controllers
 {
     [ApiController]
-    [Route("campaigns")]
+    [Microsoft.AspNetCore.Mvc.Route("campaigns")]
     public class CampaignController
     {
 
@@ -20,9 +22,21 @@ namespace StoryBooks.Api.Controllers
         }
 
         [HttpGet]
-        public Task<IEnumerable<Campaign>> ListAll()
+        public Task<IEnumerable<CampaignListItemDto>> ListAll()
         {
-            return _mediatR.Send(new ListCampaignHandler.ListCampaignsCommand());
+            return _mediatR.Send(new ListCampaignHandler.ListCampaignsQuery());
+        }
+        
+        [HttpPost]
+        public Task Create(CampaignUpdateDto updateDto)
+        {
+            return _mediatR.Send(new CreateCampaignHandler.CreateCampaignCommand(updateDto));
+        }
+        
+        [HttpPut(":id")]
+        public Task Update(Guid id, CampaignUpdateDto updateDto)
+        {
+            return _mediatR.Send(new UpdateCampaignHandler.UpdateCampaignCommand(id, updateDto));
         }
     }
 }

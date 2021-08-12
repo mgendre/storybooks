@@ -34,11 +34,6 @@ namespace StoryBooks.Api.Infra
             var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
 
             await InitializeContainers(services, database);
-            
-            // Initialize EF core context for Cosmos
-            var dbContext = new CosmosDbContext(settings);
-            await dbContext.Database.EnsureCreatedAsync();
-            services.AddSingleton(dbContext);
         }
 
         private static async Task InitializeContainers(IServiceCollection services, DatabaseResponse db)
