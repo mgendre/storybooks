@@ -1,16 +1,15 @@
-using System.Diagnostics;
-using System.Net.Http;
-using System.Threading.Tasks;
+using System;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using StoryBooks.Api.Infra;
 using StoryBooks.Api.Infra.CosmosDb;
+using StoryBooks.Api.Infra.Jwt;
 
 namespace StoryBooks.Api
 {
@@ -31,12 +30,49 @@ namespace StoryBooks.Api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "StoryBooks.Api", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                    Type = SecuritySchemeType.ApiKey,
+                    In = ParameterLocation.Header,
+                    Scheme = "Bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+
             });
             services.AddMediatR(typeof(Startup));
             
             var cosmosDbConfig = Configuration.GetSection("CosmosDb").Get<CosmosDbSettings>();
 
             services.AddCosmosDb(cosmosDbConfig);
+
+            var googleClientId = Configuration.GetSection("Authentication:Google:ClientId").Get<string>();
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+                })
+                .AddJwtBearer(o =>
+                {
+                    o.SecurityTokenValidators.Clear();
+                    o.SecurityTokenValidators.Add(new GoogleTokenValidator(googleClientId));
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +86,7 @@ namespace StoryBooks.Api
             }
 
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

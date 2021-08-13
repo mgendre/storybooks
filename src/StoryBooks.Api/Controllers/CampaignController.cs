@@ -2,15 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StoryBooks.Api.Business.Campaign;
 using StoryBooks.Api.Dto;
 
 namespace StoryBooks.Api.Controllers
 {
+    [Authorize]
     [ApiController]
-    [Microsoft.AspNetCore.Mvc.Route("campaigns")]
+    [Route("api/campaigns")]
     public class CampaignController
     {
 

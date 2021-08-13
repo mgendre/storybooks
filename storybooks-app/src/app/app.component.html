@@ -1,0 +1,16 @@
+<div>
+  <div *ngIf="!user">
+    You are not logged
+  </div>
+
+  <div *ngIf="user">
+    <p>Login successful!</p>
+    <p>Request your profile information by clicking Profile above.</p>
+  </div>
+
+  <button (click)="login()">Login</button>
+  <button (click)="logout()">Logout</button>
+  <button (click)="getCampaigns()">Get test</button>
+</div>
+
+<router-outlet></router-outlet>

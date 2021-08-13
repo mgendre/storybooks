@@ -22,3 +22,16 @@ curl -k https://localhost:8081/_explorer/emulator.pem > ~/emulatorcert.crt
 sudo cp ~/emulatorcert.crt /usr/local/share/ca-certificates/
 sudo update-ca-certificates
 ```
+
+Define following environment variables in the launch settings:
+- CosmosDb__PrimaryKey
+
+See the https://localhost:8081/_explorer/index.html page to get the PrimaryKey
+
+## Deploy on Azure
+
+Deploy the appservice, then add following variables to connect to CosmosDB:
+- CosmosDb__EndpointUrl
+- CosmosDb__PrimaryKey
+
+Restart the appservice container
