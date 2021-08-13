@@ -3,28 +3,25 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Azure.Cosmos;
+using StoryBooks.Api.Business.Repository;
 using StoryBooks.Api.Dto;
-using StoryBooks.Api.Infra.CosmosDb.Containers;
 
 namespace StoryBooks.Api.Business.Campaign
 {
     public class UpdateCampaignHandler : IRequestHandler<UpdateCampaignHandler.UpdateCampaignCommand>
     {
 
-        private readonly Container _container;
+        private readonly ICampaignRepository _repository;
 
-        public UpdateCampaignHandler(CampaignContainer campaignContainer)
+        public UpdateCampaignHandler(ICampaignRepository repository)
         {
-            _container = campaignContainer.Container;
+            _repository = repository;
         }
 
         public async Task<Unit> Handle(UpdateCampaignCommand request, CancellationToken cancellationToken)
         {
-            var key = new PartitionKey("TODO: PASS OWNER");
-            var existing = await _container.ReadItemAsync<Models.Campaign>(request.Id.ToString(),
-                key, cancellationToken: cancellationToken);
-            request.ToUpdate.Patch(existing.Resource);
-            await _container.UpsertItemAsync(existing.Resource, key, cancellationToken: cancellationToken);
+            await _repository.Update(request.Id.ToString(), new PartitionKey(request.PartitionKey), 
+                campaign => request.ToUpdate.Patch(campaign), cancellationToken);
             return Unit.Value;
         }
 
@@ -32,10 +29,12 @@ namespace StoryBooks.Api.Business.Campaign
         {
             public CampaignUpdateDto ToUpdate { get; }
             public Guid Id { get; }
+            public string PartitionKey { get; }
 
-            public UpdateCampaignCommand(Guid id, CampaignUpdateDto toUpdate)
+            public UpdateCampaignCommand(Guid id, string partitionKey, CampaignUpdateDto toUpdate)
             {
                 ToUpdate = toUpdate;
+                PartitionKey = partitionKey;
                 Id = id;
             }
         }

@@ -4,7 +4,7 @@ using Newtonsoft.Json.Converters;
 
 namespace StoryBooks.Models
 {
-    public class Campaign
+    public class Campaign : IModelBase
     {
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; } = Guid.NewGuid().ToString();

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Azure.Cosmos;
 using StoryBooks.Api.Dto;
+using StoryBooks.Api.Infra.CosmosDb;
 using StoryBooks.Api.Infra.CosmosDb.Containers;
 
 namespace StoryBooks.Api.Business.Campaign
@@ -23,21 +24,15 @@ namespace StoryBooks.Api.Business.Campaign
         public async Task<IEnumerable<CampaignListItemDto>> Handle(ListCampaignsQuery request,
             CancellationToken cancellationToken)
         {
-            var queryDefinition = new QueryDefinition("SELECT c.id, c.Name, c.CreationDate, c.ModificationDate FROM " +
+            var queryDefinition = new QueryDefinition("SELECT c.id, c.PartitionKey, c.Name, c.CreationDate, c.ModificationDate FROM " +
                                                       $"{nameof(Models.Campaign)} c");
             var feedIterator = _container.GetItemQueryIterator<Models.Campaign>(queryDefinition, requestOptions: new QueryRequestOptions
             {
                 PartitionKey = new PartitionKey("TODO: PASS OWNER")
             });
             
-            var campaigns = new List<CampaignListItemDto>();
-
-            while (feedIterator.HasMoreResults)
-            {
-                var currentResultSet = await feedIterator.ReadNextAsync(cancellationToken);
-                campaigns.AddRange(currentResultSet.Select(campaign => new CampaignListItemDto(campaign)));
-            }
-            return campaigns;
+            var campaigns = await feedIterator.ToListAsync(cancellationToken);
+            return campaigns.Select(c => new CampaignListItemDto(c));
         }
 
         public class ListCampaignsQuery : IRequest<IEnumerable<CampaignListItemDto>>

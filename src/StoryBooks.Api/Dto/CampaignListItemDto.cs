@@ -6,6 +6,8 @@ namespace StoryBooks.Api.Dto
     public class CampaignListItemDto
     {
         public Guid Id { get; }
+        
+        public string PartitionKey { get; }
 
         public string Name { get; }
 
@@ -17,6 +19,7 @@ namespace StoryBooks.Api.Dto
 
         public CampaignListItemDto(Campaign campaign)
         {
+            PartitionKey = campaign.PartitionKey;
             Id = Guid.Parse(campaign.Id);
             Name = campaign.Name;
             Status = campaign.Status;

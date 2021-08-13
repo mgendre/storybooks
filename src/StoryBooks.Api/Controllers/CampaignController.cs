@@ -33,10 +33,10 @@ namespace StoryBooks.Api.Controllers
             return _mediatR.Send(new CreateCampaignHandler.CreateCampaignCommand(updateDto));
         }
         
-        [HttpPut(":id")]
-        public Task Update(Guid id, CampaignUpdateDto updateDto)
+        [HttpPut(":id/:partitionKey")]
+        public Task Update(Guid id, string partitionKey, CampaignUpdateDto updateDto)
         {
-            return _mediatR.Send(new UpdateCampaignHandler.UpdateCampaignCommand(id, updateDto));
+            return _mediatR.Send(new UpdateCampaignHandler.UpdateCampaignCommand(id, partitionKey, updateDto));
         }
     }
 }

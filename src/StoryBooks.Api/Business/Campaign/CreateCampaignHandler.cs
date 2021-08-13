@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using StoryBooks.Api.Business.Repository;
 using StoryBooks.Api.Dto;
 using StoryBooks.Api.Infra.CosmosDb.Containers;
 using StoryBooks.Models;
@@ -11,11 +12,11 @@ namespace StoryBooks.Api.Business.Campaign
     public class CreateCampaignHandler : IRequestHandler<CreateCampaignHandler.CreateCampaignCommand>
     {
 
-        private readonly CampaignContainer _campaignContainer;
+        private readonly ICampaignRepository _repository;
 
-        public CreateCampaignHandler(CampaignContainer campaignContainer)
+        public CreateCampaignHandler(ICampaignRepository repository)
         {
-            _campaignContainer = campaignContainer;
+            _repository = repository;
         }
 
         public async Task<Unit> Handle(CreateCampaignCommand request, CancellationToken cancellationToken)
@@ -28,7 +29,7 @@ namespace StoryBooks.Api.Business.Campaign
                 ModificationDate = DateTime.Now
             };
             request.ToUpdate.Patch(toCreate);
-            await _campaignContainer.Container.CreateItemAsync(toCreate, cancellationToken: cancellationToken);
+            await _repository.Create(toCreate, cancellationToken);
 
             return Unit.Value;
         }

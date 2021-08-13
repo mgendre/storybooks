@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.DependencyInjection;
+using StoryBooks.Api.Business.Repository;
 using StoryBooks.Api.Infra.CosmosDb;
 using StoryBooks.Api.Infra.CosmosDb.Containers;
 using StoryBooks.Models;
@@ -33,15 +34,17 @@ namespace StoryBooks.Api.Infra
             var client = new CosmosClient(endpoint, key);
             var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
 
-            await InitializeContainers(services, database);
+            await Initialize(services, database);
         }
 
-        private static async Task InitializeContainers(IServiceCollection services, DatabaseResponse db)
+        private static async Task Initialize(IServiceCollection services, DatabaseResponse db)
         {
             var container = await db.Database.CreateContainerIfNotExistsAsync(
                 nameof(Campaign), "/PartitionKey");
             var campaignContainer = new CampaignContainer(container);
             services.AddSingleton(campaignContainer);
+
+            services.AddSingleton<ICampaignRepository>(new CampaignRepository(container));
         }
     }
 }
