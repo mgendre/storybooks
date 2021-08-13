@@ -1,36 +1,45 @@
 import {HttpClient} from '@angular/common/http';
-import {Component} from '@angular/core';
-import {GoogleLoginProvider, SocialAuthService, SocialUser } from 'angularx-social-login';
+import {Component, OnInit} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
+import {AuthenticationService, User} from './services/AuthenticationService';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  loggedIn = false;
   title = 'storybooks-app';
-
-  user: SocialUser | null = null;
+  user: User | null = null;
+  ready = false;
 
   constructor(
-    private http: HttpClient,
-    private authService: SocialAuthService
+    private readonly http: HttpClient,
+    private readonly authService: AuthenticationService,
+    private readonly translate: TranslateService
   ) {
-
-    this.authService.authState.subscribe((user: SocialUser) => {
-      console.log(user);
-      localStorage.setItem('jwt_token', user.idToken);
+    this.authService.user.subscribe(user => {
       this.user = user;
+      this.loggedIn = !!user;
     });
+    this.authService
   }
 
-  login(): void {
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((x: any) => console.log(x));
+  async ngOnInit(): Promise<void> {
+    try {
+      await this.translate.use('fr').toPromise();
+    } finally {
+      this.ready = true;
+    }
   }
 
-  logout(): void {
-    this.authService.signOut();
-    localStorage.setItem('jwt_token', '');
+  async login(): Promise<void> {
+    await this.authService.login();
+  }
+
+  async logout(): Promise<void> {
+    await this.authService.logout();
   }
 
   public async getCampaigns() {
