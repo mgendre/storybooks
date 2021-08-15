@@ -28,7 +28,6 @@ namespace StoryBooks.Api.Infra.Jwt
 
         public ClaimsPrincipal ValidateToken(string securityToken, TokenValidationParameters validationParameters, out SecurityToken validatedToken)
         {
-            validatedToken = null;
             var payload = GoogleJsonWebSignature.ValidateAsync(securityToken, new GoogleJsonWebSignature.ValidationSettings
             {
                 Audience =  new[] { _clientId }
@@ -43,10 +42,14 @@ namespace StoryBooks.Api.Infra.Jwt
                     new(JwtRegisteredClaimNames.Email, payload.Email),
                     new(JwtRegisteredClaimNames.Sub, payload.Subject),
                     new(JwtRegisteredClaimNames.Iss, payload.Issuer),
+                    new("authentication_provider", payload.Issuer)
                 };
 
             var principal = new ClaimsPrincipal();
             principal.AddIdentity(new ClaimsIdentity(claims, JwtBearerDefaults.AuthenticationScheme));
+            validatedToken = new JwtSecurityToken(
+                claims: claims,
+                issuer: payload.Issuer);
             return principal;
         }
     }

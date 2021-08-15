@@ -55,6 +55,7 @@ namespace StoryBooks.Api
 
             });
             services.AddMediatR(typeof(Startup));
+            services.AddHttpContextAccessor();
             
             var cosmosDbConfig = Configuration.GetSection("CosmosDb").Get<CosmosDbSettings>();
 

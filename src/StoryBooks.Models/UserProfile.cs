@@ -4,21 +4,16 @@ using Newtonsoft.Json.Converters;
 
 namespace StoryBooks.Models
 {
-    public class Campaign : IModelBase
+    public class UserProfile : IModelBase
     {
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; } = Guid.NewGuid().ToString();
         
-        public string PartitionKey { get; set; }
-        
-        public string OwnerUserId { get; set; }
+        public string PartitionKey => Email;
 
-        public string Name { get; set; }
+        public string Email { get; set; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
-        public CampaignStatus Status { get; set; }
-        
-        public Story[] Stories { get; set; }
+        public Campaign[] Campaigns { get; set; }
         
         public DateTime CreationDate { get; set; }
         

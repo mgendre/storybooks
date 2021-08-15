@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
 using StoryBooks.Models;
 
-namespace StoryBooks.Api.Business.Repository
+namespace StoryBooks.Api.Repository
 {
     public interface ICosmosRepository<T> where T: IModelBase
     {

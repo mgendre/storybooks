@@ -2,10 +2,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
-using StoryBooks.Api.Business.Repository;
 using StoryBooks.Models;
 
-namespace StoryBooks.Api.Business
+namespace StoryBooks.Api.Repository
 {
     public abstract class AbstractCosmosRepository<T> : ICosmosRepository<T> where T : IModelBase
     {

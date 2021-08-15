@@ -3,8 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Azure.Cosmos;
-using StoryBooks.Api.Business.Repository;
 using StoryBooks.Api.Dto;
+using StoryBooks.Api.Repository;
 
 namespace StoryBooks.Api.Business.Campaign
 {

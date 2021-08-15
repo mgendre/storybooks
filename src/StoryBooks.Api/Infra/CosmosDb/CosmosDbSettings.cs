@@ -5,15 +5,15 @@ namespace StoryBooks.Api.Infra.CosmosDb
         /// <summary>
         ///     CosmosDb Account - The Azure Cosmos DB endpoint
         /// </summary>
-        public string EndpointUrl { get; set; }
+        public string EndpointUrl { get; set; } = "";
         /// <summary>
         ///     Key - The primary key for the Azure DocumentDB account.
         /// </summary>
-        public string PrimaryKey { get; set; }
+        public string PrimaryKey { get; set; } = "";
         /// <summary>
         ///     Database name
         /// </summary>
-        public string DatabaseName { get; set; }
+        public string DatabaseName { get; set; } = "";
 
     }
 }

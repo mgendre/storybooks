@@ -1,4 +1,4 @@
-namespace StoryBooks.Api.Business.Repository
+namespace StoryBooks.Api.Repository
 {
     public interface ICampaignRepository : ICosmosRepository<Models.Campaign>
     {

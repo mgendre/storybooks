@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.DependencyInjection;
-using StoryBooks.Api.Business.Repository;
 using StoryBooks.Api.Infra.CosmosDb;
 using StoryBooks.Api.Infra.CosmosDb.Containers;
+using StoryBooks.Api.Repository;
 using StoryBooks.Models;
 
 namespace StoryBooks.Api.Infra
@@ -19,8 +19,8 @@ namespace StoryBooks.Api.Infra
             InitializeCosmos(services, settings).GetAwaiter().GetResult();
             return services;
         }
-        
-        
+
+
         /// <summary>
         /// Creates a Cosmos DB database and if required create containers
         /// </summary>
@@ -39,12 +39,19 @@ namespace StoryBooks.Api.Infra
 
         private static async Task Initialize(IServiceCollection services, DatabaseResponse db)
         {
-            var container = await db.Database.CreateContainerIfNotExistsAsync(
-                nameof(Campaign), "/PartitionKey");
-            var campaignContainer = new CampaignContainer(container);
+            var campaignContainer = new CampaignContainer(
+                await db.Database.CreateContainerIfNotExistsAsync(
+                    nameof(Campaign), "/PartitionKey")
+            );
             services.AddSingleton(campaignContainer);
-
-            services.AddSingleton<ICampaignRepository>(new CampaignRepository(container));
+            services.AddSingleton<ICampaignRepository>(new CampaignRepository(campaignContainer));
+            
+            var userProfileContainer = new UserProfileContainer(
+                await db.Database.CreateContainerIfNotExistsAsync(
+                    nameof(UserProfile), "/PartitionKey")
+            );
+            services.AddSingleton(userProfileContainer);
+            services.AddSingleton<IUserProfileRepository>(new UserProfileRepository(userProfileContainer));
         }
     }
 }

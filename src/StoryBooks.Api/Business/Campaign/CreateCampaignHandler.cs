@@ -2,9 +2,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using StoryBooks.Api.Business.Repository;
 using StoryBooks.Api.Dto;
 using StoryBooks.Api.Infra.CosmosDb.Containers;
+using StoryBooks.Api.Repository;
 using StoryBooks.Models;
 
 namespace StoryBooks.Api.Business.Campaign

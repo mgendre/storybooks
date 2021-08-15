@@ -4,7 +4,7 @@ namespace StoryBooks.Api.Dto
 {
     public class CampaignUpdateDto
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
         public void Patch(Campaign toPatch)
         {
