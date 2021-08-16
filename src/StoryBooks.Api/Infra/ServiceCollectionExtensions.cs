@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,10 +31,8 @@ namespace StoryBooks.Api.Infra
             var databaseName = settings.DatabaseName;
             var endpoint = settings.EndpointUrl;
             var key = settings.PrimaryKey;
-
             var client = new CosmosClient(endpoint, key);
             var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
-
             await Initialize(services, database);
         }
 

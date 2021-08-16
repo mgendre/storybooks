@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using StoryBooks.Api.Business.Campaign;
 using StoryBooks.Api.Dto;
 
@@ -15,7 +16,7 @@ namespace StoryBooks.Api.Controllers
     [Route("api/campaigns")]
     public class CampaignController : ControllerBase
     {
-        public CampaignController(IMediator mediatR, IHttpContextAccessor httpContext) :
+        public CampaignController(IMediator mediatR, IHttpContextAccessor httpContext, ILogger<CampaignController> _logger) :
             base(mediatR, httpContext)
         {
         }

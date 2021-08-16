@@ -10,14 +10,42 @@
         <PackageReference Include="MediatR" Version="9.0.0" />
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.9" />
         <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.20.1" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="NSwag.MSBuild" Version="13.13.2">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
         <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
         <PackageReference Include="System.Net.Http" Version="4.3.4" />
     </ItemGroup>
 
+    <Target Name="NSwag" BeforeTargets="AfterBuild" Condition="'$(TF_BUILD)'!='True'">
+        <Exec ConsoleToMSBuild="true" ContinueOnError="true" Command="$(NSwagExe_Core31) run nswag.json /variables:Configuration=$(Configuration)">
+            <Output TaskParameter="ExitCode" PropertyName="NSwagExitCode" />
+            <Output TaskParameter="ConsoleOutput" PropertyName="NSwagOutput" />
+        </Exec>
+
+        <Message Text="$(NSwagOutput)" Condition="'$(NSwagExitCode)' == '0'" Importance="low" />
+        <Error Text="$(NSwagOutput)" Condition="'$(NSwagExitCode)' != '0'" />
+    </Target>
+
     <ItemGroup>
-      <ProjectReference Include="..\StoryBooks.Models\StoryBooks.Models.csproj" />
+        <ProjectReference Include="..\StoryBooks.Models\StoryBooks.Models.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="**\*.cshtml" />
+      <_ContentIncludedByDefault Remove="**\*.razor" />
+      <_ContentIncludedByDefault Remove="**\*.config" />
+      <_ContentIncludedByDefault Remove="**\*.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <UpToDateCheckInput Remove="**\*.cshtml" />
+      <UpToDateCheckInput Remove="**\*.razor" />
     </ItemGroup>
 
 </Project>
