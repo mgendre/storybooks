@@ -63,7 +63,7 @@ namespace StoryBooks.Api
                 var cosmosDbConfig = _configuration.GetSection("CosmosDb").Get<CosmosDbSettings>();
                 services.AddCosmosDb(cosmosDbConfig);
             }
-            catch (ArgumentNullException e)
+            catch (Exception e)
             {
                 // This error is thrown by nswag for an obscure reason
                 Console.Error.WriteLine("Error while initializing Cosmos: " + e);

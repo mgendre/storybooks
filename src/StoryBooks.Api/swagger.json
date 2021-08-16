@@ -1,0 +1,176 @@
+{
+  "x-generator": "NSwag v13.13.2.0 (NJsonSchema v10.5.2.0 (Newtonsoft.Json v13.0.0.0))",
+  "swagger": "2.0",
+  "info": {
+    "title": "StoryBooks",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/campaigns": {
+      "get": {
+        "tags": [
+          "Campaign"
+        ],
+        "operationId": "Campaign_ListAll",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CampaignListItemDto"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Campaign"
+        ],
+        "operationId": "Campaign_Create",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "updateDto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CampaignUpdateDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/campaigns/:id/:partitionKey": {
+      "put": {
+        "tags": [
+          "Campaign"
+        ],
+        "operationId": "Campaign_Update",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "format": "guid",
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "partitionKey",
+            "in": "query",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "name": "updateDto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CampaignUpdateDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/user-profiles": {
+      "post": {
+        "tags": [
+          "UserProfile"
+        ],
+        "operationId": "UserProfile_EnsureCreated",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "CampaignListItemDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "partitionKey",
+        "name",
+        "status",
+        "creationDate",
+        "modificationDate"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "partitionKey": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/CampaignStatus"
+        },
+        "creationDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "modificationDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "CampaignStatus": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "InProgress"
+      ],
+      "enum": [
+        "InProgress"
+      ]
+    },
+    "CampaignUpdateDto": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
