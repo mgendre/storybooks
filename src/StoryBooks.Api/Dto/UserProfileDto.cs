@@ -1,8 +1,8 @@
 namespace StoryBooks.Api.Dto
 {
-    public class CurrentUserDto
+    public class UserProfileDto
     {
-        public CurrentUserDto(string issuer, string email, string lastName, string firstName, string subject)
+        public UserProfileDto(string issuer, string email, string lastName, string firstName, string subject)
         {
             Issuer = issuer;
             Email = email;

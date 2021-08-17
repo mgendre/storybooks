@@ -17,7 +17,7 @@ export const BASE_URL = new InjectionToken<string>('BASE_URL');
 @Injectable({
     providedIn: 'root'
 })
-export class CampaignService {
+export class CampaignApiClient {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -190,7 +190,7 @@ export class CampaignService {
 @Injectable({
     providedIn: 'root'
 })
-export class UserProfileService {
+export class UserProfileApiClient {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -201,7 +201,7 @@ export class UserProfileService {
     }
 
     ensureCreated(): Observable<void> {
-        let url_ = this.baseUrl + "/api/user-profiles";
+        let url_ = this.baseUrl + "/api/user-profiles/create";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -242,6 +242,54 @@ export class UserProfileService {
             }));
         }
         return _observableOf<void>(<any>null);
+    }
+
+    getProfile(): Observable<UserProfileDto> {
+        let url_ = this.baseUrl + "/api/user-profiles/current";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetProfile(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetProfile(<any>response_);
+                } catch (e) {
+                    return <Observable<UserProfileDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<UserProfileDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetProfile(response: HttpResponseBase): Observable<UserProfileDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UserProfileDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<UserProfileDto>(<any>null);
     }
 }
 
@@ -339,6 +387,62 @@ export class CampaignUpdateDto implements ICampaignUpdateDto {
 
 export interface ICampaignUpdateDto {
     name: string;
+}
+
+export class UserProfileDto implements IUserProfileDto {
+    issuer!: string;
+    email!: string;
+    lastName!: string;
+    firstName!: string;
+    subject!: string;
+    id!: string;
+
+    constructor(data?: IUserProfileDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.issuer = _data["issuer"] !== undefined ? _data["issuer"] : <any>null;
+            this.email = _data["email"] !== undefined ? _data["email"] : <any>null;
+            this.lastName = _data["lastName"] !== undefined ? _data["lastName"] : <any>null;
+            this.firstName = _data["firstName"] !== undefined ? _data["firstName"] : <any>null;
+            this.subject = _data["subject"] !== undefined ? _data["subject"] : <any>null;
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): UserProfileDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserProfileDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["issuer"] = this.issuer !== undefined ? this.issuer : <any>null;
+        data["email"] = this.email !== undefined ? this.email : <any>null;
+        data["lastName"] = this.lastName !== undefined ? this.lastName : <any>null;
+        data["firstName"] = this.firstName !== undefined ? this.firstName : <any>null;
+        data["subject"] = this.subject !== undefined ? this.subject : <any>null;
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        return data; 
+    }
+}
+
+export interface IUserProfileDto {
+    issuer: string;
+    email: string;
+    lastName: string;
+    firstName: string;
+    subject: string;
+    id: string;
 }
 
 export class SwaggerException extends Error {

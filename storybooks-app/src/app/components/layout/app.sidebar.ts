@@ -1,9 +1,6 @@
-import {HttpClient} from '@angular/common/http';
-import {OnInit} from '@angular/core';
 import {Component} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
-import {GoogleLoginProvider, SocialAuthService, SocialUser} from 'angularx-social-login';
-import { AuthenticationService, User } from 'src/app/services/AuthenticationService';
+import {AuthenticationService} from 'src/app/services/AuthenticationService';
+import {UserProfileDto} from "../../services/api.generated.clients";
 
 @Component({
   selector: 'app-main-sidebar',
@@ -11,7 +8,7 @@ import { AuthenticationService, User } from 'src/app/services/AuthenticationServ
   styleUrls: ['./app.sidebar.scss']
 })
 export class MainSidebarComponent {
-  user : User | null = null;
+  user : UserProfileDto | null = null;
 
   constructor(private readonly authService: AuthenticationService) {
     authService.user.subscribe(user => {

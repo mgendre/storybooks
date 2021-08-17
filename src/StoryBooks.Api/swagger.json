@@ -102,7 +102,7 @@
         }
       }
     },
-    "/api/user-profiles": {
+    "/api/user-profiles/create": {
       "post": {
         "tags": [
           "UserProfile"
@@ -111,6 +111,28 @@
         "responses": {
           "200": {
             "description": ""
+          }
+        }
+      }
+    },
+    "/api/user-profiles/current": {
+      "get": {
+        "tags": [
+          "UserProfile"
+        ],
+        "operationId": "UserProfile_GetProfile",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UserProfileDto"
+            }
           }
         }
       }
@@ -168,6 +190,37 @@
       ],
       "properties": {
         "name": {
+          "type": "string"
+        }
+      }
+    },
+    "UserProfileDto": {
+      "type": "object",
+      "required": [
+        "issuer",
+        "email",
+        "lastName",
+        "firstName",
+        "subject",
+        "id"
+      ],
+      "properties": {
+        "issuer": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "id": {
           "type": "string"
         }
       }

@@ -1,29 +1,56 @@
 import {Injectable} from "@angular/core";
-import {Observable, ReplaySubject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {GoogleLoginProvider, SocialAuthService, SocialUser} from "angularx-social-login";
+import {HasInitialization} from "./HasInitialization";
+import {UserProfileApiClient, UserProfileDto} from "./api.generated.clients";
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthenticationService {
-  private readonly _user = new ReplaySubject<User | null>();
-  public readonly user: Observable<User | null> = this._user.asObservable();
+export class AuthenticationService implements HasInitialization {
+  private readonly _user = new BehaviorSubject<UserProfileDto | null>(null);
+  public readonly user: Observable<UserProfileDto | null> = this._user.asObservable();
 
-  constructor(private readonly authService: SocialAuthService) {
-    authService.authState.subscribe((su: SocialUser) => {
+  private readonly _ready = new BehaviorSubject(false);
+  public readonly ready = this._ready.asObservable();
+
+  constructor(private readonly authService: SocialAuthService,
+              private readonly userProfileClient: UserProfileApiClient) {
+    authService.authState.subscribe(async (su: SocialUser) => {
       if (su) {
-        this._user.next(new User(su.email, su.firstName, su.lastName));
+        try {
+          await this.loadProfile();
+        } catch (_) {
+          this._user.next(null);
+        }
       } else {
         this._user.next(null);
       }
     });
+    authService.initState.subscribe(async (s) => {
+      if (s) {
+        try {
+          // We can access the profile
+          await this.userProfileClient.getProfile().toPromise();
+        } catch(_) {
+          this._user.next(null);
+        } finally {
+          this._ready.next(true);
+        }
+      }
+    });
   }
 
-  public async login(): Promise<User> {
-    const su = await this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-    localStorage.setItem('jwt_token', su.idToken);
-    const user = new User(su.email, su.firstName, su.lastName);
+  private async loadProfile(): Promise<UserProfileDto> {
+    const user = await this.userProfileClient.getProfile().toPromise();
     this._user.next(user);
+    return user;
+  }
+
+  public async login(): Promise<UserProfileDto> {
+    const su = await this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+    const user = await this.loadProfile();
+    localStorage.setItem('jwt_token', su.idToken);
     return user;
   }
 
@@ -42,11 +69,3 @@ export class AuthenticationService {
   }
 }
 
-export class User {
-  constructor(
-    public readonly email: string,
-    public readonly firstName: string,
-    public readonly lastNamt: string
-  ) {
-  }
-}

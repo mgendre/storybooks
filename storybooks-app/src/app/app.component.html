@@ -7,18 +7,17 @@
     <div class="col py-3">
       <div class="no-login container" *ngIf="!loggedIn">
         <div class="alert alert-primary" role="alert">
-          <span translate="application.login.loginRequired"></span>
+          <span data-translate="application.login.loginRequired"></span>
           <div class="login-provider google">
             <button type="button" class="btn btn-primary"
                     (click)="login()">
               <i class="bi bi-google"></i>
-              <span translate="application.login.google.button"></span>
+              <span data-translate="application.login.google.button"></span>
             </button>
           </div>
         </div>
       </div>
       <div class="container" *ngIf="loggedIn">
-        <button (click)="test()">OK</button>
         <router-outlet></router-outlet>
       </div>
     </div>

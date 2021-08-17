@@ -23,10 +23,10 @@ namespace StoryBooks.Api.Business.UserProfile
 
         public class EnsureUserExistsCommand : IRequest
         {
-            public CurrentUserDto CurrentUser { get; }
-            public EnsureUserExistsCommand(CurrentUserDto currentUser)
+            public UserProfileDto UserProfile { get; }
+            public EnsureUserExistsCommand(UserProfileDto userProfile)
             {
-                CurrentUser = currentUser;
+                UserProfile = userProfile;
             }
         }
     }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StoryBooks.Api.Business.UserProfile;
+using StoryBooks.Api.Dto;
 
 namespace StoryBooks.Api.Controllers
 {
@@ -19,15 +20,23 @@ namespace StoryBooks.Api.Controllers
         }
 
         [HttpPost]
+        [Route("create")]
         public Task EnsureCreated()
         {
             var user = GetCurrentUser();
             if (user == null)
             {
-                throw new InvalidOperationException("Current user should not be null");
+                throw new UnauthorizedAccessException("Current user should not be null");
             }
 
             return MediatR.Send(new EnsureUserExistsHandler.EnsureUserExistsCommand(user));
+        }
+
+        [HttpGet]
+        [Route("current")]
+        public UserProfileDto GetProfile()
+        {
+            return GetCurrentUser() ?? throw new UnauthorizedAccessException("User is not signed in");
         }
     }
 }
