@@ -2,5 +2,8 @@
   "application.name": "Story Books",
   "application.login.loginRequired": "Vous devez vous identifier avant de pouvoir accéder et créer de nouvelles campagnes.",
   "application.login.google.button": "Se connecter avec votre compte Google",
-  "nav.logout": "Se déconnecter"
+  "nav.logout": "Se déconnecter",
+  "nav.campaigns": "Campagnes",
+  "nav.persons": "Personnages",
+  "campaigns.title": "Campagnes"
 }
