@@ -102,25 +102,12 @@
         }
       }
     },
-    "/api/user-profiles/create": {
-      "post": {
-        "tags": [
-          "UserProfile"
-        ],
-        "operationId": "UserProfile_EnsureCreated",
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/api/user-profiles/current": {
       "get": {
         "tags": [
           "UserProfile"
         ],
-        "operationId": "UserProfile_GetProfile",
+        "operationId": "UserProfile_EnsureCreated",
         "produces": [
           "text/plain",
           "application/json",
@@ -197,15 +184,21 @@
     "UserProfileDto": {
       "type": "object",
       "required": [
+        "id",
         "issuer",
+        "subjectId",
         "email",
         "lastName",
-        "firstName",
-        "subject",
-        "id"
+        "firstName"
       ],
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "issuer": {
+          "type": "string"
+        },
+        "subjectId": {
           "type": "string"
         },
         "email": {
@@ -215,12 +208,6 @@
           "type": "string"
         },
         "firstName": {
-          "type": "string"
-        },
-        "subject": {
-          "type": "string"
-        },
-        "id": {
           "type": "string"
         }
       }

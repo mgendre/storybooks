@@ -200,51 +200,7 @@ export class UserProfileApiClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    ensureCreated(): Observable<void> {
-        let url_ = this.baseUrl + "/api/user-profiles/create";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processEnsureCreated(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processEnsureCreated(<any>response_);
-                } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<void>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processEnsureCreated(response: HttpResponseBase): Observable<void> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<void>(<any>null);
-    }
-
-    getProfile(): Observable<UserProfileDto> {
+    ensureCreated(): Observable<UserProfileDto> {
         let url_ = this.baseUrl + "/api/user-profiles/current";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -257,11 +213,11 @@ export class UserProfileApiClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetProfile(response_);
+            return this.processEnsureCreated(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetProfile(<any>response_);
+                    return this.processEnsureCreated(<any>response_);
                 } catch (e) {
                     return <Observable<UserProfileDto>><any>_observableThrow(e);
                 }
@@ -270,7 +226,7 @@ export class UserProfileApiClient {
         }));
     }
 
-    protected processGetProfile(response: HttpResponseBase): Observable<UserProfileDto> {
+    protected processEnsureCreated(response: HttpResponseBase): Observable<UserProfileDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -390,12 +346,12 @@ export interface ICampaignUpdateDto {
 }
 
 export class UserProfileDto implements IUserProfileDto {
+    id!: string;
     issuer!: string;
+    subjectId!: string;
     email!: string;
     lastName!: string;
     firstName!: string;
-    subject!: string;
-    id!: string;
 
     constructor(data?: IUserProfileDto) {
         if (data) {
@@ -408,12 +364,12 @@ export class UserProfileDto implements IUserProfileDto {
 
     init(_data?: any) {
         if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
             this.issuer = _data["issuer"] !== undefined ? _data["issuer"] : <any>null;
+            this.subjectId = _data["subjectId"] !== undefined ? _data["subjectId"] : <any>null;
             this.email = _data["email"] !== undefined ? _data["email"] : <any>null;
             this.lastName = _data["lastName"] !== undefined ? _data["lastName"] : <any>null;
             this.firstName = _data["firstName"] !== undefined ? _data["firstName"] : <any>null;
-            this.subject = _data["subject"] !== undefined ? _data["subject"] : <any>null;
-            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
         }
     }
 
@@ -426,23 +382,23 @@ export class UserProfileDto implements IUserProfileDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : <any>null;
         data["issuer"] = this.issuer !== undefined ? this.issuer : <any>null;
+        data["subjectId"] = this.subjectId !== undefined ? this.subjectId : <any>null;
         data["email"] = this.email !== undefined ? this.email : <any>null;
         data["lastName"] = this.lastName !== undefined ? this.lastName : <any>null;
         data["firstName"] = this.firstName !== undefined ? this.firstName : <any>null;
-        data["subject"] = this.subject !== undefined ? this.subject : <any>null;
-        data["id"] = this.id !== undefined ? this.id : <any>null;
         return data; 
     }
 }
 
 export interface IUserProfileDto {
+    id: string;
     issuer: string;
+    subjectId: string;
     email: string;
     lastName: string;
     firstName: string;
-    subject: string;
-    id: string;
 }
 
 export class SwaggerException extends Error {

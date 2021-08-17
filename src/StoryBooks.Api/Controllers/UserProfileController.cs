@@ -19,24 +19,16 @@ namespace StoryBooks.Api.Controllers
         {
         }
 
-        [HttpPost]
-        [Route("create")]
-        public Task EnsureCreated()
+        [HttpGet]
+        [Route("current")]
+        public async Task<UserProfileDto> EnsureCreated()
         {
             var user = GetCurrentUser();
             if (user == null)
             {
                 throw new UnauthorizedAccessException("Current user should not be null");
             }
-
-            return MediatR.Send(new EnsureUserExistsHandler.EnsureUserExistsCommand(user));
-        }
-
-        [HttpGet]
-        [Route("current")]
-        public UserProfileDto GetProfile()
-        {
-            return GetCurrentUser() ?? throw new UnauthorizedAccessException("User is not signed in");
+            return await MediatR.Send(new EnsureUserExistsHandler.EnsureUserExistsCommand(user));
         }
     }
 }

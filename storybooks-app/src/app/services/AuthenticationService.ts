@@ -19,39 +19,29 @@ export class AuthenticationService implements HasInitialization {
     authService.authState.subscribe(async (su: SocialUser) => {
       if (su) {
         try {
+          localStorage.setItem('jwt_token', su.idToken);
           await this.loadProfile();
         } catch (_) {
-          this._user.next(null);
-        }
-      } else {
-        this._user.next(null);
-      }
-    });
-    authService.initState.subscribe(async (s) => {
-      if (s) {
-        try {
-          // We can access the profile
-          await this.userProfileClient.getProfile().toPromise();
-        } catch(_) {
           this._user.next(null);
         } finally {
           this._ready.next(true);
         }
+      } else {
+        this._user.next(null);
+        this._ready.next(true);
       }
     });
   }
 
+
   private async loadProfile(): Promise<UserProfileDto> {
-    const user = await this.userProfileClient.getProfile().toPromise();
+    const user = await this.userProfileClient.ensureCreated().toPromise();
     this._user.next(user);
     return user;
   }
 
-  public async login(): Promise<UserProfileDto> {
-    const su = await this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-    const user = await this.loadProfile();
-    localStorage.setItem('jwt_token', su.idToken);
-    return user;
+  public async login(): Promise<void> {
+    await this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
 
   public async logout(): Promise<void> {

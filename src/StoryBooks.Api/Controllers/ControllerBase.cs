@@ -19,7 +19,7 @@ namespace StoryBooks.Api.Controllers
             HttpContext = httpContext;
         }
 
-        protected UserProfileDto? GetCurrentUser()
+        protected CurrentUserDto? GetCurrentUser()
         {
             var identity = HttpContext?.HttpContext?.User;
             if (identity == null)
@@ -34,9 +34,9 @@ namespace StoryBooks.Api.Controllers
                 throw new InvalidOperationException("Current user has no email");
             }
 
-            return new UserProfileDto(
+            return new CurrentUserDto(
                 issuer: identity.FindFirstValue("authentication_provider") ?? "",
-                subject: identity.FindFirstValue(JwtRegisteredClaimNames.Sub) ?? "",
+                subjectId: identity.FindFirstValue(JwtRegisteredClaimNames.Sub) ?? "",
                 email: email.Value,
                 firstName: identity.FindFirstValue(JwtRegisteredClaimNames.GivenName) ?? "",
                 lastName: identity.FindFirstValue(JwtRegisteredClaimNames.FamilyName) ?? ""
