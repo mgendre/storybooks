@@ -5,6 +5,16 @@
     <span translate="campaigns.empty"></span>
   </div>
 
+
+  <div class="campaigns-list">
+    <div class="card" *ngFor="let campaign of campaigns">
+      <div class="card-body">
+        <span>{{campaign.name}}</span>
+      </div>
+    </div>
+  </div>
+
+
   <div class="create-campaign">
     <h3 translate>campaigns.create.title</h3>
 
