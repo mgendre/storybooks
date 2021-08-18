@@ -13,6 +13,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {CampaignsComponent} from "./components/campaigns/app.campaigns";
 import {FormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
+import {NgxWebstorageModule} from "ngx-webstorage";
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -39,6 +40,7 @@ const routes: Routes = [
     AppRoutingModule,
     HttpClientModule,
     SocialLoginModule,
+    NgxWebstorageModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

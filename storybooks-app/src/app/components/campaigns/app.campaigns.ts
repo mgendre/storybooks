@@ -37,7 +37,8 @@ export class CampaignsComponent implements OnInit, OnDestroy {
   }
 
   async createCampaign() {
-    await this.campaignsDatastore.create(this.newCampaignName);
+    const campaign = await this.campaignsDatastore.create(this.newCampaignName);
+    await this.campaignsDatastore.selectCampaign(campaign.id);
     this.newCampaignName = '';
   }
 
@@ -45,4 +46,7 @@ export class CampaignsComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
 
+  async selectCampaign(campaign: CampaignListItemDto) {
+    await this.campaignsDatastore.selectCampaign(campaign.id);
+  }
 }

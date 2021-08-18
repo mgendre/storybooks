@@ -4,7 +4,7 @@
   display: block;
 }
 
-ul {
+ul, div {
   width: 100%;
 }
 
@@ -20,7 +20,11 @@ hr {
   width: 100%;
 }
 
+h5 {
+  font-size: 18px;
+  text-align: center;
+}
+
 .user-profile-menu {
   margin-bottom: 18px;
-  width: 100%;
 }

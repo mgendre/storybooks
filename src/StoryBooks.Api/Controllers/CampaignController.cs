@@ -29,21 +29,29 @@ namespace StoryBooks.Api.Controllers
         {
             return MediatR.Send(new ListCampaignHandler.ListCampaignsQuery(GetCurrentUser().Email));
         }
+        
+        [HttpGet(":id")]
+        public Task<CampaignDto> Get(string id)
+        {
+            return MediatR.Send(new GetCampaignHandler.GetCampaignQuery(id, GetCurrentUser().Email));
+        }
 
         [HttpPost]
-        public async Task Create(CampaignUpdateDto updateDto)
+        public async Task<CampaignDto> Create(CampaignUpdateDto updateDto)
         {
             var cu = GetCurrentUser();
             var command = new CreateCampaignHandler.CreateCampaignCommand(updateDto, cu.Email);
             var created = await MediatR.Send(command);
             _logger.LogInformation("Campaign {CampaignId} created for user with email {UserEmail}",
                 created.Id, cu.Email);
+
+            return CampaignDto.FromModel(created);
         }
 
-        [HttpPut(":id/:partitionKey")]
-        public Task Update(Guid id, string partitionKey, CampaignUpdateDto updateDto)
+        [HttpPut(":id")]
+        public Task Update(Guid id, CampaignUpdateDto updateDto)
         {
-            return MediatR.Send(new UpdateCampaignHandler.UpdateCampaignCommand(id, partitionKey, updateDto));
+            return MediatR.Send(new UpdateCampaignHandler.UpdateCampaignCommand(id, updateDto));
         }
     }
 }

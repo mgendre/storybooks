@@ -20,7 +20,7 @@ namespace StoryBooks.Api.Business.Campaign
 
         public async Task<Unit> Handle(UpdateCampaignCommand request, CancellationToken cancellationToken)
         {
-            await _repository.Update(request.Id.ToString(), new PartitionKey(request.PartitionKey), 
+            await _repository.Update(request.Id.ToString(), new PartitionKey(request.Id.ToString()), 
                 campaign => request.ToUpdate.Patch(campaign), cancellationToken);
             return Unit.Value;
         }
@@ -29,12 +29,10 @@ namespace StoryBooks.Api.Business.Campaign
         {
             public CampaignUpdateDto ToUpdate { get; }
             public Guid Id { get; }
-            public string PartitionKey { get; }
 
-            public UpdateCampaignCommand(Guid id, string partitionKey, CampaignUpdateDto toUpdate)
+            public UpdateCampaignCommand(Guid id, CampaignUpdateDto toUpdate)
             {
                 ToUpdate = toUpdate;
-                PartitionKey = partitionKey;
                 Id = id;
             }
         }

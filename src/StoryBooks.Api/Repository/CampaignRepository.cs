@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
+using StoryBooks.Api.Dto;
 using StoryBooks.Api.Infra.CosmosDb.Containers;
 using StoryBooks.Models;
 

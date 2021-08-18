@@ -29,7 +29,7 @@ namespace StoryBooks.Api.Business.Campaign
         public async Task<IEnumerable<CampaignListItemDto>> Handle(ListCampaignsQuery request,
             CancellationToken cancellationToken)
         {
-            var userProfile = await _userProfileRepository.GetProfile(request.userMail, cancellationToken);
+            var userProfile = await _userProfileRepository.GetProfile(request.UserMail, cancellationToken);
 
             var campaigns = new List<CampaignListItemDto>();
             foreach (var campaignId in userProfile.CampaignIds)
@@ -45,10 +45,10 @@ namespace StoryBooks.Api.Business.Campaign
         {
             public ListCampaignsQuery(string userMail)
             {
-                this.userMail = userMail;
+                this.UserMail = userMail;
             }
 
-            public string userMail { get; }
+            public string UserMail { get; }
         }
     }
 }

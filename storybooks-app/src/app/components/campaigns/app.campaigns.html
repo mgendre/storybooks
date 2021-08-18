@@ -6,9 +6,10 @@
   </div>
 
 
-  <div class="campaigns-list">
+  <div class="campaigns-list" *ngIf="campaigns.length > 0">
+    <h3 translate>campaigns.select.title</h3>
     <div class="card" *ngFor="let campaign of campaigns">
-      <div class="card-body">
+      <div class="card-body" (click)="selectCampaign(campaign)">
         <span>{{campaign.name}}</span>
       </div>
     </div>

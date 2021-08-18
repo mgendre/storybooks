@@ -82,7 +82,7 @@ export class CampaignApiClient {
         return _observableOf<CampaignListItemDto[]>(<any>null);
     }
 
-    create(updateDto: CampaignUpdateDto): Observable<void> {
+    create(updateDto: CampaignUpdateDto): Observable<CampaignDto> {
         let url_ = this.baseUrl + "/api/campaigns";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -94,6 +94,7 @@ export class CampaignApiClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             })
         };
 
@@ -104,14 +105,14 @@ export class CampaignApiClient {
                 try {
                     return this.processCreate(<any>response_);
                 } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
+                    return <Observable<CampaignDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<void>><any>_observableThrow(response_);
+                return <Observable<CampaignDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processCreate(response: HttpResponseBase): Observable<void> {
+    protected processCreate(response: HttpResponseBase): Observable<CampaignDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -120,26 +121,77 @@ export class CampaignApiClient {
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CampaignDto.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(<any>null);
+        return _observableOf<CampaignDto>(<any>null);
     }
 
-    update(id: string, partitionKey: string, updateDto: CampaignUpdateDto): Observable<void> {
-        let url_ = this.baseUrl + "/api/campaigns/:id/:partitionKey?";
+    get(id: string): Observable<CampaignDto> {
+        let url_ = this.baseUrl + "/api/campaigns/:id?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined and cannot be null.");
         else
             url_ += "id=" + encodeURIComponent("" + id) + "&";
-        if (partitionKey === undefined || partitionKey === null)
-            throw new Error("The parameter 'partitionKey' must be defined and cannot be null.");
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(<any>response_);
+                } catch (e) {
+                    return <Observable<CampaignDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CampaignDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<CampaignDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CampaignDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CampaignDto>(<any>null);
+    }
+
+    update(id: string, updateDto: CampaignUpdateDto): Observable<void> {
+        let url_ = this.baseUrl + "/api/campaigns/:id?";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined and cannot be null.");
         else
-            url_ += "partitionKey=" + encodeURIComponent("" + partitionKey) + "&";
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(updateDto);
@@ -307,6 +359,62 @@ export interface ICampaignListItemDto {
 
 export enum CampaignStatus {
     InProgress = "InProgress",
+}
+
+export class CampaignDto implements ICampaignDto {
+    id!: string;
+    partitionKey!: string;
+    name!: string;
+    status!: CampaignStatus;
+    creationDate!: Date;
+    modificationDate!: Date;
+
+    constructor(data?: ICampaignDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.partitionKey = _data["partitionKey"] !== undefined ? _data["partitionKey"] : <any>null;
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
+            this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
+            this.creationDate = _data["creationDate"] ? new Date(_data["creationDate"].toString()) : <any>null;
+            this.modificationDate = _data["modificationDate"] ? new Date(_data["modificationDate"].toString()) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): CampaignDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CampaignDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["partitionKey"] = this.partitionKey !== undefined ? this.partitionKey : <any>null;
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        data["status"] = this.status !== undefined ? this.status : <any>null;
+        data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
+        data["modificationDate"] = this.modificationDate ? this.modificationDate.toISOString() : <any>null;
+        return data; 
+    }
+}
+
+export interface ICampaignDto {
+    id: string;
+    partitionKey: string;
+    name: string;
+    status: CampaignStatus;
+    creationDate: Date;
+    modificationDate: Date;
 }
 
 export class CampaignUpdateDto implements ICampaignUpdateDto {

@@ -17,14 +17,14 @@ namespace StoryBooks.Api.Dto
 
         public DateTime ModificationDate { get; }
 
-        public CampaignListItemDto(Campaign campaign)
+        public CampaignListItemDto(Campaign campaignDto)
         {
-            PartitionKey = campaign.PartitionKey;
-            Id = Guid.Parse(campaign.Id);
-            Name = campaign.Name;
-            Status = campaign.Status;
-            CreationDate = campaign.CreationDate;
-            ModificationDate = campaign.ModificationDate;
+            PartitionKey = campaignDto.PartitionKey;
+            Id = Guid.Parse(campaignDto.Id);
+            Name = campaignDto.Name;
+            Status = campaignDto.Status;
+            CreationDate = campaignDto.CreationDate;
+            ModificationDate = campaignDto.ModificationDate;
         }
     }
 }

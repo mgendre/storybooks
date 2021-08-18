@@ -11,8 +11,6 @@ namespace StoryBooks.Models
 
         public string PartitionKey => Id;
         
-        public string OwnerUserId { get; set; }
-
         public string Name { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]

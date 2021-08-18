@@ -1,21 +1,28 @@
 <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-  <a [routerLink]="'campaigns'" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+  <a [routerLink]="'campaigns'"
+     class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
     <span class="fs-5 d-none d-sm-inline" translate>application.name</span>
   </a>
-  <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+  <ul class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start" id="menu">
     <li class="nav-item">
       <a [routerLink]="'campaigns'" [routerLinkActive]="'active'" class="nav-link align-middle">
         <i class="fs-4 bi bi-house"></i>
         <span class="ms-1 d-none d-sm-inline" translate>nav.campaigns</span>
       </a>
     </li>
-    <li class="nav-item">
-      <a [routerLink]="'persons'" [routerLinkActive]="'active'" class="nav-link align-middle">
-        <i class="fs-4 bi bi-people"></i>
-        <span class="ms-1 d-none d-sm-inline" translate>nav.persons</span>
-      </a>
-    </li>
   </ul>
+  <div *ngIf="selectedCampaign" class="campaign-items">
+    <hr>
+    <h5>{{selectedCampaign.name}}</h5>
+    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu-campaign">
+      <li class="nav-item" *ngIf="selectedCampaign">
+        <a [routerLink]="'persons'" [routerLinkActive]="'active'" class="nav-link align-middle">
+          <i class="fs-4 bi bi-people"></i>
+          <span class="ms-1 d-none d-sm-inline" translate>nav.persons</span>
+        </a>
+      </li>
+    </ul>
+  </div>
 
   <div class="user-profile-menu" *ngIf="user">
     <hr>

@@ -7,6 +7,7 @@
   "nav.persons": "Personnages",
   "campaigns.title": "Campagnes",
   "campaigns.empty": "Commencez par créer une nouvelle campagne.",
+  "campaigns.select.title": "Choisir une campagne",
   "campaigns.create.title": "Créer une nouvelle campagne",
   "campaigns.create.button": "Créer",
   "campaigns.create.placeholder": "Nom de la campagne"
