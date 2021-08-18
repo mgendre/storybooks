@@ -8,8 +8,8 @@ namespace StoryBooks.Models
     {
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; } = Guid.NewGuid().ToString();
-        
-        public string PartitionKey { get; set; }
+
+        public string PartitionKey => Id;
         
         public string OwnerUserId { get; set; }
 

@@ -45,7 +45,7 @@ namespace StoryBooks.Api.Business.UserProfile
                 Id = Guid.NewGuid().ToString(),
                 Issuer = currentUser.Issuer,
                 SubjectId = currentUser.SubjectId,
-                Campaigns = Array.Empty<Models.Campaign>(),
+                CampaignIds = Array.Empty<string>(),
                 Email = currentUser.Email,
                 CreationDate = DateTime.Now,
                 ModificationDate = DateTime.Now,

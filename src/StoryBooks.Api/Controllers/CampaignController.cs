@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -16,21 +17,27 @@ namespace StoryBooks.Api.Controllers
     [Route("api/campaigns")]
     public class CampaignController : ControllerBase
     {
-        public CampaignController(IMediator mediatR, IHttpContextAccessor httpContext, ILogger<CampaignController> _logger) :
+        private readonly ILogger<CampaignController> _logger;
+        public CampaignController(IMediator mediatR, IHttpContextAccessor httpContext, ILogger<CampaignController> logger) :
             base(mediatR, httpContext)
         {
+            _logger = logger;
         }
 
         [HttpGet]
         public Task<IEnumerable<CampaignListItemDto>> ListAll()
         {
-            return MediatR.Send(new ListCampaignHandler.ListCampaignsQuery());
+            return MediatR.Send(new ListCampaignHandler.ListCampaignsQuery(GetCurrentUser().Email));
         }
 
         [HttpPost]
-        public Task Create(CampaignUpdateDto updateDto)
+        public async Task Create(CampaignUpdateDto updateDto)
         {
-            return MediatR.Send(new CreateCampaignHandler.CreateCampaignCommand(updateDto));
+            var cu = GetCurrentUser();
+            var command = new CreateCampaignHandler.CreateCampaignCommand(updateDto, cu.Email);
+            var created = await MediatR.Send(command);
+            _logger.LogInformation("Campaign {CampaignId} created for user with email {UserEmail}",
+                created.Id, cu.Email);
         }
 
         [HttpPut(":id/:partitionKey")]

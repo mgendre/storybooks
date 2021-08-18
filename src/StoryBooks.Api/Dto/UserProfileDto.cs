@@ -1,10 +1,18 @@
+using System.Collections.Generic;
 using StoryBooks.Models;
 
 namespace StoryBooks.Api.Dto
 {
     public class UserProfileDto
     {
-        public UserProfileDto(string id, string issuer, string email, string lastName, string firstName, string subjectId)
+        public UserProfileDto(
+            string id, 
+            string issuer, 
+            string email, 
+            string lastName, 
+            string firstName, 
+            string subjectId,
+            IList<string> campaignIds)
         {
             Id = id;
             Issuer = issuer;
@@ -12,6 +20,7 @@ namespace StoryBooks.Api.Dto
             LastName = lastName;
             FirstName = firstName;
             SubjectId = subjectId;
+            CampaignIds = campaignIds;
         }
 
         public string Id { get; }
@@ -21,6 +30,8 @@ namespace StoryBooks.Api.Dto
         public string LastName { get; }
         public string FirstName { get; }
 
+        public IList<string> CampaignIds { get; }
+
         public static UserProfileDto FromModel(UserProfile up)
         {
             return new UserProfileDto(
@@ -29,8 +40,9 @@ namespace StoryBooks.Api.Dto
                 issuer: up.Issuer,
                 subjectId: up.SubjectId,
                 lastName: up.LastName,
-                firstName: up.FirstName
-                );
+                firstName: up.FirstName,
+                campaignIds: up.CampaignIds
+            );
         }
     }
 }

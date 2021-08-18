@@ -7,6 +7,7 @@ using Microsoft.Azure.Cosmos;
 using StoryBooks.Api.Dto;
 using StoryBooks.Api.Infra.CosmosDb;
 using StoryBooks.Api.Infra.CosmosDb.Containers;
+using StoryBooks.Api.Repository;
 
 namespace StoryBooks.Api.Business.Campaign
 {
@@ -14,29 +15,40 @@ namespace StoryBooks.Api.Business.Campaign
         IEnumerable<CampaignListItemDto>>
     {
 
-        private readonly Container _container;
+        private readonly ICampaignRepository _campaignRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
 
-        public ListCampaignHandler(CampaignContainer campaignContainer)
+        public ListCampaignHandler(
+            ICampaignRepository campaignRepository, 
+            IUserProfileRepository userProfileRepository)
         {
-            _container = campaignContainer.Container;
+            _campaignRepository = campaignRepository;
+            _userProfileRepository = userProfileRepository;
         }
 
         public async Task<IEnumerable<CampaignListItemDto>> Handle(ListCampaignsQuery request,
             CancellationToken cancellationToken)
         {
-            var queryDefinition = new QueryDefinition("SELECT c.id, c.PartitionKey, c.Name, c.CreationDate, c.ModificationDate FROM " +
-                                                      $"{nameof(Models.Campaign)} c");
-            var feedIterator = _container.GetItemQueryIterator<Models.Campaign>(queryDefinition, requestOptions: new QueryRequestOptions
+            var userProfile = await _userProfileRepository.GetProfile(request.userMail, cancellationToken);
+
+            var campaigns = new List<CampaignListItemDto>();
+            foreach (var campaignId in userProfile.CampaignIds)
             {
-                PartitionKey = new PartitionKey("TODO: PASS OWNER")
-            });
-            
-            var campaigns = await feedIterator.ToListAsync(cancellationToken);
-            return campaigns.Select(c => new CampaignListItemDto(c));
+                var model = await _campaignRepository.GetById(campaignId, cancellationToken);
+                campaigns.Add(new CampaignListItemDto(model));
+            }
+
+            return campaigns;
         }
 
         public class ListCampaignsQuery : IRequest<IEnumerable<CampaignListItemDto>>
         {
+            public ListCampaignsQuery(string userMail)
+            {
+                this.userMail = userMail;
+            }
+
+            public string userMail { get; }
         }
     }
 }

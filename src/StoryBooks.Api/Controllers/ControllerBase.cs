@@ -1,10 +1,12 @@
 using System;
 using System.Linq;
+using System.Security.Authentication;
 using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.JsonWebTokens;
 using StoryBooks.Api.Dto;
+using StoryBooks.Api.Infra.Exceptions;
 
 namespace StoryBooks.Api.Controllers
 {
@@ -19,7 +21,7 @@ namespace StoryBooks.Api.Controllers
             HttpContext = httpContext;
         }
 
-        protected CurrentUserDto? GetCurrentUser()
+        protected CurrentUserDto? FindCurrentUser()
         {
             var identity = HttpContext?.HttpContext?.User;
             if (identity == null)
@@ -41,6 +43,11 @@ namespace StoryBooks.Api.Controllers
                 firstName: identity.FindFirstValue(JwtRegisteredClaimNames.GivenName) ?? "",
                 lastName: identity.FindFirstValue(JwtRegisteredClaimNames.FamilyName) ?? ""
             );
+        }
+
+        protected CurrentUserDto GetCurrentUser()
+        {
+            return FindCurrentUser() ?? throw new AuthenticationException("No current user found");
         }
     }
 }

@@ -189,7 +189,8 @@
         "subjectId",
         "email",
         "lastName",
-        "firstName"
+        "firstName",
+        "campaignIds"
       ],
       "properties": {
         "id": {
@@ -209,6 +210,12 @@
         },
         "firstName": {
           "type": "string"
+        },
+        "campaignIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     }

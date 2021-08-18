@@ -27,8 +27,8 @@ namespace StoryBooks.Api.Business.UserProfile
                 PartitionKey = new PartitionKey(request.Email)
             };
             var it = _repository.Container.GetItemQueryIterator<Models.UserProfile>(requestOptions: options);
-
-            var profile = (await it.ToListAsync(cancellationToken)).FirstOrDefault();
+            var collection = await it.ToListAsync(cancellationToken);
+            var profile = collection.FirstOrDefault();
 
             return profile == null ? null : UserProfileDto.FromModel(profile);
         }

@@ -23,7 +23,7 @@ namespace StoryBooks.Api.Controllers
         [Route("current")]
         public async Task<UserProfileDto> EnsureCreated()
         {
-            var user = GetCurrentUser();
+            var user = FindCurrentUser();
             if (user == null)
             {
                 throw new UnauthorizedAccessException("Current user should not be null");

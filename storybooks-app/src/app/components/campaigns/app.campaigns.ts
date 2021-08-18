@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CampaignApiClient, CampaignListItemDto, UserProfileDto} from "../../services/api.generated.clients";
+import {CampaignListItemDto} from "../../services/api.generated.clients";
 import {CampaignsDatastore} from "../../datastores/CampaignsDatastore";
 import {Subscription} from "rxjs";
 
@@ -15,7 +15,9 @@ export class CampaignsComponent implements OnInit, OnDestroy {
 
   private readonly subscriptions: Subscription[] = [];
 
-  constructor(readonly campaignsDatastore: CampaignsDatastore) {
+  newCampaignName: string = '';
+
+  constructor(private readonly campaignsDatastore: CampaignsDatastore) {
 
   }
 
@@ -32,6 +34,11 @@ export class CampaignsComponent implements OnInit, OnDestroy {
         this.ready = r;
       })
     );
+  }
+
+  async createCampaign() {
+    await this.campaignsDatastore.create(this.newCampaignName);
+    this.newCampaignName = '';
   }
 
   ngOnDestroy(): void {

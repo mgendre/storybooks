@@ -1,4 +1,28 @@
-<h1 translate>campaigns.title</h1>
+<script src="../../services/ServiceInitializer.ts"></script><h1 translate>campaigns.title</h1>
 <div *ngIf="ready">
-  {{campaigns.length}}
+
+  <div class="alert alert-primary" role="alert" *ngIf="campaigns?.length === 0">
+    <span translate="campaigns.empty"></span>
+  </div>
+
+  <div class="create-campaign">
+    <h3 translate>campaigns.create.title</h3>
+
+    <form class="row" (ngSubmit)="form.form.valid && createCampaign()" #form="ngForm">
+      <div class="col">
+        <input type="text"
+               required
+               minlength="1"
+               class="form-control"
+               name="newCampaignName"
+               [(ngModel)]="newCampaignName"
+               [placeholder]="'campaigns.create.placeholder' | translate"/>
+      </div>
+      <div class="col">
+        <button class="btn btn-primary"
+                [disabled]="form.form.invalid"
+                translate>campaigns.create.button</button>
+      </div>
+    </form>
+  </div>
 </div>

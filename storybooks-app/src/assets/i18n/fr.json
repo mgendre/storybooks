@@ -5,5 +5,9 @@
   "nav.logout": "Se déconnecter",
   "nav.campaigns": "Campagnes",
   "nav.persons": "Personnages",
-  "campaigns.title": "Campagnes"
+  "campaigns.title": "Campagnes",
+  "campaigns.empty": "Commencez par créer une nouvelle campagne.",
+  "campaigns.create.title": "Créer une nouvelle campagne",
+  "campaigns.create.button": "Créer",
+  "campaigns.create.placeholder": "Nom de la campagne"
 }

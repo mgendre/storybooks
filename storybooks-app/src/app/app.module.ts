@@ -11,6 +11,8 @@ import { MainSidebarComponent } from './components/layout/app.sidebar';
 import { AuthInterceptor } from './shared/auth/AuthInterceptor';
 import {RouterModule, Routes} from "@angular/router";
 import {CampaignsComponent} from "./components/campaigns/app.campaigns";
+import {FormsModule} from "@angular/forms";
+import {CommonModule} from "@angular/common";
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -32,6 +34,8 @@ const routes: Routes = [
   ],
   imports: [
     BrowserModule,
+    CommonModule,
+    FormsModule,
     AppRoutingModule,
     HttpClientModule,
     SocialLoginModule,

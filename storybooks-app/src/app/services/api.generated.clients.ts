@@ -352,6 +352,7 @@ export class UserProfileDto implements IUserProfileDto {
     email!: string;
     lastName!: string;
     firstName!: string;
+    campaignIds!: string[];
 
     constructor(data?: IUserProfileDto) {
         if (data) {
@@ -359,6 +360,9 @@ export class UserProfileDto implements IUserProfileDto {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
+        }
+        if (!data) {
+            this.campaignIds = [];
         }
     }
 
@@ -370,6 +374,14 @@ export class UserProfileDto implements IUserProfileDto {
             this.email = _data["email"] !== undefined ? _data["email"] : <any>null;
             this.lastName = _data["lastName"] !== undefined ? _data["lastName"] : <any>null;
             this.firstName = _data["firstName"] !== undefined ? _data["firstName"] : <any>null;
+            if (Array.isArray(_data["campaignIds"])) {
+                this.campaignIds = [] as any;
+                for (let item of _data["campaignIds"])
+                    this.campaignIds!.push(item);
+            }
+            else {
+                this.campaignIds = <any>null;
+            }
         }
     }
 
@@ -388,6 +400,11 @@ export class UserProfileDto implements IUserProfileDto {
         data["email"] = this.email !== undefined ? this.email : <any>null;
         data["lastName"] = this.lastName !== undefined ? this.lastName : <any>null;
         data["firstName"] = this.firstName !== undefined ? this.firstName : <any>null;
+        if (Array.isArray(this.campaignIds)) {
+            data["campaignIds"] = [];
+            for (let item of this.campaignIds)
+                data["campaignIds"].push(item);
+        }
         return data; 
     }
 }
@@ -399,6 +416,7 @@ export interface IUserProfileDto {
     email: string;
     lastName: string;
     firstName: string;
+    campaignIds: string[];
 }
 
 export class SwaggerException extends Error {

@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace StoryBooks.Models
 {
@@ -16,7 +16,7 @@ namespace StoryBooks.Models
 
         public string Email { get; set; }
 
-        public Campaign[] Campaigns { get; set; }
+        public IList<string> CampaignIds { get; set; } = new List<string>();
         
         public string LastName { get; set; }
         
