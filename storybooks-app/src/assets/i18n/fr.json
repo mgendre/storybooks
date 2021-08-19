@@ -11,5 +11,6 @@
   "campaigns.select.title": "Choisir une campagne",
   "campaigns.create.title": "Créer une nouvelle campagne",
   "campaigns.create.button": "Créer",
-  "campaigns.create.placeholder": "Nom de la campagne"
+  "campaigns.create.placeholder": "Nom de la campagne",
+  "scenarios.title": "Scénarios"
 }

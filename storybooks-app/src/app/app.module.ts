@@ -15,6 +15,7 @@ import {CommonModule} from "@angular/common";
 import {NgxWebstorageModule} from "ngx-webstorage";
 import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
 import {ScenariosComponent} from "./components/scenarios/app.scenarios";
+import {CurrentCampaignName} from "./components/campaigns/app.current-campaign-name";
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -27,6 +28,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     AppComponent,
     MainSidebarComponent,
     CampaignsComponent,
+    CurrentCampaignName,
     ScenariosComponent
   ],
   imports: [
