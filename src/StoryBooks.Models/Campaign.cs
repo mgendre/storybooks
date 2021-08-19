@@ -16,7 +16,7 @@ namespace StoryBooks.Models
         [JsonConverter(typeof(StringEnumConverter))]
         public CampaignStatus Status { get; set; }
         
-        public Scenario[] Scenarios { get; set; }
+        public Scenario[] Scenarios { get; set; } = Array.Empty<Scenario>();
         
         public DateTime CreationDate { get; set; }
         
