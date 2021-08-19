@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CampaignListItemDto} from "../../services/api.generated.clients";
 import {CampaignsDatastore} from "../../datastores/CampaignsDatastore";
 import {Subscription} from "rxjs";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-campaigns',
@@ -17,7 +18,8 @@ export class CampaignsComponent implements OnInit, OnDestroy {
 
   newCampaignName: string = '';
 
-  constructor(private readonly campaignsDatastore: CampaignsDatastore) {
+  constructor(private readonly campaignsDatastore: CampaignsDatastore,
+              private readonly router: Router) {
 
   }
 
@@ -40,6 +42,7 @@ export class CampaignsComponent implements OnInit, OnDestroy {
     const campaign = await this.campaignsDatastore.create(this.newCampaignName);
     await this.campaignsDatastore.selectCampaign(campaign.id);
     this.newCampaignName = '';
+    await this.router.navigate(['/scenarios']);
   }
 
   ngOnDestroy(): void {
@@ -48,5 +51,6 @@ export class CampaignsComponent implements OnInit, OnDestroy {
 
   async selectCampaign(campaign: CampaignListItemDto) {
     await this.campaignsDatastore.selectCampaign(campaign.id);
+    await this.router.navigate(['/scenarios']);
   }
 }

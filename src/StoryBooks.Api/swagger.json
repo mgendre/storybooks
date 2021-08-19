@@ -113,7 +113,6 @@
             "name": "id",
             "in": "query",
             "required": true,
-            "format": "guid",
             "x-nullable": false
           },
           {
@@ -129,6 +128,58 @@
         "responses": {
           "200": {
             "description": ""
+          }
+        }
+      }
+    },
+    "/api/campaigns/:campaignId/scenarios/:scenarioId": {
+      "put": {
+        "tags": [
+          "Scenario"
+        ],
+        "operationId": "Scenario_UpdateScenario",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "campaignId",
+            "in": "query",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "scenarioId",
+            "in": "query",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "name": "scenario",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ScenarioDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ScenarioDto"
+            }
           }
         }
       }
@@ -208,7 +259,8 @@
         "name",
         "status",
         "creationDate",
-        "modificationDate"
+        "modificationDate",
+        "scenarios"
       ],
       "properties": {
         "id": {
@@ -227,6 +279,36 @@
         "modificationDate": {
           "type": "string",
           "format": "date-time"
+        },
+        "scenarios": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ScenarioDto"
+          }
+        }
+      }
+    },
+    "ScenarioDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "creationDate",
+        "title",
+        "markdown"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "creationDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "title": {
+          "type": "string"
+        },
+        "markdown": {
+          "type": "string"
         }
       }
     },

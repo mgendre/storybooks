@@ -9,30 +9,25 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {MainSidebarComponent} from './components/layout/app.sidebar';
 import {AuthInterceptor} from './shared/auth/AuthInterceptor';
-import {RouterModule, Routes} from "@angular/router";
 import {CampaignsComponent} from "./components/campaigns/app.campaigns";
 import {FormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {NgxWebstorageModule} from "ngx-webstorage";
 import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
+import {ScenariosComponent} from "./components/scenarios/app.scenarios";
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/');
 }
 
-const routes: Routes = [
-  { path: '', redirectTo: 'campaigns', pathMatch: 'full' },
-  { path: 'campaigns', component: CampaignsComponent },
-  { path: 'persons', component: CampaignsComponent }
-];
-
 
 @NgModule({
   declarations: [
     AppComponent,
     MainSidebarComponent,
-    CampaignsComponent
+    CampaignsComponent,
+    ScenariosComponent
   ],
   imports: [
     BrowserModule,
@@ -51,8 +46,7 @@ const routes: Routes = [
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    }),
-    RouterModule.forRoot(routes)
+    })
   ],
   providers: [
     {

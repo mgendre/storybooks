@@ -5,6 +5,7 @@
   "nav.logout": "Se déconnecter",
   "nav.campaigns": "Campagnes",
   "nav.persons": "Personnages",
+  "nav.scenarios": "Scénarios",
   "campaigns.title": "Campagnes",
   "campaigns.empty": "Commencez par créer une nouvelle campagne.",
   "campaigns.select.title": "Choisir une campagne",
