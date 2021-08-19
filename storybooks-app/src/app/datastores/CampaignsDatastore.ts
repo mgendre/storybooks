@@ -9,6 +9,7 @@ import {
 import {Injectable} from "@angular/core";
 import {AuthenticationService} from "../services/AuthenticationService";
 import {LocalStorageService} from "ngx-webstorage";
+import {NGXLogger} from "ngx-logger";
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +26,8 @@ export class CampaignsDatastore implements HasInitialization {
 
   constructor(private readonly campaignsApiClient: CampaignApiClient,
               private readonly authenticationService: AuthenticationService,
-              private readonly storage: LocalStorageService) {
+              private readonly storage: LocalStorageService,
+              private readonly logger: NGXLogger) {
     this.authenticationService.user.subscribe(async (user) => {
       if (user) {
         await this.reload();
@@ -39,7 +41,11 @@ export class CampaignsDatastore implements HasInitialization {
 
     const campaignId = this.storage.retrieve("selected_campaign");
     if (campaignId) {
-      await this.selectCampaign(campaignId);
+      try {
+        await this.selectCampaign(campaignId);
+      } catch(e) {
+        this.logger.warn('Could not load stored campaign id');
+      }
     }
 
     const campaigns = await this.campaignsApiClient.listAll().toPromise();

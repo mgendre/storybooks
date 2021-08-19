@@ -7,8 +7,6 @@ namespace StoryBooks.Api.Dto
     {
         public string Id { get; set; } = "";
 
-        public string PartitionKey => Id;
-
         public string Name { get; set; } = "";
 
         public CampaignStatus Status { get; set; } = CampaignStatus.InProgress;

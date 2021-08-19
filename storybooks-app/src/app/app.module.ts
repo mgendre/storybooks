@@ -1,19 +1,20 @@
-import {HttpClient, HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from 'angularx-social-login';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import { MainSidebarComponent } from './components/layout/app.sidebar';
-import { AuthInterceptor } from './shared/auth/AuthInterceptor';
+import {MainSidebarComponent} from './components/layout/app.sidebar';
+import {AuthInterceptor} from './shared/auth/AuthInterceptor';
 import {RouterModule, Routes} from "@angular/router";
 import {CampaignsComponent} from "./components/campaigns/app.campaigns";
 import {FormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {NgxWebstorageModule} from "ngx-webstorage";
+import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -41,6 +42,9 @@ const routes: Routes = [
     HttpClientModule,
     SocialLoginModule,
     NgxWebstorageModule.forRoot(),
+    LoggerModule.forRoot({
+      level: NgxLoggerLevel.DEBUG
+    }),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

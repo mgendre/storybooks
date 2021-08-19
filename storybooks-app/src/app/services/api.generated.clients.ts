@@ -363,7 +363,6 @@ export enum CampaignStatus {
 
 export class CampaignDto implements ICampaignDto {
     id!: string;
-    partitionKey!: string;
     name!: string;
     status!: CampaignStatus;
     creationDate!: Date;
@@ -381,7 +380,6 @@ export class CampaignDto implements ICampaignDto {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
-            this.partitionKey = _data["partitionKey"] !== undefined ? _data["partitionKey"] : <any>null;
             this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
             this.creationDate = _data["creationDate"] ? new Date(_data["creationDate"].toString()) : <any>null;
@@ -399,7 +397,6 @@ export class CampaignDto implements ICampaignDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id !== undefined ? this.id : <any>null;
-        data["partitionKey"] = this.partitionKey !== undefined ? this.partitionKey : <any>null;
         data["name"] = this.name !== undefined ? this.name : <any>null;
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
@@ -410,7 +407,6 @@ export class CampaignDto implements ICampaignDto {
 
 export interface ICampaignDto {
     id: string;
-    partitionKey: string;
     name: string;
     status: CampaignStatus;
     creationDate: Date;

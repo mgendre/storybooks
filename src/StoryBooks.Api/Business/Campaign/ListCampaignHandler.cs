@@ -32,9 +32,18 @@ namespace StoryBooks.Api.Business.Campaign
             var userProfile = await _userProfileRepository.GetProfile(request.UserMail, cancellationToken);
 
             var campaigns = new List<CampaignListItemDto>();
+
+            string query = "select c.id, c.Name, c.Status, c.CreationDate, c.ModificationDate from " +
+                           $"{nameof(Models.Campaign)} c";
             foreach (var campaignId in userProfile.CampaignIds)
             {
-                var model = await _campaignRepository.GetById(campaignId, cancellationToken);
+                var options = new QueryRequestOptions
+                {
+                    PartitionKey = new PartitionKey(campaignId),
+                    MaxItemCount = 1
+                };
+                var iterator = _campaignRepository.Container.GetItemQueryIterator<Models.Campaign>(query, requestOptions: options);
+                var model = await iterator.FirstAsync(cancellationToken);
                 campaigns.Add(new CampaignListItemDto(model));
             }
 

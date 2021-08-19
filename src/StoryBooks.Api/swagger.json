@@ -205,7 +205,6 @@
       "type": "object",
       "required": [
         "id",
-        "partitionKey",
         "name",
         "status",
         "creationDate",
@@ -213,9 +212,6 @@
       ],
       "properties": {
         "id": {
-          "type": "string"
-        },
-        "partitionKey": {
           "type": "string"
         },
         "name": {
