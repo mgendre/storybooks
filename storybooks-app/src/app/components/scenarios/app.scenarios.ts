@@ -1,7 +1,7 @@
 import {ScenarioDto} from "../../services/api.generated.clients";
 import {Subscription} from "rxjs";
-import {CampaignsDatastore} from "../../datastores/CampaignsDatastore";
 import {Component, OnDestroy} from "@angular/core";
+import {ScenariosDatastore} from "../../datastores/ScenariosDatastore";
 
 
 @Component({
@@ -12,14 +12,16 @@ import {Component, OnDestroy} from "@angular/core";
 export class ScenariosComponent implements OnDestroy {
 
   scenarios: ScenarioDto[] = [];
+
   private readonly subscriptions: Subscription[] = [];
 
-  constructor(private readonly campaignsDatastore: CampaignsDatastore) {
-    this.subscriptions.push(this.campaignsDatastore.selectedCampaign.subscribe(c => {
-      if (!c) {
+  constructor(private readonly scenariosDatastore: ScenariosDatastore) {
+    this.subscriptions.push(this.scenariosDatastore.scenarios.subscribe(scenarios => {
+      if (!scenarios) {
+        this.scenarios = [];
         return;
       }
-      this.scenarios = c.scenarios;
+      this.scenarios = scenarios;
       // Order them by date desc...
       this.scenarios.sort((a,b) => {
         if (a.creationDate === b.creationDate) {

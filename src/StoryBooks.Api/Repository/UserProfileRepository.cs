@@ -11,7 +11,7 @@ namespace StoryBooks.Api.Repository
 {
     public class UserProfileRepository : AbstractCosmosRepository<UserProfile>, IUserProfileRepository
     {
-        public UserProfileRepository(UserProfileContainer container) : base(container.Container)
+        public UserProfileRepository(ICosmosContainer container) : base(container.Container)
         {
         }
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using StoryBooks.Api.Business.Campaign;
+using StoryBooks.Api.Business.Scenario;
 using StoryBooks.Api.Dto;
 
 namespace StoryBooks.Api.Controllers
@@ -54,6 +55,23 @@ namespace StoryBooks.Api.Controllers
             await VerifyCurrentUserAccess(id);
             await MediatR.Send(new UpdateCampaignHandler.UpdateCampaignCommand(id, updateDto));
         }
+        
+        
+        // Scenarios
+        [HttpGet(":campaignId/scenarios")]
+        public async Task<IEnumerable<ScenarioDto>> ListScenarios(string campaignId)
+        {
+            await VerifyCurrentUserAccess(campaignId);
+            return await MediatR.Send(new ListScenariosHandler.ListScenariosQuery(campaignId));
+        }
+        
+        [HttpPut(":campaignId/scenarios/:scenarioId")]
+        public async Task<ScenarioDto> UpdateScenario(string campaignId, string scenarioId, ScenarioDto scenario)
+        {
+            await VerifyCurrentUserAccess(campaignId);
+            throw new NotImplementedException();
+        }
+
 
         private async Task VerifyCurrentUserAccess(string campaignId)
         {

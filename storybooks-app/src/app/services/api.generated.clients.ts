@@ -237,19 +237,64 @@ export class CampaignApiClient {
         }
         return _observableOf<void>(<any>null);
     }
-}
 
-@Injectable({
-    providedIn: 'root'
-})
-export class ScenarioApiClient {
-    private http: HttpClient;
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+    listScenarios(campaignId: string): Observable<ScenarioDto[]> {
+        let url_ = this.baseUrl + "/api/campaigns/:campaignId/scenarios?";
+        if (campaignId === undefined || campaignId === null)
+            throw new Error("The parameter 'campaignId' must be defined and cannot be null.");
+        else
+            url_ += "campaignId=" + encodeURIComponent("" + campaignId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
 
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(BASE_URL) baseUrl?: string) {
-        this.http = http;
-        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processListScenarios(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processListScenarios(<any>response_);
+                } catch (e) {
+                    return <Observable<ScenarioDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ScenarioDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processListScenarios(response: HttpResponseBase): Observable<ScenarioDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ScenarioDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ScenarioDto[]>(<any>null);
     }
 
     updateScenario(campaignId: string, scenarioId: string, scenario: ScenarioDto): Observable<ScenarioDto> {
@@ -441,7 +486,6 @@ export class CampaignDto implements ICampaignDto {
     status!: CampaignStatus;
     creationDate!: Date;
     modificationDate!: Date;
-    scenarios!: ScenarioDto[];
 
     constructor(data?: ICampaignDto) {
         if (data) {
@@ -449,9 +493,6 @@ export class CampaignDto implements ICampaignDto {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
-        }
-        if (!data) {
-            this.scenarios = [];
         }
     }
 
@@ -462,14 +503,6 @@ export class CampaignDto implements ICampaignDto {
             this.status = _data["status"] !== undefined ? _data["status"] : <any>null;
             this.creationDate = _data["creationDate"] ? new Date(_data["creationDate"].toString()) : <any>null;
             this.modificationDate = _data["modificationDate"] ? new Date(_data["modificationDate"].toString()) : <any>null;
-            if (Array.isArray(_data["scenarios"])) {
-                this.scenarios = [] as any;
-                for (let item of _data["scenarios"])
-                    this.scenarios!.push(ScenarioDto.fromJS(item));
-            }
-            else {
-                this.scenarios = <any>null;
-            }
         }
     }
 
@@ -487,11 +520,6 @@ export class CampaignDto implements ICampaignDto {
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
         data["modificationDate"] = this.modificationDate ? this.modificationDate.toISOString() : <any>null;
-        if (Array.isArray(this.scenarios)) {
-            data["scenarios"] = [];
-            for (let item of this.scenarios)
-                data["scenarios"].push(item.toJSON());
-        }
         return data; 
     }
 }
@@ -502,7 +530,42 @@ export interface ICampaignDto {
     status: CampaignStatus;
     creationDate: Date;
     modificationDate: Date;
-    scenarios: ScenarioDto[];
+}
+
+export class CampaignUpdateDto implements ICampaignUpdateDto {
+    name!: string;
+
+    constructor(data?: ICampaignUpdateDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): CampaignUpdateDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CampaignUpdateDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        return data; 
+    }
+}
+
+export interface ICampaignUpdateDto {
+    name: string;
 }
 
 export class ScenarioDto implements IScenarioDto {
@@ -551,42 +614,6 @@ export interface IScenarioDto {
     creationDate: Date;
     title: string;
     markdown: string;
-}
-
-export class CampaignUpdateDto implements ICampaignUpdateDto {
-    name!: string;
-
-    constructor(data?: ICampaignUpdateDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): CampaignUpdateDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new CampaignUpdateDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name !== undefined ? this.name : <any>null;
-        return data; 
-    }
-}
-
-export interface ICampaignUpdateDto {
-    name: string;
 }
 
 export class UserProfileDto implements IUserProfileDto {

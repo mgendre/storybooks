@@ -8,7 +8,7 @@ namespace StoryBooks.Api.Repository
 {
     public class CampaignRepository : AbstractCosmosRepository<Campaign>, ICampaignRepository
     {
-        public CampaignRepository(CampaignContainer container) : base(container.Container)
+        public CampaignRepository(ICosmosContainer container) : base(container.Container)
         {
         }
 

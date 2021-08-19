@@ -132,12 +132,46 @@
         }
       }
     },
+    "/api/campaigns/:campaignId/scenarios": {
+      "get": {
+        "tags": [
+          "Campaign"
+        ],
+        "operationId": "Campaign_ListScenarios",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "campaignId",
+            "in": "query",
+            "required": true,
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ScenarioDto"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/campaigns/:campaignId/scenarios/:scenarioId": {
       "put": {
         "tags": [
-          "Scenario"
+          "Campaign"
         ],
-        "operationId": "Scenario_UpdateScenario",
+        "operationId": "Campaign_UpdateScenario",
         "consumes": [
           "application/json",
           "text/json",
@@ -259,8 +293,7 @@
         "name",
         "status",
         "creationDate",
-        "modificationDate",
-        "scenarios"
+        "modificationDate"
       ],
       "properties": {
         "id": {
@@ -279,12 +312,17 @@
         "modificationDate": {
           "type": "string",
           "format": "date-time"
-        },
-        "scenarios": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ScenarioDto"
-          }
+        }
+      }
+    },
+    "CampaignUpdateDto": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
         }
       }
     },
@@ -308,17 +346,6 @@
           "type": "string"
         },
         "markdown": {
-          "type": "string"
-        }
-      }
-    },
-    "CampaignUpdateDto": {
-      "type": "object",
-      "required": [
-        "name"
-      ],
-      "properties": {
-        "name": {
           "type": "string"
         }
       }
