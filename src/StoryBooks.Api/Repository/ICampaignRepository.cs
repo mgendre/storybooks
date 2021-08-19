@@ -1,6 +1,5 @@
 using System.Threading;
 using System.Threading.Tasks;
-using StoryBooks.Api.Dto;
 using StoryBooks.Models;
 
 namespace StoryBooks.Api.Repository

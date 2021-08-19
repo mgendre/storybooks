@@ -1,12 +1,10 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Azure.Cosmos;
 using StoryBooks.Api.Dto;
 using StoryBooks.Api.Infra.CosmosDb;
-using StoryBooks.Api.Infra.CosmosDb.Containers;
 using StoryBooks.Api.Repository;
 
 namespace StoryBooks.Api.Business.Campaign

@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -20,7 +19,7 @@ namespace StoryBooks.Api.Business.Campaign
 
         public async Task<Unit> Handle(UpdateCampaignCommand request, CancellationToken cancellationToken)
         {
-            await _repository.Update(request.Id.ToString(), new PartitionKey(request.Id.ToString()), 
+            await _repository.Update(request.Id, new PartitionKey(request.Id.ToString()), 
                 campaign => request.ToUpdate.Patch(campaign), cancellationToken);
             return Unit.Value;
         }
@@ -28,9 +27,9 @@ namespace StoryBooks.Api.Business.Campaign
         public class UpdateCampaignCommand : IRequest
         {
             public CampaignUpdateDto ToUpdate { get; }
-            public Guid Id { get; }
+            public string Id { get; }
 
-            public UpdateCampaignCommand(Guid id, CampaignUpdateDto toUpdate)
+            public UpdateCampaignCommand(string id, CampaignUpdateDto toUpdate)
             {
                 ToUpdate = toUpdate;
                 Id = id;

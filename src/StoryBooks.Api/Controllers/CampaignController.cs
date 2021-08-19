@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -31,9 +30,10 @@ namespace StoryBooks.Api.Controllers
         }
         
         [HttpGet(":id")]
-        public Task<CampaignDto> Get(string id)
+        public async Task<CampaignDto> Get(string id)
         {
-            return MediatR.Send(new GetCampaignHandler.GetCampaignQuery(id, GetCurrentUser().Email));
+            await VerifyCurrentUserAccess(id);
+            return await MediatR.Send(new GetCampaignHandler.GetCampaignQuery(id, GetCurrentUser().Email));
         }
 
         [HttpPost]
@@ -49,9 +49,19 @@ namespace StoryBooks.Api.Controllers
         }
 
         [HttpPut(":id")]
-        public Task Update(Guid id, CampaignUpdateDto updateDto)
+        public async Task Update(string id, CampaignUpdateDto updateDto)
         {
-            return MediatR.Send(new UpdateCampaignHandler.UpdateCampaignCommand(id, updateDto));
+            await VerifyCurrentUserAccess(id);
+            await MediatR.Send(new UpdateCampaignHandler.UpdateCampaignCommand(id, updateDto));
+        }
+
+        private async Task VerifyCurrentUserAccess(string campaignId)
+        {
+            var profile = await GetCurrentUserProfile();
+            if (!profile.CampaignIds.Contains(campaignId))
+            {
+                throw new UnauthorizedAccessException($"User {profile.Email} has no access to campaign {campaignId}");
+            }
         }
     }
 }

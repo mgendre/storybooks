@@ -1,12 +1,12 @@
 using System;
-using System.Linq;
 using System.Security.Authentication;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.JsonWebTokens;
+using StoryBooks.Api.Business.UserProfile;
 using StoryBooks.Api.Dto;
-using StoryBooks.Api.Infra.Exceptions;
 
 namespace StoryBooks.Api.Controllers
 {
@@ -48,6 +48,13 @@ namespace StoryBooks.Api.Controllers
         protected CurrentUserDto GetCurrentUser()
         {
             return FindCurrentUser() ?? throw new AuthenticationException("No current user found");
+        }
+        
+        protected async Task<UserProfileDto> GetCurrentUserProfile()
+        {
+            var cu = GetCurrentUser();
+            return await MediatR.Send(new FindUserHandler.FindUserHandlerCommand(cu.Email)) ?? 
+                   throw new AuthenticationException($"No profile found for user with email {cu.Email}");
         }
     }
 }
