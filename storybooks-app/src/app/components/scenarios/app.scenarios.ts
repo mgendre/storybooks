@@ -2,6 +2,7 @@ import {ScenarioDto} from "../../services/api.generated.clients";
 import {Subscription} from "rxjs";
 import {Component, OnDestroy} from "@angular/core";
 import {ScenariosDatastore} from "../../datastores/ScenariosDatastore";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -15,7 +16,8 @@ export class ScenariosComponent implements OnDestroy {
 
   private readonly subscriptions: Subscription[] = [];
 
-  constructor(private readonly scenariosDatastore: ScenariosDatastore) {
+  constructor(private readonly scenariosDatastore: ScenariosDatastore,
+              private readonly router: Router) {
     this.subscriptions.push(this.scenariosDatastore.scenarios.subscribe(scenarios => {
       if (!scenarios) {
         this.scenarios = [];
@@ -39,5 +41,13 @@ export class ScenariosComponent implements OnDestroy {
     this.subscriptions.forEach(s => {
       s.unsubscribe();
     });
+  }
+
+  openScenario(sce: ScenarioDto) {
+    alert('OPEN');
+  }
+
+  async createScenario() {
+    await this.router.navigate(['scenarios/new']);
   }
 }

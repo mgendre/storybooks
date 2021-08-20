@@ -26,6 +26,7 @@
     "bootstrap": "^5.1.0",
     "bootstrap-icons": "^1.5.0",
     "jquery": "^3.6.0",
+    "markdown-it": "^12.2.0",
     "ngx-logger": "^4.3.3",
     "ngx-webstorage": "^8.0.0",
     "popper.js": "^1.16.1",
@@ -37,6 +38,8 @@
     "@angular-devkit/build-angular": "~12.2.1",
     "@angular/cli": "~12.2.1",
     "@angular/compiler-cli": "~12.2.0",
+    "@types/markdown-it": "^12.2.0",
+    "@types/marked": "^2.0.4",
     "@types/node": "^12.11.1",
     "typescript": "~4.3.5"
   }

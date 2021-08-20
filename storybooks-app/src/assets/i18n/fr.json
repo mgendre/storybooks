@@ -12,5 +12,8 @@
   "campaigns.create.title": "Créer une nouvelle campagne",
   "campaigns.create.button": "Créer",
   "campaigns.create.placeholder": "Nom de la campagne",
-  "scenarios.title": "Scénarios"
+  "scenarios.title": "Scénarios",
+  "scenario.edit.form.title": "Nom du scénario",
+  "scenario.edit.form.content": "Résumé",
+  "scenario.edit.form.markdown": "La syntaxe \"Markdown\" est supportée. Veuillez-vous référer au lien suivant pour plus de détails:"
 }

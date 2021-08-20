@@ -10,12 +10,15 @@ import {AppComponent} from './app.component';
 import {MainSidebarComponent} from './components/layout/app.sidebar';
 import {AuthInterceptor} from './shared/auth/AuthInterceptor';
 import {CampaignsComponent} from "./components/campaigns/app.campaigns";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {NgxWebstorageModule} from "ngx-webstorage";
 import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
 import {ScenariosComponent} from "./components/scenarios/app.scenarios";
 import {CurrentCampaignName} from "./components/campaigns/app.current-campaign-name";
+import {EditScenarioComponent} from "./components/scenarios/app.edit-scenario";
+import {MarkdownEditor} from "./shared/markdown/app.md-editor";
+import {MarkdownView} from "./shared/markdown/app.md-view";
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -27,9 +30,12 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   declarations: [
     AppComponent,
     MainSidebarComponent,
+    MarkdownEditor,
+    MarkdownView,
     CampaignsComponent,
     CurrentCampaignName,
-    ScenariosComponent
+    ScenariosComponent,
+    EditScenarioComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +54,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })
+    }),
+    ReactiveFormsModule
   ],
   providers: [
     {

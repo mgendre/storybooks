@@ -1,4 +1,21 @@
-<h1>
-  <app-current-campaign-name></app-current-campaign-name> -
-  <span translate>scenarios.title</span>
-</h1>
+<div class="scenarios">
+  <h1>
+    <app-current-campaign-name></app-current-campaign-name>
+    -
+    <span translate>scenarios.title</span>
+  </h1>
+
+  <button class="btn btn-primary"
+  (click)="createScenario()">NEW</button>
+
+  <div class="scenarios-list">
+    <div class="campaigns-list" *ngIf="scenarios.length > 0">
+      <h3 translate>campaigns.select.title</h3>
+      <div class="card" *ngFor="let sce of scenarios">
+        <div class="card-body" (click)="openScenario(sce)">
+          <span>{{sce.title}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

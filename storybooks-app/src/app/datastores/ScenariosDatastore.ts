@@ -2,7 +2,6 @@ import {HasInitialization} from "../services/HasInitialization";
 import {BehaviorSubject} from "rxjs";
 import {CampaignApiClient, ScenarioDto} from "../services/api.generated.clients";
 import {Injectable} from "@angular/core";
-import {NGXLogger} from "ngx-logger";
 import {CampaignsDatastore} from "./CampaignsDatastore";
 
 @Injectable({
@@ -31,5 +30,13 @@ export class ScenariosDatastore implements HasInitialization {
       this._scenarios.next([]);
       return [];
     }
+  }
+
+  public getScenario(id: string) {
+    const scenario = this._scenarios.value.find(s => s.id === id);
+    if (!scenario) {
+      throw new Error('Could not find scenario with id ' + id);
+    }
+    return scenario;
   }
 }
