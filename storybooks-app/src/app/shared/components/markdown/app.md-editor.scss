@@ -1,6 +1,10 @@
-@import '../../../styles/variables';
+@import '../../../../styles/variables';
 
 .sb-markdown-editor {
+
+  .row {
+    margin-bottom: 0;
+  }
 
   .combined-editor {
     border: 1px solid $border-default-color;

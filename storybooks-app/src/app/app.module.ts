@@ -17,8 +17,8 @@ import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
 import {ScenariosComponent} from "./components/scenarios/app.scenarios";
 import {CurrentCampaignName} from "./components/campaigns/app.current-campaign-name";
 import {EditScenarioComponent} from "./components/scenarios/app.edit-scenario";
-import {MarkdownEditor} from "./shared/markdown/app.md-editor";
-import {MarkdownView} from "./shared/markdown/app.md-view";
+import {MarkdownEditor} from "./shared/components/markdown/app.md-editor";
+import {MarkdownView} from "./shared/components/markdown/app.md-view";
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
