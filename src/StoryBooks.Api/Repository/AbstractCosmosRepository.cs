@@ -24,6 +24,7 @@ namespace StoryBooks.Api.Repository
 
         public async Task<T> Create(T toCreate, CancellationToken ct)
         {
+            toCreate.CreationDate = DateTime.Now;
             var response = await Container.CreateItemAsync(toCreate, cancellationToken: ct);
             return response.Resource;
         }
@@ -32,7 +33,8 @@ namespace StoryBooks.Api.Repository
         {
             var existing = await GetById(id, key, ct);
             patch(existing);
-            
+            existing.ModificationDate = DateTime.Now;
+
             var result = await Container.UpsertItemAsync(existing, key, cancellationToken: ct);
             return result.Resource;
         }

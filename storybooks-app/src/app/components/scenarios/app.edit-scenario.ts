@@ -2,7 +2,7 @@ import {ScenarioDto, ScenarioUpdateDto} from "../../services/api.generated.clien
 import {Subscription} from "rxjs";
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {ScenariosDatastore} from "../../datastores/ScenariosDatastore";
-import {ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 
@@ -13,7 +13,15 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class EditScenarioComponent implements OnInit, OnDestroy {
 
-  scenario: ScenarioDto = new ScenarioDto();
+  _scenario: ScenarioDto = new ScenarioDto();
+  set scenario(scenario: ScenarioDto) {
+    this._scenario = scenario;
+    this.scenarioForm.setValue({'title': scenario.title ?? ''});
+  }
+  get scenario() {
+    return this._scenario;
+  }
+
 
   scenarioForm = new FormGroup({
     title: new FormControl('', [
@@ -24,6 +32,7 @@ export class EditScenarioComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
 
   constructor(private readonly scenariosDatastore: ScenariosDatastore,
+              private router: Router,
               private route: ActivatedRoute) {
   }
 
@@ -32,21 +41,39 @@ export class EditScenarioComponent implements OnInit, OnDestroy {
     toUpdate.title = this.scenarioForm.get('title')?.value ?? '';
     toUpdate.markdown = this.scenario.markdown;
     await this.scenariosDatastore.saveScenario(toUpdate, this.scenario.id);
+    await this.close();
+  }
+
+  async close() {
+    await this.router.navigate(['/scenarios']);
   }
 
   ngOnInit(): void {
+    let id : string | null = null;
     this.subscriptions.push(this.route.params.subscribe((params: Params) => {
-      const id = params['scenarioId'];
+      id = params['scenarioId'];
+
+      if (!this.scenariosDatastore.isReady()) {
+        return;
+      }
+
       if (id) {
         this.scenario = this.scenariosDatastore.getScenario(id);
       } else {
         this.scenario = new ScenarioDto();
       }
       this.scenarioForm.setValue({
-        'title': this.scenario.title
+        'title': this.scenario.title ?? ''
       });
     }));
+
+    this.subscriptions.push(this.scenariosDatastore.ready.subscribe(r => {
+      if (r && id) {
+        this.scenario = this.scenariosDatastore.getScenario(id);
+      }
+    }));
   }
+
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => {

@@ -57,5 +57,9 @@ export class AuthenticationService implements HasInitialization {
   public getToken(): string {
     return localStorage.get('jwt_token');
   }
+
+  isReady(): boolean {
+    return this._ready.value;
+  }
 }
 

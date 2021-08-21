@@ -22,12 +22,21 @@
     </div>
 
     <div class="row">
-      <div class="col-md-12">
-        <button class="btn btn-primary"
-                type="submit"
-                [disabled]="scenarioForm.invalid"
-                translate>common.button.save
-        </button>
+      <div class="col-md-6">
+          <button class="btn btn-secondary"
+                  type="button"
+                  (click)="close()">
+            <i class="bi bi-x"></i>
+            <span translate>common.button.cancel</span>
+          </button>
+      </div>
+      <div class="col-md-6 text-end">
+          <button class="btn btn-icon btn-primary"
+                  type="submit"
+                  [disabled]="scenarioForm.invalid">
+            <i class="bi bi-save"></i>
+            <span translate>common.button.save</span>
+          </button>
       </div>
     </div>
   </form>

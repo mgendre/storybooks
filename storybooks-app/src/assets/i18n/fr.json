@@ -1,5 +1,6 @@
 {
   "common.button.save": "Sauver",
+  "common.button.cancel": "Annuler",
   "application.name": "Story Books",
   "application.login.loginRequired": "Vous devez vous identifier avant de pouvoir accéder et créer de nouvelles campagnes.",
   "application.login.google.button": "Se connecter avec votre compte Google",
@@ -14,6 +15,8 @@
   "campaigns.create.button": "Créer",
   "campaigns.create.placeholder": "Nom de la campagne",
   "scenarios.title": "Scénarios",
+  "scenarios.new": "Créer un nouveau scénario",
+  "scenarios.list.expandLink": "Afficher le scénario",
   "scenario.edit.form.title": "Nom du scénario",
   "scenario.edit.form.content": "Résumé",
   "scenario.edit.form.markdown": "La syntaxe \"Markdown\" est supportée. Veuillez-vous référer au lien suivant pour plus de détails:"

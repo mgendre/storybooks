@@ -79,4 +79,9 @@ export class CampaignsDatastore implements HasInitialization {
       this.storage.store("selected_campaign", campaignId);
     }
   }
+
+
+  isReady(): boolean {
+    return this._ready.value;
+  }
 }

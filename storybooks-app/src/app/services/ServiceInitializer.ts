@@ -29,4 +29,8 @@ export class ServiceInitializer implements HasInitialization {
     await this.translate.use('fr').toPromise();
     this._translationReady.next(true);
   }
+
+  isReady(): boolean {
+    return this._ready.value;
+  }
 }

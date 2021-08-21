@@ -8,7 +8,7 @@
 
   <div class="campaigns-list sb-card-list" *ngIf="campaigns.length > 0">
     <h3 translate>campaigns.select.title</h3>
-    <div class="card" *ngFor="let campaign of campaigns">
+    <div class="card clickable" *ngFor="let campaign of campaigns">
       <div class="card-body" (click)="selectCampaign(campaign)">
         <span>{{campaign.name}}</span>
       </div>

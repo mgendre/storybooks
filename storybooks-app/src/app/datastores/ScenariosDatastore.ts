@@ -25,6 +25,7 @@ export class ScenariosDatastore implements HasInitialization {
     if (campaignId) {
       const scenarios = await this.campaignsApiClient.listScenarios(campaignId).toPromise();
       this._scenarios.next(scenarios);
+      this._ready.next(true);
       return scenarios;
     } else {
       this._scenarios.next([]);
@@ -51,4 +52,9 @@ export class ScenariosDatastore implements HasInitialization {
 
     await this.reload(campaignId);
   }
+
+  isReady(): boolean {
+    return this._ready.value;
+  }
 }
+

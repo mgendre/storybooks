@@ -6,8 +6,8 @@ namespace StoryBooks.Models
     {
         public string Id { get; }
         
-        public DateTime CreationDate { get; }
-        
-        public DateTime ModificationDate { get; }
+        public DateTime CreationDate { get; set; }
+
+        public DateTime ModificationDate { get; set; }
     }
 }

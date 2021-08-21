@@ -12,20 +12,20 @@ import {Router} from "@angular/router";
 })
 export class ScenariosComponent implements OnDestroy {
 
-  scenarios: ScenarioDto[] = [];
+  scenarios: ScenarioItem[] = [];
 
   private readonly subscriptions: Subscription[] = [];
 
   constructor(private readonly scenariosDatastore: ScenariosDatastore,
               private readonly router: Router) {
     this.subscriptions.push(this.scenariosDatastore.scenarios.subscribe(scenarios => {
+      this.scenarios = [];
       if (!scenarios) {
-        this.scenarios = [];
         return;
       }
-      this.scenarios = scenarios;
+
       // Order them by date desc...
-      this.scenarios.sort((a,b) => {
+      scenarios.sort((a,b) => {
         if (a.creationDate === b.creationDate) {
           return 0;
         }
@@ -34,6 +34,10 @@ export class ScenariosComponent implements OnDestroy {
         }
         return 0;
       });
+
+      for (let i=0; i<scenarios.length; i++) {
+        this.scenarios.push(new ScenarioItem(scenarios[i], i<1));
+      }
     }));
   }
 
@@ -43,11 +47,21 @@ export class ScenariosComponent implements OnDestroy {
     });
   }
 
-  async openScenario(sce: ScenarioDto) {
+  async editScenario(sce: ScenarioDto) {
     await this.router.navigate(['scenarios/edit/' + sce.id]);
   }
 
   async createScenario() {
     await this.router.navigate(['scenarios/new']);
+  }
+}
+
+class ScenarioItem {
+  public readonly scenario: ScenarioDto;
+  public expanded = false;
+
+  constructor(scenario: ScenarioDto, expanded: boolean = false) {
+    this.scenario = scenario;
+    this.expanded = expanded;
   }
 }

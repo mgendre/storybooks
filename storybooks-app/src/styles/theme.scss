@@ -1,4 +1,14 @@
 
+h1 {
+  margin-bottom: 30px;
+}
+
+a:not([href]):not([class]), a:not([href]):not([class]):hover {
+  color: $link-color;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 form {
   .row {
     margin-bottom: 18px;
@@ -14,16 +24,31 @@ form {
   }
 }
 
-.sb-card-list .card {
-  margin-bottom: 20px;
+.sb-card-list{
 
-  &:hover {
-    cursor: pointer;
-    border: #333 1px solid;
+  .card {
+    margin-bottom: 20px;
+
+    &.clickable {
+      cursor: pointer;
+      &:hover {
+        border: #333 1px solid;
+      }
+    }
+
+    span {
+      font-size: 20px;
+    }
+
+    .card-buttons {
+      text-align: right;
+    }
   }
+}
 
-  span {
-    font-size: 20px;
+.btn-icon {
+  i {
+    display: inline-block;
+    padding-right: 5px;
   }
-
 }

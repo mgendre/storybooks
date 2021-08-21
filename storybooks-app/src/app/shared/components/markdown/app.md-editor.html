@@ -6,10 +6,10 @@
       <div class="editor"
            [class]="{'col-md-6': previewMode === previewModes.COMBINED, 'col-md-12': previewMode === previewModes.EDITOR}">
         <div class="editor-pane">
-        <textarea class="form-control"
-                  [(ngModel)]="markdown"
-                  (ngModelChange)="markdownInputChanged()">
-        </textarea>
+          <textarea class="form-control"
+                    [(ngModel)]="markdown"
+                    (ngModelChange)="markdownInputChanged()">
+          </textarea>
           <div class="form-text">
             <span translate>scenario.edit.form.markdown</span>
             <br/>
