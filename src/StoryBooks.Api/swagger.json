@@ -67,7 +67,7 @@
         }
       }
     },
-    "/api/campaigns/:id": {
+    "/api/campaigns/{id}": {
       "get": {
         "tags": [
           "Campaign"
@@ -82,7 +82,7 @@
           {
             "type": "string",
             "name": "id",
-            "in": "query",
+            "in": "path",
             "required": true,
             "x-nullable": false
           }
@@ -111,7 +111,7 @@
           {
             "type": "string",
             "name": "id",
-            "in": "query",
+            "in": "path",
             "required": true,
             "x-nullable": false
           },
@@ -132,7 +132,7 @@
         }
       }
     },
-    "/api/campaigns/:campaignId/scenarios": {
+    "/api/campaigns/{campaignId}/scenarios": {
       "get": {
         "tags": [
           "Campaign"
@@ -147,7 +147,7 @@
           {
             "type": "string",
             "name": "campaignId",
-            "in": "query",
+            "in": "path",
             "required": true,
             "x-nullable": false
           }
@@ -164,9 +164,52 @@
             }
           }
         }
+      },
+      "post": {
+        "tags": [
+          "Campaign"
+        ],
+        "operationId": "Campaign_CreateScenario",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "name": "scenario",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ScenarioUpdateDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ScenarioDto"
+            }
+          }
+        }
       }
     },
-    "/api/campaigns/:campaignId/scenarios/:scenarioId": {
+    "/api/campaigns/{campaignId}/scenarios/{scenarioId}": {
       "put": {
         "tags": [
           "Campaign"
@@ -186,14 +229,14 @@
           {
             "type": "string",
             "name": "campaignId",
-            "in": "query",
+            "in": "path",
             "required": true,
             "x-nullable": false
           },
           {
             "type": "string",
             "name": "scenarioId",
-            "in": "query",
+            "in": "path",
             "required": true,
             "x-nullable": false
           },
@@ -202,7 +245,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ScenarioDto"
+              "$ref": "#/definitions/ScenarioUpdateDto"
             },
             "x-nullable": false
           }
@@ -342,6 +385,21 @@
           "type": "string",
           "format": "date-time"
         },
+        "title": {
+          "type": "string"
+        },
+        "markdown": {
+          "type": "string"
+        }
+      }
+    },
+    "ScenarioUpdateDto": {
+      "type": "object",
+      "required": [
+        "title",
+        "markdown"
+      ],
+      "properties": {
         "title": {
           "type": "string"
         },

@@ -6,17 +6,28 @@
     <span *ngIf="scenario.title">- {{scenario.title}}</span>
   </h1>
 
-  <form class="edit-form" [formGroup]="scenarioForm">
+  <form class="edit-form" [formGroup]="scenarioForm" (submit)="save()">
     <div class="row">
       <div class="col-md-6">
         <label for="scenario-title" class="form-label" translate>scenario.edit.form.title</label>
-        <input type="email" class="form-control" id="scenario-title">
+        <input type="email" class="form-control" id="scenario-title" formControlName="title">
       </div>
     </div>
+
     <div class="row">
       <div class="col-md-12">
         <label class="form-label" translate>scenario.edit.form.content</label>
-        <app-markdown-editor [markdown]="'## 1'" id="scenario-markdown"></app-markdown-editor>
+        <app-markdown-editor [(markdown)]="scenario.markdown" id="scenario-markdown"></app-markdown-editor>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <button class="btn btn-primary"
+                type="submit"
+                [disabled]="scenarioForm.invalid"
+                translate>common.button.save
+        </button>
       </div>
     </div>
   </form>

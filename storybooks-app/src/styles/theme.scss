@@ -5,6 +5,14 @@ form {
   }
 }
 
+.form-control {
+  &.ng-invalid.ng-touched {
+    border-color: red;
+    &:focus {
+      box-shadow: 0 0 0 0.25rem rgba(253, 0, 0, 0.25);
+    }
+  }
+}
 
 .sb-card-list .card {
   margin-bottom: 20px;
@@ -17,4 +25,5 @@ form {
   span {
     font-size: 20px;
   }
+
 }

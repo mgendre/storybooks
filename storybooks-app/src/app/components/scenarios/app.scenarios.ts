@@ -43,8 +43,8 @@ export class ScenariosComponent implements OnDestroy {
     });
   }
 
-  openScenario(sce: ScenarioDto) {
-    alert('OPEN');
+  async openScenario(sce: ScenarioDto) {
+    await this.router.navigate(['scenarios/edit/' + sce.id]);
   }
 
   async createScenario() {

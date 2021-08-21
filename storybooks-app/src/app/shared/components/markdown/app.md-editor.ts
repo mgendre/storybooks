@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from "@angular/core";
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core";
 import {Subject, Subscription} from "rxjs";
 import {debounceTime, distinctUntilChanged} from "rxjs/operators";
 
@@ -15,14 +15,16 @@ export class MarkdownEditor implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
 
   @Input()
-  markdown = '';
+  markdown: string | null = '';
+  @Output('markdownChange') markdownChangeEmitter = new EventEmitter<string>();
 
   markdownValueChanged = new Subject<string>();
 
   markdownPreview = '';
 
   markdownInputChanged() {
-    this.markdownValueChanged.next(this.markdown);
+    this.markdownValueChanged.next(this.markdown ?? '');
+    this.markdownChangeEmitter.emit(this.markdown ?? '');
   }
 
   ngOnInit(): void {
@@ -31,10 +33,10 @@ export class MarkdownEditor implements OnInit, OnDestroy {
         debounceTime(300),
         distinctUntilChanged()
       ).subscribe(() => {
-        this.markdownPreview = this.markdown;
+        this.markdownPreview = this.markdown ?? '';
       })
     );
-    this.markdownPreview = this.markdown;
+    this.markdownPreview = this.markdown ?? '';
   }
 
   ngOnDestroy(): void {

@@ -24,6 +24,14 @@ export class CampaignsDatastore implements HasInitialization {
   private readonly _selectedCampaign = new BehaviorSubject<CampaignDto | null>(null);
   public readonly selectedCampaign = this._selectedCampaign.asObservable();
 
+  public get selectedCampaignValue(): CampaignDto{
+    const value = this._selectedCampaign.value;
+    if (!value) {
+      throw new Error('No selected campaign');
+    }
+    return value;
+  }
+
   constructor(private readonly campaignsApiClient: CampaignApiClient,
               private readonly authenticationService: AuthenticationService,
               private readonly storage: LocalStorageService,

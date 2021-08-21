@@ -30,7 +30,7 @@ namespace StoryBooks.Api.Controllers
             return MediatR.Send(new ListCampaignHandler.ListCampaignsQuery(GetCurrentUser().Email));
         }
         
-        [HttpGet(":id")]
+        [HttpGet("{id}")]
         public async Task<CampaignDto> Get(string id)
         {
             await VerifyCurrentUserAccess(id);
@@ -49,7 +49,7 @@ namespace StoryBooks.Api.Controllers
             return CampaignDto.FromModel(created);
         }
 
-        [HttpPut(":id")]
+        [HttpPut("{id}")]
         public async Task Update(string id, CampaignUpdateDto updateDto)
         {
             await VerifyCurrentUserAccess(id);
@@ -58,20 +58,26 @@ namespace StoryBooks.Api.Controllers
         
         
         // Scenarios
-        [HttpGet(":campaignId/scenarios")]
+        [HttpGet("{campaignId}/scenarios")]
         public async Task<IEnumerable<ScenarioDto>> ListScenarios(string campaignId)
         {
             await VerifyCurrentUserAccess(campaignId);
             return await MediatR.Send(new ListScenariosHandler.ListScenariosQuery(campaignId));
         }
         
-        [HttpPut(":campaignId/scenarios/:scenarioId")]
-        public async Task<ScenarioDto> UpdateScenario(string campaignId, string scenarioId, ScenarioDto scenario)
+        [HttpPost("{campaignId}/scenarios/")]
+        public async Task<ScenarioDto> CreateScenario(string campaignId, ScenarioUpdateDto scenario)
         {
             await VerifyCurrentUserAccess(campaignId);
-            throw new NotImplementedException();
+            return await MediatR.Send(new SaveScenariosHandler.SaveScenariosCommand(campaignId, null, scenario));
         }
 
+        [HttpPut("{campaignId}/scenarios/{scenarioId}")]
+        public async Task<ScenarioDto> UpdateScenario(string campaignId, string scenarioId, ScenarioUpdateDto scenario)
+        {
+            await VerifyCurrentUserAccess(campaignId);
+            return await MediatR.Send(new SaveScenariosHandler.SaveScenariosCommand(campaignId, scenarioId, scenario));
+        }
 
         private async Task VerifyCurrentUserAccess(string campaignId)
         {

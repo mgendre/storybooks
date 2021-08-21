@@ -1,6 +1,6 @@
 import {HasInitialization} from "../services/HasInitialization";
 import {BehaviorSubject} from "rxjs";
-import {CampaignApiClient, ScenarioDto} from "../services/api.generated.clients";
+import {CampaignApiClient, ScenarioDto, ScenarioUpdateDto} from "../services/api.generated.clients";
 import {Injectable} from "@angular/core";
 import {CampaignsDatastore} from "./CampaignsDatastore";
 
@@ -38,5 +38,17 @@ export class ScenariosDatastore implements HasInitialization {
       throw new Error('Could not find scenario with id ' + id);
     }
     return scenario;
+  }
+
+  public async saveScenario(scenario: ScenarioUpdateDto, scenarioId: string | null = null) {
+    const campaignId = this.campaignsDatastore.selectedCampaignValue.id;
+
+    if (scenarioId) {
+      await this.campaignsApiClient.updateScenario(campaignId, scenarioId, scenario).toPromise();
+    } else {
+      await this.campaignsApiClient.createScenario(campaignId, scenario).toPromise();
+    }
+
+    await this.reload(campaignId);
   }
 }

@@ -29,8 +29,7 @@ namespace StoryBooks.Api.Business.Scenario
             {
                 // The partition key is the campaign id
                 // We just have to get the whole list of scenarios from the partition
-                PartitionKey = new PartitionKey(request.CampaignId),
-                MaxItemCount = 1
+                PartitionKey = new PartitionKey(request.CampaignId)
             };
             var iterator = _scenarioRepository.Container.GetItemQueryIterator<Models.Scenario>(requestOptions: options);
             var models = await iterator.ToListAsync(cancellationToken);

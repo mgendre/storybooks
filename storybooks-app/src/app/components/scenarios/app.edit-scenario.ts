@@ -1,9 +1,9 @@
-import {ScenarioDto} from "../../services/api.generated.clients";
+import {ScenarioDto, ScenarioUpdateDto} from "../../services/api.generated.clients";
 import {Subscription} from "rxjs";
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {ScenariosDatastore} from "../../datastores/ScenariosDatastore";
 import {ActivatedRoute, Params} from "@angular/router";
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 
 @Component({
@@ -16,14 +16,22 @@ export class EditScenarioComponent implements OnInit, OnDestroy {
   scenario: ScenarioDto = new ScenarioDto();
 
   scenarioForm = new FormGroup({
-    title: new FormControl(''),
-    markdown: new FormControl(''),
+    title: new FormControl('', [
+      Validators.required,
+    ])
   });
 
   private readonly subscriptions: Subscription[] = [];
 
   constructor(private readonly scenariosDatastore: ScenariosDatastore,
               private route: ActivatedRoute) {
+  }
+
+  async save() {
+    const toUpdate = new ScenarioUpdateDto();
+    toUpdate.title = this.scenarioForm.get('title')?.value ?? '';
+    toUpdate.markdown = this.scenario.markdown;
+    await this.scenariosDatastore.saveScenario(toUpdate, this.scenario.id);
   }
 
   ngOnInit(): void {
@@ -34,6 +42,9 @@ export class EditScenarioComponent implements OnInit, OnDestroy {
       } else {
         this.scenario = new ScenarioDto();
       }
+      this.scenarioForm.setValue({
+        'title': this.scenario.title
+      });
     }));
   }
 
@@ -42,6 +53,4 @@ export class EditScenarioComponent implements OnInit, OnDestroy {
       s.unsubscribe();
     });
   }
-
-
 }

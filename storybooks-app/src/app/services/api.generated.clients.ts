@@ -135,11 +135,10 @@ export class CampaignApiClient {
     }
 
     get(id: string): Observable<CampaignDto> {
-        let url_ = this.baseUrl + "/api/campaigns/:id?";
+        let url_ = this.baseUrl + "/api/campaigns/{id}";
         if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined and cannot be null.");
-        else
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -187,11 +186,10 @@ export class CampaignApiClient {
     }
 
     update(id: string, updateDto: CampaignUpdateDto): Observable<void> {
-        let url_ = this.baseUrl + "/api/campaigns/:id?";
+        let url_ = this.baseUrl + "/api/campaigns/{id}";
         if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined and cannot be null.");
-        else
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(updateDto);
@@ -239,11 +237,10 @@ export class CampaignApiClient {
     }
 
     listScenarios(campaignId: string): Observable<ScenarioDto[]> {
-        let url_ = this.baseUrl + "/api/campaigns/:campaignId/scenarios?";
+        let url_ = this.baseUrl + "/api/campaigns/{campaignId}/scenarios";
         if (campaignId === undefined || campaignId === null)
-            throw new Error("The parameter 'campaignId' must be defined and cannot be null.");
-        else
-            url_ += "campaignId=" + encodeURIComponent("" + campaignId) + "&";
+            throw new Error("The parameter 'campaignId' must be defined.");
+        url_ = url_.replace("{campaignId}", encodeURIComponent("" + campaignId));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -297,16 +294,69 @@ export class CampaignApiClient {
         return _observableOf<ScenarioDto[]>(<any>null);
     }
 
-    updateScenario(campaignId: string, scenarioId: string, scenario: ScenarioDto): Observable<ScenarioDto> {
-        let url_ = this.baseUrl + "/api/campaigns/:campaignId/scenarios/:scenarioId?";
+    createScenario(campaignId: string, scenario: ScenarioUpdateDto): Observable<ScenarioDto> {
+        let url_ = this.baseUrl + "/api/campaigns/{campaignId}/scenarios";
         if (campaignId === undefined || campaignId === null)
-            throw new Error("The parameter 'campaignId' must be defined and cannot be null.");
-        else
-            url_ += "campaignId=" + encodeURIComponent("" + campaignId) + "&";
+            throw new Error("The parameter 'campaignId' must be defined.");
+        url_ = url_.replace("{campaignId}", encodeURIComponent("" + campaignId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(scenario);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateScenario(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateScenario(<any>response_);
+                } catch (e) {
+                    return <Observable<ScenarioDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ScenarioDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateScenario(response: HttpResponseBase): Observable<ScenarioDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ScenarioDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ScenarioDto>(<any>null);
+    }
+
+    updateScenario(campaignId: string, scenarioId: string, scenario: ScenarioUpdateDto): Observable<ScenarioDto> {
+        let url_ = this.baseUrl + "/api/campaigns/{campaignId}/scenarios/{scenarioId}";
+        if (campaignId === undefined || campaignId === null)
+            throw new Error("The parameter 'campaignId' must be defined.");
+        url_ = url_.replace("{campaignId}", encodeURIComponent("" + campaignId));
         if (scenarioId === undefined || scenarioId === null)
-            throw new Error("The parameter 'scenarioId' must be defined and cannot be null.");
-        else
-            url_ += "scenarioId=" + encodeURIComponent("" + scenarioId) + "&";
+            throw new Error("The parameter 'scenarioId' must be defined.");
+        url_ = url_.replace("{scenarioId}", encodeURIComponent("" + scenarioId));
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(scenario);
@@ -612,6 +662,46 @@ export class ScenarioDto implements IScenarioDto {
 export interface IScenarioDto {
     id: string;
     creationDate: Date;
+    title: string;
+    markdown: string;
+}
+
+export class ScenarioUpdateDto implements IScenarioUpdateDto {
+    title!: string;
+    markdown!: string;
+
+    constructor(data?: IScenarioUpdateDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.title = _data["title"] !== undefined ? _data["title"] : <any>null;
+            this.markdown = _data["markdown"] !== undefined ? _data["markdown"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): ScenarioUpdateDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ScenarioUpdateDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title !== undefined ? this.title : <any>null;
+        data["markdown"] = this.markdown !== undefined ? this.markdown : <any>null;
+        return data; 
+    }
+}
+
+export interface IScenarioUpdateDto {
     title: string;
     markdown: string;
 }
