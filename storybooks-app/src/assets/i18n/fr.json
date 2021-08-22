@@ -3,6 +3,7 @@
   "common.button.cancel": "Annuler",
   "common.confirm.accept": "Oui",
   "common.confirm.reject": "Non",
+  "common.error.message": "Une erreur est survenue",
   "application.name": "Story Books",
   "application.login.loginRequired": "Vous devez vous identifier avant de pouvoir accéder et créer de nouvelles campagnes.",
   "application.login.google.button": "Se connecter avec votre compte Google",

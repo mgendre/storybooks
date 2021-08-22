@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {Component, OnInit} from '@angular/core';
+import {Component, NgZone, OnInit} from '@angular/core';
 import {UserProfileDto} from './services/api.generated.clients';
 import {AuthenticationService} from './services/AuthenticationService';
 import {ServiceInitializer} from "./services/ServiceInitializer";
@@ -37,9 +37,5 @@ export class AppComponent implements OnInit {
 
   async logout(): Promise<void> {
     await this.authService.logout();
-  }
-
-  public async getCampaigns() {
-    await this.http.get('http://localhost:4200/api/campaigns').toPromise();
   }
 }

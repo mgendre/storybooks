@@ -1,7 +1,7 @@
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
-import {NgModule} from '@angular/core';
+import {ErrorHandler, NgModule, NgZone} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from 'angularx-social-login';
 
@@ -13,15 +13,17 @@ import {CampaignsComponent} from "./components/campaigns/app.campaigns";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {NgxWebstorageModule} from "ngx-webstorage";
-import {LoggerModule, NgxLoggerLevel} from "ngx-logger";
+import {LoggerModule, NGXLogger, NgxLoggerLevel} from "ngx-logger";
 import {ScenariosComponent} from "./components/scenarios/app.scenarios";
 import {CurrentCampaignName} from "./components/campaigns/app.current-campaign-name";
 import {EditScenarioComponent} from "./components/scenarios/app.edit-scenario";
 import {MarkdownEditor} from "./shared/components/markdown/app.md-editor";
 import {MarkdownView} from "./shared/components/markdown/app.md-view";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
-import {ConfirmationService} from "primeng/api";
+import {ConfirmationService, MessageService} from "primeng/api";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {ToastModule} from "primeng/toast";
+import {AppErrorHandler} from "./shared/AppErrorHandler";
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -60,7 +62,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         deps: [HttpClient]
       }
     }),
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ToastModule
   ],
   providers: [
     {
@@ -82,7 +85,11 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
       useClass: AuthInterceptor,
       multi: true,
     },
-    ConfirmationService
+    {
+      provide: ErrorHandler, useClass: AppErrorHandler, deps: [MessageService, TranslateService, NGXLogger, NgZone]
+    },
+    ConfirmationService,
+    MessageService
   ],
   bootstrap: [AppComponent]
 })
