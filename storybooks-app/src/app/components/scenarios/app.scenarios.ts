@@ -3,6 +3,8 @@ import {Subscription} from "rxjs";
 import {Component, OnDestroy} from "@angular/core";
 import {ScenariosDatastore} from "../../datastores/ScenariosDatastore";
 import {Router} from "@angular/router";
+import {ConfirmationService} from "primeng/api";
+import {TranslateService} from "@ngx-translate/core";
 
 
 @Component({
@@ -17,7 +19,9 @@ export class ScenariosComponent implements OnDestroy {
   private readonly subscriptions: Subscription[] = [];
 
   constructor(private readonly scenariosDatastore: ScenariosDatastore,
-              private readonly router: Router) {
+              private readonly router: Router,
+              private readonly confirmationService: ConfirmationService,
+              private readonly translate: TranslateService) {
     this.subscriptions.push(this.scenariosDatastore.scenarios.subscribe(scenarios => {
       this.scenarios = [];
       if (!scenarios) {
@@ -53,6 +57,22 @@ export class ScenariosComponent implements OnDestroy {
 
   async createScenario() {
     await this.router.navigate(['scenarios/new']);
+  }
+
+  confirmDelete(scenario: ScenarioDto) {
+    this.confirmationService.confirm({
+      message: this.translate.instant(
+        'scenarios.list.delete.confirm.message',
+        {scenarioTitle: scenario.title}),
+      header: this.translate.instant('scenarios.list.delete.confirm.title',
+        {scenarioTitle: scenario.title}),
+      icon: 'bi bi-exclamation',
+      accept: () => {
+        alert('accepted');
+      },
+      reject: () => {
+      }
+    });
   }
 }
 
