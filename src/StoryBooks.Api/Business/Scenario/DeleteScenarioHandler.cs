@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
-using StoryBooks.Api.Dto;
 using StoryBooks.Api.Repository;
 
 namespace StoryBooks.Api.Business.Scenario
@@ -24,12 +23,12 @@ namespace StoryBooks.Api.Business.Scenario
         {
             await _scenarioRepository.Delete(request.ScenarioId, 
                 new PartitionKey(request.CampaignId), cancellationToken);
-            _logger.LogInformation("Scenario {ScenarioId} of campaign {CampaignId}",
+            _logger.LogInformation("Scenario {ScenarioId} of campaign {CampaignId} has been deleted",
                 request.ScenarioId, request.CampaignId);
             return Unit.Value;
         }
 
-        public class DeleteScenariosCommand : IRequest<ScenarioDto>, IRequest<Unit>
+        public class DeleteScenariosCommand : IRequest<Unit>
         {
             public string CampaignId { get; }
             

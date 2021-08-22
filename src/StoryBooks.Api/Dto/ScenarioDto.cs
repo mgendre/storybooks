@@ -6,10 +6,10 @@ namespace StoryBooks.Api.Dto
 {
     public class ScenarioDto
     {
-        public string Id { get; set; }
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public DateTime CreationDate { get; set; }
-        public string Title { get; set; }
-        public string Markdown { get; set; }
+        public string Title { get; set; } = "";
+        public string Markdown { get; set; } = "";
 
         public void Patch(Scenario scenario)
         {

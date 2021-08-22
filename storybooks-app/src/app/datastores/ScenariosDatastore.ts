@@ -53,6 +53,12 @@ export class ScenariosDatastore implements HasInitialization {
     await this.reload(campaignId);
   }
 
+  public async deleteScenario(scenarioId: string) {
+    const campaignId = this.campaignsDatastore.selectedCampaignValue.id;
+    await this.campaignsApiClient.deleteScenario(campaignId, scenarioId).toPromise();
+    await this.reload(campaignId);
+  }
+
   isReady(): boolean {
     return this._ready.value;
   }

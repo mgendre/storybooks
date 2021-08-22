@@ -67,8 +67,8 @@ export class ScenariosComponent implements OnDestroy {
       header: this.translate.instant('scenarios.list.delete.confirm.title',
         {scenarioTitle: scenario.title}),
       icon: 'bi bi-exclamation',
-      accept: () => {
-        alert('accepted');
+      accept: async () => {
+        await this.scenariosDatastore.deleteScenario(scenario.id);
       },
       reject: () => {
       }
