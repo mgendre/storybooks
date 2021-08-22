@@ -19,6 +19,9 @@ import {CurrentCampaignName} from "./components/campaigns/app.current-campaign-n
 import {EditScenarioComponent} from "./components/scenarios/app.edit-scenario";
 import {MarkdownEditor} from "./shared/components/markdown/app.md-editor";
 import {MarkdownView} from "./shared/components/markdown/app.md-view";
+import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {ConfirmationService} from "primeng/api";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -39,8 +42,10 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
     SocialLoginModule,
@@ -55,7 +60,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         deps: [HttpClient]
       }
     }),
-    ReactiveFormsModule
+    ConfirmDialogModule
   ],
   providers: [
     {
@@ -76,8 +81,10 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
-    }
+    },
+    ConfirmationService
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
