@@ -259,6 +259,33 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "Campaign"
+        ],
+        "operationId": "Campaign_DeleteScenario",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "scenarioId",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
       }
     },
     "/api/user-profiles/current": {

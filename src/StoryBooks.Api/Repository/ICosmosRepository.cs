@@ -12,6 +12,6 @@ namespace StoryBooks.Api.Repository
         public Task<T> Create(T toCreate, CancellationToken ct);
         public Task<T> GetById(string id, PartitionKey key, CancellationToken ct);
         public Task<T> Update(string id, PartitionKey key, Action<T> patch, CancellationToken ct);
-        public Task Delete(T toDelete, PartitionKey key, CancellationToken ct);
+        public Task Delete(string id, PartitionKey key, CancellationToken ct);
     }
 }

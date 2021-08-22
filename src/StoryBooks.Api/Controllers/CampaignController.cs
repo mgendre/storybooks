@@ -56,7 +56,6 @@ namespace StoryBooks.Api.Controllers
             await MediatR.Send(new UpdateCampaignHandler.UpdateCampaignCommand(id, updateDto));
         }
         
-        
         // Scenarios
         [HttpGet("{campaignId}/scenarios")]
         public async Task<IEnumerable<ScenarioDto>> ListScenarios(string campaignId)
@@ -77,6 +76,13 @@ namespace StoryBooks.Api.Controllers
         {
             await VerifyCurrentUserAccess(campaignId);
             return await MediatR.Send(new SaveScenariosHandler.SaveScenariosCommand(campaignId, scenarioId, scenario));
+        }
+        
+        [HttpDelete("{campaignId}/scenarios/{scenarioId}")]
+        public async Task DeleteScenario(string campaignId, string scenarioId)
+        {
+            await VerifyCurrentUserAccess(campaignId);
+            await MediatR.Send(new DeleteScenariosHandler.DeleteScenariosCommand(campaignId, scenarioId));
         }
 
         private async Task VerifyCurrentUserAccess(string campaignId)

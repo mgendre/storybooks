@@ -39,9 +39,9 @@ namespace StoryBooks.Api.Repository
             return result.Resource;
         }
 
-        public async Task Delete(T toDelete, PartitionKey key, CancellationToken ct)
+        public async Task Delete(string id, PartitionKey key, CancellationToken ct)
         {
-            await Container.DeleteItemAsync<T>(toDelete.Id, key, cancellationToken: ct);
+            await Container.DeleteItemAsync<T>(id, key, cancellationToken: ct);
         }
     }
 }
