@@ -1,6 +1,6 @@
 import {HasInitialization} from "../services/HasInitialization";
 import {BehaviorSubject} from "rxjs";
-import {CharacterApiClient, CharacterDto} from "../services/api.generated.clients";
+import {CharacterApiClient, CharacterDto, CharacterUpdateDto} from "../services/api.generated.clients";
 import {Injectable} from "@angular/core";
 import {CampaignsDatastore} from "./CampaignsDatastore";
 
@@ -17,7 +17,9 @@ export class ActorsDatastore implements HasInitialization {
   constructor(private readonly charactersApiClient: CharacterApiClient,
               private readonly campaignsDatastore: CampaignsDatastore) {
     this.campaignsDatastore.selectedCampaign.subscribe(async (campaign) => {
-      await this.reload(campaign?.id);
+      if (campaign?.id) {
+        await this.reload(campaign?.id);
+      }
     });
   }
 
@@ -43,9 +45,29 @@ export class ActorsDatastore implements HasInitialization {
     return this._ready.value;
   }
 
+  public async saveCharacter(actor: CharacterUpdateDto, actorId: string | null = null) {
+    const campaignId = this.campaignsDatastore.selectedCampaignValue.id;
+
+    if (actorId) {
+      await this.charactersApiClient.update(campaignId, actorId, actor).toPromise();
+    } else {
+      await this.charactersApiClient.create(campaignId, actor).toPromise();
+    }
+
+    await this.reloadCharacters(campaignId);
+  }
+
   async deleteCharacter(id: string) {
     const campaignId = this.campaignsDatastore.selectedCampaignValue.id;
     await this.charactersApiClient.delete(campaignId, id).toPromise();
     await this.reloadCharacters(campaignId);
+  }
+
+  public getCharacter(id: string) {
+    const actor = this._characters.value.find(a => a.id === id);
+    if (!actor) {
+      throw new Error('Could not find character with id ' + id);
+    }
+    return actor;
   }
 }

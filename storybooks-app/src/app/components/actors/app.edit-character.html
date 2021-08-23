@@ -1,0 +1,47 @@
+<div class="edit-character">
+  <h1>
+    <app-current-campaign-name></app-current-campaign-name>
+    -
+    <span translate>characters.title</span>
+    <span *ngIf="actor.name">- {{actor.name}}</span>
+  </h1>
+
+  <form class="edit-form" [formGroup]="actorForm" (submit)="save()">
+    <div class="row">
+      <div class="col-md-6">
+        <label for="actor-firstname" class="form-label" translate>character.edit.form.firstname</label>
+        <input type="text" class="form-control" id="actor-firstname" formControlName="firstname">
+      </div>
+      <div class="col-md-6">
+        <label for="actor-lastname" class="form-label" translate>character.edit.form.lastname</label>
+        <input type="text" class="form-control" id="actor-lastname" formControlName="lastname">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <label class="form-label" translate>actor.edit.form.content</label>
+        <app-markdown-editor [(markdown)]="actor.descriptionMarkdown" id="actor-markdown"></app-markdown-editor>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+          <button class="btn btn-secondary"
+                  type="button"
+                  (click)="close()">
+            <i class="bi bi-x"></i>
+            <span translate>common.button.cancel</span>
+          </button>
+      </div>
+      <div class="col-md-6 text-end">
+          <button class="btn btn-icon btn-primary"
+                  type="submit"
+                  [disabled]="actorForm.invalid">
+            <i class="bi bi-save"></i>
+            <span translate>common.button.save</span>
+          </button>
+      </div>
+    </div>
+  </form>
+</div>
