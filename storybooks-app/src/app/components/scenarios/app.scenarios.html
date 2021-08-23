@@ -19,7 +19,15 @@
       <div class="card" [class]="{expanded: sce.expanded}" *ngFor="let sce of scenarios">
         <div class="card-body">
           <div class="row">
-            <div class="col-md-9"><h5>{{sce.scenario.title}}</h5></div>
+            <div class="col-md-9">
+              <h5>
+                <a (click)="sce.expanded = !sce.expanded" class="link-icon">
+                  <i class="bi" [class]="{'bi-plus': !sce.expanded, 'bi-dash': sce.expanded}"></i>
+                  {{sce.scenario.title}}
+                </a>
+              </h5>
+
+            </div>
             <div class="col-md-3 card-buttons">
               <div class="btn-group btn-group-sm">
                 <button class="btn btn-primary" (click)="sce.expanded = true" *ngIf="!sce.expanded">
@@ -38,9 +46,7 @@
             </div>
           </div>
 
-          <a *ngIf="!sce.expanded" (click)="sce.expanded = true" translate>scenarios.list.expandLink</a>
-
-          <div *ngIf="sce.expanded" class="scenario-content">
+          <div *ngIf="sce.expanded" class="card-editor-content">
             <app-markdown-view [markdown]="sce.scenario.markdown"></app-markdown-view>
           </div>
         </div>

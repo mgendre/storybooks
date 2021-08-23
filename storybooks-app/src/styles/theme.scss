@@ -44,6 +44,13 @@ form {
       text-align: right;
     }
   }
+
+  .card-editor-content {
+    margin-top: 9px;
+    padding-top: 9px;
+    border-top: 1px solid rgba(0, 0, 0, 0.125)
+  }
+
 }
 
 .btn-icon {
@@ -51,4 +58,9 @@ form {
     display: inline-block;
     padding-right: 5px;
   }
+}
+
+a.link-icon {
+  text-decoration: none;
+  cursor: pointer;
 }

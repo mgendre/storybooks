@@ -24,6 +24,7 @@ import {ConfirmationService, MessageService} from "primeng/api";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ToastModule} from "primeng/toast";
 import {AppErrorHandler} from "./shared/AppErrorHandler";
+import {CharactersComponent} from "./components/actors/app.characters";
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -40,7 +41,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     CampaignsComponent,
     CurrentCampaignName,
     ScenariosComponent,
-    EditScenarioComponent
+    EditScenarioComponent,
+    CharactersComponent
   ],
   imports: [
     BrowserModule,

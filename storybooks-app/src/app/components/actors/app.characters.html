@@ -1,0 +1,54 @@
+<div class="characters">
+  <h1>
+    <app-current-campaign-name></app-current-campaign-name>
+    -
+    <span translate>characters.title</span>
+  </h1>
+
+  <div class="characters-buttons mb-4">
+    <button class="btn btn-primary"
+            (click)="create()">
+      <i class="bi bi-plus"></i>
+      <span translate>characters.new</span>
+    </button>
+  </div>
+
+  <div class="characters-list sb-card-list" *ngIf="actors.length > 0">
+
+    <div class="card" [class]="{expanded: actor.expanded}" *ngFor="let actor of actors">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-9">
+            <h5>
+              <a (click)="actor.expanded = !actor.expanded" class="link-icon">
+                <i class="bi" [class]="{'bi-plus': !actor.expanded, 'bi-dash': actor.expanded}"></i>
+                {{actor.actor.name}}
+              </a>
+            </h5>
+
+          </div>
+          <div class="col-md-3 card-buttons">
+            <div class="btn-group btn-group-sm">
+              <button class="btn btn-primary" (click)="actor.expanded = true" *ngIf="!actor.expanded">
+                <i class="bi bi-plus-square"></i>
+              </button>
+              <button class="btn btn-primary" (click)="actor.expanded = false" *ngIf="actor.expanded">
+                <i class="bi bi-dash-square"></i>
+              </button>
+              <button class="btn btn-secondary" (click)="edit(actor.actor)">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+              <button class="btn btn-secondary" (click)="confirmDelete(actor.actor)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="actor.expanded" class="card-editor-content">
+          <app-markdown-view [markdown]="actor.actor.descriptionMarkdown"></app-markdown-view>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

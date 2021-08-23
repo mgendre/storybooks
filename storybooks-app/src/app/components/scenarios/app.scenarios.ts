@@ -36,7 +36,7 @@ export class ScenariosComponent implements OnDestroy {
         if (a.creationDate < b.creationDate) {
           return 1;
         }
-        return 0;
+        return -1;
       });
 
       for (let i=0; i<scenarios.length; i++) {

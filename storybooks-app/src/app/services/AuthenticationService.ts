@@ -21,8 +21,9 @@ export class AuthenticationService implements HasInitialization {
         try {
           localStorage.setItem('jwt_token', su.idToken);
           await this.loadProfile();
-        } catch (_) {
+        } catch (e) {
           this._user.next(null);
+          throw e;
         } finally {
           this._ready.next(true);
         }
