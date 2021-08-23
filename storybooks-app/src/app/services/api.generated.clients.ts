@@ -7,10 +7,10 @@
 //----------------------
 // ReSharper disable InconsistentNaming
 
-import { mergeMap as _observableMergeMap, catchError as _observableCatch } from 'rxjs/operators';
-import { Observable, throwError as _observableThrow, of as _observableOf } from 'rxjs';
-import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
+import {catchError as _observableCatch, mergeMap as _observableMergeMap} from 'rxjs/operators';
+import {Observable, of as _observableOf, throwError as _observableThrow} from 'rxjs';
+import {Inject, Injectable, InjectionToken, Optional} from '@angular/core';
+import {HttpClient, HttpHeaders, HttpResponse, HttpResponseBase} from '@angular/common/http';
 
 export const BASE_URL = new InjectionToken<string>('BASE_URL');
 
@@ -798,7 +798,7 @@ export class CampaignListItemDto implements ICampaignListItemDto {
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
         data["modificationDate"] = this.modificationDate ? this.modificationDate.toISOString() : <any>null;
-        return data; 
+        return data;
     }
 }
 
@@ -855,7 +855,7 @@ export class CampaignDto implements ICampaignDto {
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
         data["modificationDate"] = this.modificationDate ? this.modificationDate.toISOString() : <any>null;
-        return data; 
+        return data;
     }
 }
 
@@ -895,7 +895,7 @@ export class CampaignUpdateDto implements ICampaignUpdateDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name !== undefined ? this.name : <any>null;
-        return data; 
+        return data;
     }
 }
 
@@ -940,7 +940,7 @@ export class ScenarioDto implements IScenarioDto {
         data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
         data["title"] = this.title !== undefined ? this.title : <any>null;
         data["markdown"] = this.markdown !== undefined ? this.markdown : <any>null;
-        return data; 
+        return data;
     }
 }
 
@@ -982,7 +982,7 @@ export class ScenarioUpdateDto implements IScenarioUpdateDto {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title !== undefined ? this.title : <any>null;
         data["markdown"] = this.markdown !== undefined ? this.markdown : <any>null;
-        return data; 
+        return data;
     }
 }
 
@@ -1035,7 +1035,7 @@ export abstract class AbstractActorDto implements IAbstractActorDto {
         data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
         data["modificationDate"] = this.modificationDate ? this.modificationDate.toISOString() : <any>null;
         data["type"] = this.type !== undefined ? this.type : <any>null;
-        return data; 
+        return data;
     }
 }
 
@@ -1080,7 +1080,7 @@ export class CharacterDto extends AbstractActorDto implements ICharacterDto {
         data["lastname"] = this.lastname !== undefined ? this.lastname : <any>null;
         data["name"] = this.name !== undefined ? this.name : <any>null;
         super.toJSON(data);
-        return data; 
+        return data;
     }
 }
 
@@ -1121,7 +1121,7 @@ export class AbstractActorUpdateDto implements IAbstractActorUpdateDto {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name !== undefined ? this.name : <any>null;
         data["descriptionMarkdown"] = this.descriptionMarkdown !== undefined ? this.descriptionMarkdown : <any>null;
-        return data; 
+        return data;
     }
 }
 
@@ -1161,7 +1161,7 @@ export class CharacterUpdateDto extends AbstractActorUpdateDto implements IChara
         data["lastname"] = this.lastname !== undefined ? this.lastname : <any>null;
         data["name"] = this.name !== undefined ? this.name : <any>null;
         super.toJSON(data);
-        return data; 
+        return data;
     }
 }
 
@@ -1231,7 +1231,7 @@ export class UserProfileDto implements IUserProfileDto {
             for (let item of this.campaignIds)
                 data["campaignIds"].push(item);
         }
-        return data; 
+        return data;
     }
 }
 

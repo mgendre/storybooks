@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {Component, NgZone, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserProfileDto} from './services/api.generated.clients';
 import {AuthenticationService} from './services/AuthenticationService';
 import {ServiceInitializer} from "./services/ServiceInitializer";

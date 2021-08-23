@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {CampaignsComponent} from "./components/campaigns/app.campaigns";
 import {ScenariosComponent} from "./components/scenarios/app.scenarios";
 import {EditScenarioComponent} from "./components/scenarios/app.edit-scenario";
