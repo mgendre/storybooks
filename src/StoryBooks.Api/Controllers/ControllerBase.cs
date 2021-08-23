@@ -56,5 +56,14 @@ namespace StoryBooks.Api.Controllers
             return await MediatR.Send(new FindUserHandler.FindUserHandlerCommand(cu.Email)) ?? 
                    throw new AuthenticationException($"No profile found for user with email {cu.Email}");
         }
+        
+        protected async Task VerifyCurrentUserCampaignAccess(string campaignId)
+        {
+            var profile = await GetCurrentUserProfile();
+            if (!profile.CampaignIds.Contains(campaignId))
+            {
+                throw new UnauthorizedAccessException($"User {profile.Email} has no access to campaign {campaignId}");
+            }
+        }
     }
 }

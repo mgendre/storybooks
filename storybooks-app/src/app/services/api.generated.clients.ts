@@ -461,6 +461,241 @@ export class CampaignApiClient {
 @Injectable({
     providedIn: 'root'
 })
+export class CharacterApiClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    findAll(campaignId: string): Observable<CharacterDto[]> {
+        let url_ = this.baseUrl + "/api/campaigns/{campaignId}/characters";
+        if (campaignId === undefined || campaignId === null)
+            throw new Error("The parameter 'campaignId' must be defined.");
+        url_ = url_.replace("{campaignId}", encodeURIComponent("" + campaignId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFindAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFindAll(<any>response_);
+                } catch (e) {
+                    return <Observable<CharacterDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CharacterDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processFindAll(response: HttpResponseBase): Observable<CharacterDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(CharacterDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CharacterDto[]>(<any>null);
+    }
+
+    create(campaignId: string, updateDto: CharacterUpdateDto): Observable<CharacterDto> {
+        let url_ = this.baseUrl + "/api/campaigns/{campaignId}/characters";
+        if (campaignId === undefined || campaignId === null)
+            throw new Error("The parameter 'campaignId' must be defined.");
+        url_ = url_.replace("{campaignId}", encodeURIComponent("" + campaignId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateDto);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(<any>response_);
+                } catch (e) {
+                    return <Observable<CharacterDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CharacterDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<CharacterDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CharacterDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CharacterDto>(<any>null);
+    }
+
+    update(campaignId: string, actorId: string, updateDto: CharacterUpdateDto): Observable<CharacterDto> {
+        let url_ = this.baseUrl + "/api/campaigns/{campaignId}/characters/{actorId}";
+        if (campaignId === undefined || campaignId === null)
+            throw new Error("The parameter 'campaignId' must be defined.");
+        url_ = url_.replace("{campaignId}", encodeURIComponent("" + campaignId));
+        if (actorId === undefined || actorId === null)
+            throw new Error("The parameter 'actorId' must be defined.");
+        url_ = url_.replace("{actorId}", encodeURIComponent("" + actorId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateDto);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(<any>response_);
+                } catch (e) {
+                    return <Observable<CharacterDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CharacterDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<CharacterDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CharacterDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CharacterDto>(<any>null);
+    }
+
+    delete(campaignId: string, actorId: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/campaigns/{campaignId}/characters/{actorId}";
+        if (campaignId === undefined || campaignId === null)
+            throw new Error("The parameter 'campaignId' must be defined.");
+        url_ = url_.replace("{campaignId}", encodeURIComponent("" + campaignId));
+        if (actorId === undefined || actorId === null)
+            throw new Error("The parameter 'actorId' must be defined.");
+        url_ = url_.replace("{actorId}", encodeURIComponent("" + actorId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
 export class UserProfileApiClient {
     private http: HttpClient;
     private baseUrl: string;
@@ -754,6 +989,186 @@ export class ScenarioUpdateDto implements IScenarioUpdateDto {
 export interface IScenarioUpdateDto {
     title: string;
     markdown: string;
+}
+
+export abstract class AbstractActorDto implements IAbstractActorDto {
+    id!: string;
+    campaignId!: string;
+    name!: string;
+    descriptionMarkdown!: string;
+    creationDate!: Date;
+    modificationDate!: Date;
+    type!: string;
+
+    constructor(data?: IAbstractActorDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.campaignId = _data["campaignId"] !== undefined ? _data["campaignId"] : <any>null;
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
+            this.descriptionMarkdown = _data["descriptionMarkdown"] !== undefined ? _data["descriptionMarkdown"] : <any>null;
+            this.creationDate = _data["creationDate"] ? new Date(_data["creationDate"].toString()) : <any>null;
+            this.modificationDate = _data["modificationDate"] ? new Date(_data["modificationDate"].toString()) : <any>null;
+            this.type = _data["type"] !== undefined ? _data["type"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): AbstractActorDto {
+        data = typeof data === 'object' ? data : {};
+        throw new Error("The abstract class 'AbstractActorDto' cannot be instantiated.");
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["campaignId"] = this.campaignId !== undefined ? this.campaignId : <any>null;
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        data["descriptionMarkdown"] = this.descriptionMarkdown !== undefined ? this.descriptionMarkdown : <any>null;
+        data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
+        data["modificationDate"] = this.modificationDate ? this.modificationDate.toISOString() : <any>null;
+        data["type"] = this.type !== undefined ? this.type : <any>null;
+        return data; 
+    }
+}
+
+export interface IAbstractActorDto {
+    id: string;
+    campaignId: string;
+    name: string;
+    descriptionMarkdown: string;
+    creationDate: Date;
+    modificationDate: Date;
+    type: string;
+}
+
+export class CharacterDto extends AbstractActorDto implements ICharacterDto {
+    firstname!: string;
+    lastname!: string;
+    name!: string;
+
+    constructor(data?: ICharacterDto) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.firstname = _data["firstname"] !== undefined ? _data["firstname"] : <any>null;
+            this.lastname = _data["lastname"] !== undefined ? _data["lastname"] : <any>null;
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): CharacterDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CharacterDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["firstname"] = this.firstname !== undefined ? this.firstname : <any>null;
+        data["lastname"] = this.lastname !== undefined ? this.lastname : <any>null;
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface ICharacterDto extends IAbstractActorDto {
+    firstname: string;
+    lastname: string;
+    name: string;
+}
+
+export class AbstractActorUpdateDto implements IAbstractActorUpdateDto {
+    name!: string;
+    descriptionMarkdown!: string;
+
+    constructor(data?: IAbstractActorUpdateDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
+            this.descriptionMarkdown = _data["descriptionMarkdown"] !== undefined ? _data["descriptionMarkdown"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): AbstractActorUpdateDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AbstractActorUpdateDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        data["descriptionMarkdown"] = this.descriptionMarkdown !== undefined ? this.descriptionMarkdown : <any>null;
+        return data; 
+    }
+}
+
+export interface IAbstractActorUpdateDto {
+    name: string;
+    descriptionMarkdown: string;
+}
+
+export class CharacterUpdateDto extends AbstractActorUpdateDto implements ICharacterUpdateDto {
+    firstname!: string;
+    lastname!: string;
+    name!: string;
+
+    constructor(data?: ICharacterUpdateDto) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.firstname = _data["firstname"] !== undefined ? _data["firstname"] : <any>null;
+            this.lastname = _data["lastname"] !== undefined ? _data["lastname"] : <any>null;
+            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): CharacterUpdateDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CharacterUpdateDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["firstname"] = this.firstname !== undefined ? this.firstname : <any>null;
+        data["lastname"] = this.lastname !== undefined ? this.lastname : <any>null;
+        data["name"] = this.name !== undefined ? this.name : <any>null;
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface ICharacterUpdateDto extends IAbstractActorUpdateDto {
+    firstname: string;
+    lastname: string;
+    name: string;
 }
 
 export class UserProfileDto implements IUserProfileDto {

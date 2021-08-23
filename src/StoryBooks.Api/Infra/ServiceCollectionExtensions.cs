@@ -51,6 +51,14 @@ namespace StoryBooks.Api.Infra
             services.AddSingleton(scenarioContainer);
             services.AddSingleton<IScenarioRepository>(new ScenarioRepository(scenarioContainer));
             
+            var actorContainer = new ActorContainer(
+                await db.Database.CreateContainerIfNotExistsAsync(
+                    "Actor", "/PartitionKey")
+            );
+            services.AddSingleton(actorContainer);
+            services.AddSingleton<IActorRepository<Character>>(new ActorRepository<Character>(actorContainer));
+            services.AddSingleton<IActorRepository<Place>>(new ActorRepository<Place>(actorContainer));
+            
             var userProfileContainer = new UserProfileContainer(
                 await db.Database.CreateContainerIfNotExistsAsync(
                     nameof(UserProfile), "/PartitionKey")

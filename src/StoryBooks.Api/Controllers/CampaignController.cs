@@ -33,7 +33,7 @@ namespace StoryBooks.Api.Controllers
         [HttpGet("{id}")]
         public async Task<CampaignDto> Get(string id)
         {
-            await VerifyCurrentUserAccess(id);
+            await VerifyCurrentUserCampaignAccess(id);
             return await MediatR.Send(new GetCampaignHandler.GetCampaignQuery(id, GetCurrentUser().Email));
         }
 
@@ -52,7 +52,7 @@ namespace StoryBooks.Api.Controllers
         [HttpPut("{id}")]
         public async Task Update(string id, CampaignUpdateDto updateDto)
         {
-            await VerifyCurrentUserAccess(id);
+            await VerifyCurrentUserCampaignAccess(id);
             await MediatR.Send(new UpdateCampaignHandler.UpdateCampaignCommand(id, updateDto));
         }
         
@@ -60,38 +60,29 @@ namespace StoryBooks.Api.Controllers
         [HttpGet("{campaignId}/scenarios")]
         public async Task<IEnumerable<ScenarioDto>> ListScenarios(string campaignId)
         {
-            await VerifyCurrentUserAccess(campaignId);
+            await VerifyCurrentUserCampaignAccess(campaignId);
             return await MediatR.Send(new ListScenariosHandler.ListScenariosQuery(campaignId));
         }
         
         [HttpPost("{campaignId}/scenarios/")]
         public async Task<ScenarioDto> CreateScenario(string campaignId, ScenarioUpdateDto scenario)
         {
-            await VerifyCurrentUserAccess(campaignId);
+            await VerifyCurrentUserCampaignAccess(campaignId);
             return await MediatR.Send(new SaveScenariosHandler.SaveScenariosCommand(campaignId, null, scenario));
         }
 
         [HttpPut("{campaignId}/scenarios/{scenarioId}")]
         public async Task<ScenarioDto> UpdateScenario(string campaignId, string scenarioId, ScenarioUpdateDto scenario)
         {
-            await VerifyCurrentUserAccess(campaignId);
+            await VerifyCurrentUserCampaignAccess(campaignId);
             return await MediatR.Send(new SaveScenariosHandler.SaveScenariosCommand(campaignId, scenarioId, scenario));
         }
         
         [HttpDelete("{campaignId}/scenarios/{scenarioId}")]
         public async Task DeleteScenario(string campaignId, string scenarioId)
         {
-            await VerifyCurrentUserAccess(campaignId);
+            await VerifyCurrentUserCampaignAccess(campaignId);
             await MediatR.Send(new DeleteScenariosHandler.DeleteScenariosCommand(campaignId, scenarioId));
-        }
-
-        private async Task VerifyCurrentUserAccess(string campaignId)
-        {
-            var profile = await GetCurrentUserProfile();
-            if (!profile.CampaignIds.Contains(campaignId))
-            {
-                throw new UnauthorizedAccessException($"User {profile.Email} has no access to campaign {campaignId}");
-            }
         }
     }
 }

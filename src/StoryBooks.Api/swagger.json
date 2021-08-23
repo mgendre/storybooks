@@ -288,6 +288,162 @@
         }
       }
     },
+    "/api/campaigns/{campaignId}/characters": {
+      "get": {
+        "tags": [
+          "Character"
+        ],
+        "operationId": "Character_FindAll",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CharacterDto"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Character"
+        ],
+        "operationId": "Character_Create",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "name": "updateDto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CharacterUpdateDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/CharacterDto"
+            }
+          }
+        }
+      }
+    },
+    "/api/campaigns/{campaignId}/characters/{actorId}": {
+      "put": {
+        "tags": [
+          "Character"
+        ],
+        "operationId": "Character_Update",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "actorId",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "name": "updateDto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CharacterUpdateDto"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/CharacterDto"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Character"
+        ],
+        "operationId": "Character_Delete",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "actorId",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/user-profiles/current": {
       "get": {
         "tags": [
@@ -431,6 +587,111 @@
           "type": "string"
         },
         "markdown": {
+          "type": "string"
+        }
+      }
+    },
+    "CharacterDto": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/AbstractActorDto"
+        },
+        {
+          "type": "object",
+          "required": [
+            "firstname",
+            "lastname",
+            "name"
+          ],
+          "properties": {
+            "firstname": {
+              "type": "string"
+            },
+            "lastname": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "AbstractActorDto": {
+      "type": "object",
+      "x-abstract": true,
+      "required": [
+        "id",
+        "campaignId",
+        "name",
+        "descriptionMarkdown",
+        "creationDate",
+        "modificationDate",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "campaignId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "descriptionMarkdown": {
+          "type": "string"
+        },
+        "creationDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "modificationDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "CharacterUpdateDto": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/AbstractActorUpdateDto"
+        },
+        {
+          "type": "object",
+          "required": [
+            "firstname",
+            "lastname",
+            "name"
+          ],
+          "properties": {
+            "firstname": {
+              "type": "string"
+            },
+            "lastname": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "AbstractActorUpdateDto": {
+      "type": "object",
+      "required": [
+        "name",
+        "descriptionMarkdown"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "descriptionMarkdown": {
           "type": "string"
         }
       }

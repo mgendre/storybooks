@@ -15,21 +15,22 @@ namespace StoryBooks.Api.Repository
             Container = container;
         }
         
-        public async Task<T> GetById(string id, PartitionKey key, CancellationToken ct)
+        public virtual async Task<T> GetById(string id, PartitionKey key, CancellationToken ct)
         {
             var existing = await Container.ReadItemAsync<T>(
                 id, key, cancellationToken: ct);
             return existing.Resource;
         }
 
-        public async Task<T> Create(T toCreate, CancellationToken ct)
+        public virtual async Task<T> Create(T toCreate, CancellationToken ct)
         {
             toCreate.CreationDate = DateTime.Now;
+            toCreate.ModificationDate = DateTime.Now;
             var response = await Container.CreateItemAsync(toCreate, cancellationToken: ct);
             return response.Resource;
         }
 
-        public async Task<T> Update(string id, PartitionKey key, Action<T> patch, CancellationToken ct)
+        public virtual async Task<T> Update(string id, PartitionKey key, Action<T> patch, CancellationToken ct)
         {
             var existing = await GetById(id, key, ct);
             patch(existing);
@@ -39,7 +40,7 @@ namespace StoryBooks.Api.Repository
             return result.Resource;
         }
 
-        public async Task Delete(string id, PartitionKey key, CancellationToken ct)
+        public virtual async Task Delete(string id, PartitionKey key, CancellationToken ct)
         {
             await Container.DeleteItemAsync<T>(id, key, cancellationToken: ct);
         }
