@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using StoryBooks.Api.Infra;
 using StoryBooks.Api.Infra.CosmosDb;
 using StoryBooks.Api.Infra.Jwt;
+using StoryBooks.MediaLib;
 
 namespace StoryBooks.Api
 {
@@ -82,6 +83,9 @@ namespace StoryBooks.Api
                     o.SecurityTokenValidators.Clear();
                     o.SecurityTokenValidators.Add(new GoogleTokenValidator(googleClientId));
                 });
+
+            var mediaLibOptions = _configuration.GetSection("MediaLib");
+            services.AddMediaLib(mediaLibOptions);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

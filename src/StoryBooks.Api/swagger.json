@@ -465,6 +465,19 @@
           }
         }
       }
+    },
+    "/media-lib2": {
+      "get": {
+        "tags": [
+          "MediaLib"
+        ],
+        "operationId": "MediaLib_Media",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "definitions": {

@@ -7,10 +7,10 @@
 //----------------------
 // ReSharper disable InconsistentNaming
 
-import {catchError as _observableCatch, mergeMap as _observableMergeMap} from 'rxjs/operators';
-import {Observable, of as _observableOf, throwError as _observableThrow} from 'rxjs';
-import {Inject, Injectable, InjectionToken, Optional} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpResponse, HttpResponseBase} from '@angular/common/http';
+import { mergeMap as _observableMergeMap, catchError as _observableCatch } from 'rxjs/operators';
+import { Observable, throwError as _observableThrow, of as _observableOf } from 'rxjs';
+import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
 
 export const BASE_URL = new InjectionToken<string>('BASE_URL');
 
@@ -755,6 +755,64 @@ export class UserProfileApiClient {
     }
 }
 
+@Injectable({
+    providedIn: 'root'
+})
+export class MediaLibApiClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    media(): Observable<void> {
+        let url_ = this.baseUrl + "/media-lib2";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processMedia(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processMedia(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processMedia(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+}
+
 export class CampaignListItemDto implements ICampaignListItemDto {
     id!: string;
     partitionKey!: string;
@@ -798,7 +856,7 @@ export class CampaignListItemDto implements ICampaignListItemDto {
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
         data["modificationDate"] = this.modificationDate ? this.modificationDate.toISOString() : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -855,7 +913,7 @@ export class CampaignDto implements ICampaignDto {
         data["status"] = this.status !== undefined ? this.status : <any>null;
         data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
         data["modificationDate"] = this.modificationDate ? this.modificationDate.toISOString() : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -895,7 +953,7 @@ export class CampaignUpdateDto implements ICampaignUpdateDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name !== undefined ? this.name : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -940,7 +998,7 @@ export class ScenarioDto implements IScenarioDto {
         data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
         data["title"] = this.title !== undefined ? this.title : <any>null;
         data["markdown"] = this.markdown !== undefined ? this.markdown : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -982,7 +1040,7 @@ export class ScenarioUpdateDto implements IScenarioUpdateDto {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title !== undefined ? this.title : <any>null;
         data["markdown"] = this.markdown !== undefined ? this.markdown : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -1035,7 +1093,7 @@ export abstract class AbstractActorDto implements IAbstractActorDto {
         data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
         data["modificationDate"] = this.modificationDate ? this.modificationDate.toISOString() : <any>null;
         data["type"] = this.type !== undefined ? this.type : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -1080,7 +1138,7 @@ export class CharacterDto extends AbstractActorDto implements ICharacterDto {
         data["lastname"] = this.lastname !== undefined ? this.lastname : <any>null;
         data["name"] = this.name !== undefined ? this.name : <any>null;
         super.toJSON(data);
-        return data;
+        return data; 
     }
 }
 
@@ -1121,7 +1179,7 @@ export class AbstractActorUpdateDto implements IAbstractActorUpdateDto {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name !== undefined ? this.name : <any>null;
         data["descriptionMarkdown"] = this.descriptionMarkdown !== undefined ? this.descriptionMarkdown : <any>null;
-        return data;
+        return data; 
     }
 }
 
@@ -1161,7 +1219,7 @@ export class CharacterUpdateDto extends AbstractActorUpdateDto implements IChara
         data["lastname"] = this.lastname !== undefined ? this.lastname : <any>null;
         data["name"] = this.name !== undefined ? this.name : <any>null;
         super.toJSON(data);
-        return data;
+        return data; 
     }
 }
 
@@ -1231,7 +1289,7 @@ export class UserProfileDto implements IUserProfileDto {
             for (let item of this.campaignIds)
                 data["campaignIds"].push(item);
         }
-        return data;
+        return data; 
     }
 }
 

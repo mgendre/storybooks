@@ -35,6 +35,7 @@
     </Target>
 
     <ItemGroup>
+        <ProjectReference Include="..\StoryBooks.MediaLib\StoryBooks.MediaLib.csproj" />
         <ProjectReference Include="..\StoryBooks.Models\StoryBooks.Models.csproj" />
     </ItemGroup>
     

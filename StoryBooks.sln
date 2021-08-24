@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoryBooks.Api", "src\Story
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoryBooks.Models", "src\StoryBooks.Models\StoryBooks.Models.csproj", "{770EB6DD-57E7-476A-A881-16F38ECBBE60}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoryBooks.MediaLib", "src\StoryBooks.MediaLib\StoryBooks.MediaLib.csproj", "{509F921C-8F37-41BD-833B-0ECB5B8319B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{770EB6DD-57E7-476A-A881-16F38ECBBE60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{770EB6DD-57E7-476A-A881-16F38ECBBE60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{770EB6DD-57E7-476A-A881-16F38ECBBE60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{509F921C-8F37-41BD-833B-0ECB5B8319B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{509F921C-8F37-41BD-833B-0ECB5B8319B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{509F921C-8F37-41BD-833B-0ECB5B8319B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{509F921C-8F37-41BD-833B-0ECB5B8319B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
