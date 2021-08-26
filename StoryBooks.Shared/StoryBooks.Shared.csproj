@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>StoryBooks.Shared</RootNamespace>
+        <Nullable>enable</Nullable>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MediatR" Version="9.0.0" />
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
+        <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.20.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\src\StoryBooks.Models\StoryBooks.Models.csproj" />
+    </ItemGroup>
+
+</Project>

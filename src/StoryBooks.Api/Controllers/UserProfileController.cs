@@ -4,8 +4,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using StoryBooks.Api.Business.UserProfile;
-using StoryBooks.Api.Dto;
+using StoryBooks.Infra.Controllers.Dto;
+using StoryBooks.Shared.UserProfile;
 
 namespace StoryBooks.Api.Controllers
 {

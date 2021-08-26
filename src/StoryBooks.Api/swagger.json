@@ -466,12 +466,12 @@
         }
       }
     },
-    "/media-lib2": {
+    "/": {
       "get": {
         "tags": [
-          "MediaLib"
+          "DocumentLib"
         ],
-        "operationId": "MediaLib_Media",
+        "operationId": "DocumentLib_Media",
         "responses": {
           "200": {
             "description": ""

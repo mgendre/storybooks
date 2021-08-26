@@ -2,15 +2,16 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
-using StoryBooks.Api.Infra.CosmosDb;
 using StoryBooks.Api.Infra.CosmosDb.Containers;
 using StoryBooks.Models;
+using StoryBooks.Shared.Cosmos;
+using StoryBooks.Shared.Repository;
 
 namespace StoryBooks.Api.Repository
 {
     public class ActorRepository<T> : AbstractCosmosRepository<T>, IActorRepository<T> where T : AbstractActor
     {
-        public ActorRepository(ICosmosContainer container) : base(container.Container)
+        public ActorRepository(ActorContainer container) : base(container.Container)
         {
         }
 

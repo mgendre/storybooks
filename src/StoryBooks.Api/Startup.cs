@@ -8,9 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using StoryBooks.Api.Infra;
-using StoryBooks.Api.Infra.CosmosDb;
 using StoryBooks.Api.Infra.Jwt;
-using StoryBooks.MediaLib;
+using StoryBooks.DocumentLib.Infra;
+using StoryBooks.Shared.Cosmos;
+using StoryBooks.Shared.Infra;
 
 namespace StoryBooks.Api
 {
@@ -58,11 +59,12 @@ namespace StoryBooks.Api
             });
             services.AddMediatR(typeof(Startup));
             services.AddHttpContextAccessor();
-
+            
             try
             {
                 var cosmosDbConfig = _configuration.GetSection("CosmosDb").Get<CosmosDbSettings>();
                 services.AddCosmosDb(cosmosDbConfig);
+                services.AddSharedModule(cosmosDbConfig);
             }
             catch (Exception e)
             {
@@ -101,6 +103,7 @@ namespace StoryBooks.Api
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
         

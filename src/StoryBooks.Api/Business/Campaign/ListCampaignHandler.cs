@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Azure.Cosmos;
 using StoryBooks.Api.Dto;
-using StoryBooks.Api.Infra.CosmosDb;
 using StoryBooks.Api.Repository;
+using StoryBooks.Shared.Cosmos;
+using StoryBooks.Shared.Repository;
 
 namespace StoryBooks.Api.Business.Campaign
 {

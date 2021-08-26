@@ -758,7 +758,7 @@ export class UserProfileApiClient {
 @Injectable({
     providedIn: 'root'
 })
-export class MediaLibApiClient {
+export class DocumentLibApiClient {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -769,7 +769,7 @@ export class MediaLibApiClient {
     }
 
     media(): Observable<void> {
-        let url_ = this.baseUrl + "/media-lib2";
+        let url_ = this.baseUrl + "/";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {

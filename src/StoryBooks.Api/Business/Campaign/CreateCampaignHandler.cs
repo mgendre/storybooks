@@ -6,6 +6,7 @@ using Microsoft.Azure.Cosmos;
 using StoryBooks.Api.Dto;
 using StoryBooks.Api.Repository;
 using StoryBooks.Models;
+using StoryBooks.Shared.Repository;
 
 namespace StoryBooks.Api.Business.Campaign
 {
