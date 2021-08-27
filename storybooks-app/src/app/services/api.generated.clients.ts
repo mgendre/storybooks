@@ -768,8 +768,244 @@ export class DocumentLibApiClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
+    uploadAndCreate(campaignId: string, files: FileParameter[]): Observable<MediaDto> {
+        let url_ = this.baseUrl + "/{campaignId}/media/upload";
+        if (campaignId === undefined || campaignId === null)
+            throw new Error("The parameter 'campaignId' must be defined.");
+        url_ = url_.replace("{campaignId}", encodeURIComponent("" + campaignId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (files === null || files === undefined)
+            throw new Error("The parameter 'files' cannot be null.");
+        else
+            files.forEach(item_ => content_.append("files", item_.data, item_.fileName ? item_.fileName : "files") );
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUploadAndCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUploadAndCreate(<any>response_);
+                } catch (e) {
+                    return <Observable<MediaDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<MediaDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUploadAndCreate(response: HttpResponseBase): Observable<MediaDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = MediaDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<MediaDto>(<any>null);
+    }
+
+    uploadAndReplace(campaignId: string, mediaId: string, files: FileParameter[], mediaUd: string): Observable<MediaDto> {
+        let url_ = this.baseUrl + "/{campaignId}/media/{mediaUd}/upload?";
+        if (campaignId === undefined || campaignId === null)
+            throw new Error("The parameter 'campaignId' must be defined.");
+        url_ = url_.replace("{campaignId}", encodeURIComponent("" + campaignId));
+        if (mediaUd === undefined || mediaUd === null)
+            throw new Error("The parameter 'mediaUd' must be defined.");
+        url_ = url_.replace("{mediaUd}", encodeURIComponent("" + mediaUd));
+        if (mediaId === undefined || mediaId === null)
+            throw new Error("The parameter 'mediaId' must be defined and cannot be null.");
+        else
+            url_ += "mediaId=" + encodeURIComponent("" + mediaId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (files === null || files === undefined)
+            throw new Error("The parameter 'files' cannot be null.");
+        else
+            files.forEach(item_ => content_.append("files", item_.data, item_.fileName ? item_.fileName : "files") );
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUploadAndReplace(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUploadAndReplace(<any>response_);
+                } catch (e) {
+                    return <Observable<MediaDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<MediaDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUploadAndReplace(response: HttpResponseBase): Observable<MediaDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = MediaDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<MediaDto>(<any>null);
+    }
+
+    create(campaignId: string, externalUri: string): Observable<MediaDto> {
+        let url_ = this.baseUrl + "/{campaignId}/media?";
+        if (campaignId === undefined || campaignId === null)
+            throw new Error("The parameter 'campaignId' must be defined.");
+        url_ = url_.replace("{campaignId}", encodeURIComponent("" + campaignId));
+        if (externalUri === undefined || externalUri === null)
+            throw new Error("The parameter 'externalUri' must be defined and cannot be null.");
+        else
+            url_ += "externalUri=" + encodeURIComponent("" + externalUri) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(<any>response_);
+                } catch (e) {
+                    return <Observable<MediaDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<MediaDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<MediaDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = MediaDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<MediaDto>(<any>null);
+    }
+
+    update(campaignId: string, mediaId: string, externalUri: string): Observable<MediaDto> {
+        let url_ = this.baseUrl + "/{campaignId}/media/{mediaId}?";
+        if (campaignId === undefined || campaignId === null)
+            throw new Error("The parameter 'campaignId' must be defined.");
+        url_ = url_.replace("{campaignId}", encodeURIComponent("" + campaignId));
+        if (mediaId === undefined || mediaId === null)
+            throw new Error("The parameter 'mediaId' must be defined.");
+        url_ = url_.replace("{mediaId}", encodeURIComponent("" + mediaId));
+        if (externalUri === undefined || externalUri === null)
+            throw new Error("The parameter 'externalUri' must be defined and cannot be null.");
+        else
+            url_ += "externalUri=" + encodeURIComponent("" + externalUri) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(<any>response_);
+                } catch (e) {
+                    return <Observable<MediaDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<MediaDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<MediaDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = MediaDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<MediaDto>(<any>null);
+    }
+
     media(): Observable<void> {
-        let url_ = this.baseUrl + "/";
+        let url_ = this.baseUrl + "/asdsad";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1301,6 +1537,76 @@ export interface IUserProfileDto {
     lastName: string;
     firstName: string;
     campaignIds: string[];
+}
+
+export class MediaDto implements IMediaDto {
+    id!: string;
+    campaignId!: string;
+    storageType!: MediaStorageType;
+    externalUri?: string | null;
+    documentId?: string | null;
+    creationDate!: Date;
+    modificationDate!: Date;
+
+    constructor(data?: IMediaDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"] !== undefined ? _data["id"] : <any>null;
+            this.campaignId = _data["campaignId"] !== undefined ? _data["campaignId"] : <any>null;
+            this.storageType = _data["storageType"] !== undefined ? _data["storageType"] : <any>null;
+            this.externalUri = _data["externalUri"] !== undefined ? _data["externalUri"] : <any>null;
+            this.documentId = _data["documentId"] !== undefined ? _data["documentId"] : <any>null;
+            this.creationDate = _data["creationDate"] ? new Date(_data["creationDate"].toString()) : <any>null;
+            this.modificationDate = _data["modificationDate"] ? new Date(_data["modificationDate"].toString()) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): MediaDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new MediaDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id !== undefined ? this.id : <any>null;
+        data["campaignId"] = this.campaignId !== undefined ? this.campaignId : <any>null;
+        data["storageType"] = this.storageType !== undefined ? this.storageType : <any>null;
+        data["externalUri"] = this.externalUri !== undefined ? this.externalUri : <any>null;
+        data["documentId"] = this.documentId !== undefined ? this.documentId : <any>null;
+        data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
+        data["modificationDate"] = this.modificationDate ? this.modificationDate.toISOString() : <any>null;
+        return data; 
+    }
+}
+
+export interface IMediaDto {
+    id: string;
+    campaignId: string;
+    storageType: MediaStorageType;
+    externalUri?: string | null;
+    documentId?: string | null;
+    creationDate: Date;
+    modificationDate: Date;
+}
+
+export enum MediaStorageType {
+    ExternalUri = "ExternalUri",
+    Document = "Document",
+}
+
+export interface FileParameter {
+    data: any;
+    fileName: string;
 }
 
 export class SwaggerException extends Error {

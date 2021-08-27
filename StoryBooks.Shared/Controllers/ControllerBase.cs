@@ -37,11 +37,11 @@ namespace StoryBooks.Api.Controllers
             }
 
             return new CurrentUserDto(
-                issuer: identity.FindFirstValue("authentication_provider") ?? "",
-                subjectId: identity.FindFirstValue(JwtRegisteredClaimNames.Sub) ?? "",
+                issuer: identity.FindFirstValue("authentication_provider") ?? string.Empty,
+                subjectId: identity.FindFirstValue(JwtRegisteredClaimNames.Sub) ?? string.Empty,
                 email: email.Value,
-                firstName: identity.FindFirstValue(JwtRegisteredClaimNames.GivenName) ?? "",
-                lastName: identity.FindFirstValue(JwtRegisteredClaimNames.FamilyName) ?? ""
+                firstName: identity.FindFirstValue(JwtRegisteredClaimNames.GivenName) ?? string.Empty,
+                lastName: identity.FindFirstValue(JwtRegisteredClaimNames.FamilyName) ?? string.Empty
             );
         }
 

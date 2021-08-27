@@ -21,7 +21,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Repository" />
+        <ProjectReference Include="..\..\StoryBooks.Shared\StoryBooks.Shared.csproj" />
+        <ProjectReference Include="..\StoryBooks.Models\StoryBooks.Models.csproj" />
     </ItemGroup>
 
 </Project>

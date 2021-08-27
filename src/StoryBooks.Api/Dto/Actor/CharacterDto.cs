@@ -4,9 +4,9 @@ namespace StoryBooks.Api.Dto.Actor
 {
     public class CharacterDto : AbstractActorDto
     {
-        public string Firstname { get; set; } = "";
+        public string Firstname { get; set; } = string.Empty;
 
-        public string Lastname { get; set; } = "";
+        public string Lastname { get; set; } = string.Empty;
         
         public override string Name => $"{Firstname} {Lastname}";
 

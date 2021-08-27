@@ -8,8 +8,8 @@ namespace StoryBooks.Api.Dto
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public DateTime CreationDate { get; set; }
-        public string Title { get; set; } = "";
-        public string Markdown { get; set; } = "";
+        public string Title { get; set; } = string.Empty;
+        public string Markdown { get; set; } = string.Empty;
 
         public void Patch(Scenario scenario)
         {
@@ -27,7 +27,7 @@ namespace StoryBooks.Api.Dto
             return new ScenarioDto
             {
                 Id = scenario.Id,
-                Markdown = scenario.Sections.FirstOrDefault()?.Markdown ?? "",
+                Markdown = scenario.Sections.FirstOrDefault()?.Markdown ?? string.Empty,
                 Title = scenario.Title,
                 CreationDate = scenario.CreationDate
             };

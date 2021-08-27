@@ -7,15 +7,15 @@ namespace StoryBooks.Api.Dto.Actor
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
-        public string CampaignId { get; set; } = "";
+        public string CampaignId { get; set; } = string.Empty;
 
-        public virtual string Name { get; set; } = "";
+        public virtual string Name { get; set; } = string.Empty;
 
-        public string DescriptionMarkdown { get; set; } = "";
+        public string DescriptionMarkdown { get; set; } = string.Empty;
         public DateTime CreationDate { get; set; }
         public DateTime ModificationDate { get; set; }
 
-        public string Type { get; set; } = "";
+        public string Type { get; set; } = string.Empty;
         
         
         protected void LoadFromModel(AbstractActor model)

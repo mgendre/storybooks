@@ -11,16 +11,16 @@ namespace StoryBooks.Models
         
         public string PartitionKey => Email;
         
-        public string Issuer { get; set; }
-        public string SubjectId { get; set; }
+        public string Issuer { get; set; } = string.Empty;
+        public string SubjectId { get; set; } = string.Empty;
 
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         public IList<string> CampaignIds { get; set; } = new List<string>();
         
-        public string LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
         
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
         
         public DateTime CreationDate { get; set; }
         

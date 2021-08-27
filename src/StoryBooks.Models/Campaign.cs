@@ -11,7 +11,7 @@ namespace StoryBooks.Models
 
         public string PartitionKey => Id;
         
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [JsonConverter(typeof(StringEnumConverter))]
         public CampaignStatus Status { get; set; }

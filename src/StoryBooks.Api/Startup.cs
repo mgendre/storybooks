@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -55,7 +56,6 @@ namespace StoryBooks.Api
                         Array.Empty<string>()
                     }
                 });
-
             });
             services.AddMediatR(typeof(Startup));
             services.AddHttpContextAccessor();
@@ -64,6 +64,10 @@ namespace StoryBooks.Api
             {
                 var cosmosDbConfig = _configuration.GetSection("CosmosDb").Get<CosmosDbSettings>();
                 services.AddCosmosDb(cosmosDbConfig);
+                
+                var mediaLibOptions = _configuration.GetSection("MediaLib");
+                services.AddMediaLib(mediaLibOptions, cosmosDbConfig);
+                
                 services.AddSharedModule(cosmosDbConfig);
             }
             catch (Exception e)
@@ -85,9 +89,6 @@ namespace StoryBooks.Api
                     o.SecurityTokenValidators.Clear();
                     o.SecurityTokenValidators.Add(new GoogleTokenValidator(googleClientId));
                 });
-
-            var mediaLibOptions = _configuration.GetSection("MediaLib");
-            services.AddMediaLib(mediaLibOptions);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

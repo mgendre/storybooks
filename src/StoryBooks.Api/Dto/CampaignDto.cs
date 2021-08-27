@@ -5,9 +5,9 @@ namespace StoryBooks.Api.Dto
 {
     public class CampaignDto : IModelBase
     {
-        public string Id { get; set; } = "";
+        public string Id { get; set; } = string.Empty;
 
-        public string Name { get; set; } = "";
+        public string Name { get; set; } = string.Empty;
 
         public CampaignStatus Status { get; set; } = CampaignStatus.InProgress;
         

@@ -466,7 +466,196 @@
         }
       }
     },
-    "/": {
+    "/{campaignId}/media/upload": {
+      "post": {
+        "tags": [
+          "DocumentLib"
+        ],
+        "operationId": "DocumentLib_UploadAndCreate",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "type": "file",
+            "name": "files",
+            "in": "formData",
+            "required": true,
+            "collectionFormat": "multi",
+            "x-nullable": false,
+            "items": {
+              "type": "file"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/MediaDto"
+            }
+          }
+        }
+      }
+    },
+    "/{campaignId}/media/{mediaUd}/upload": {
+      "post": {
+        "tags": [
+          "DocumentLib"
+        ],
+        "operationId": "DocumentLib_UploadAndReplace",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "mediaId",
+            "in": "query",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "type": "file",
+            "name": "files",
+            "in": "formData",
+            "required": true,
+            "collectionFormat": "multi",
+            "x-nullable": false,
+            "items": {
+              "type": "file"
+            }
+          },
+          {
+            "type": "string",
+            "name": "mediaUd",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/MediaDto"
+            }
+          }
+        }
+      }
+    },
+    "/{campaignId}/media": {
+      "post": {
+        "tags": [
+          "DocumentLib"
+        ],
+        "operationId": "DocumentLib_Create",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "externalUri",
+            "in": "query",
+            "required": true,
+            "format": "uri",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/MediaDto"
+            }
+          }
+        }
+      }
+    },
+    "/{campaignId}/media/{mediaId}": {
+      "put": {
+        "tags": [
+          "DocumentLib"
+        ],
+        "operationId": "DocumentLib_Update",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "mediaId",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "externalUri",
+            "in": "query",
+            "required": true,
+            "format": "uri",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/MediaDto"
+            }
+          }
+        }
+      }
+    },
+    "/asdsad": {
       "get": {
         "tags": [
           "DocumentLib"
@@ -746,6 +935,54 @@
           }
         }
       }
+    },
+    "MediaDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "campaignId",
+        "storageType",
+        "creationDate",
+        "modificationDate"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "campaignId": {
+          "type": "string"
+        },
+        "storageType": {
+          "$ref": "#/definitions/MediaStorageType"
+        },
+        "externalUri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "documentId": {
+          "type": "string"
+        },
+        "creationDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "modificationDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "MediaStorageType": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "ExternalUri",
+        "Document"
+      ],
+      "enum": [
+        "ExternalUri",
+        "Document"
+      ]
     }
   }
 }

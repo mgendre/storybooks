@@ -4,9 +4,9 @@ namespace StoryBooks.Api.Dto.Actor
 {
     public class AbstractActorUpdateDto
     {
-        public virtual string Name { get; set; } = "";
+        public virtual string Name { get; set; } = string.Empty;
 
-        public string DescriptionMarkdown { get; set; } = "";
+        public string DescriptionMarkdown { get; set; } = string.Empty;
 
         public void Patch(AbstractActor actor)
         {

@@ -3,21 +3,14 @@ using Newtonsoft.Json;
 
 namespace StoryBooks.Models
 {
-    public class Document : IModelBase
+    public class Document
     {
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
-        public string PartitionKey => CampaignId;
-        
-        public string CampaignId { get; set; }
-        
-        public string Filename { get; set; }
-        
-        public string MediaType { get; set; }
+        public string BlobName => Id;
 
-        public DateTime CreationDate { get; set; }
-        
-        public DateTime ModificationDate { get; set; }
+        public string Filename { get; set; } = string.Empty;
+
     }
 }
