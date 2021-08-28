@@ -27,6 +27,7 @@
   "character.edit.form.lastname": "Nom",
   "actor.edit.form.content": "Description",
   "mediaLib.title": "Médiathèque",
+  "mediaLib.add": "Ajouter un nouvel élément",
   "media.publish.edit": "Remplacer un élément de la médiathèque",
   "media.publish.create": "Ajouter un élément à la médiathèque",
   "media.publish.button": "Sauver",

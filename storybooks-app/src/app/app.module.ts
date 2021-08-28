@@ -29,6 +29,7 @@ import {EditCharacterComponent} from "./components/actors/app.edit-character";
 import {MediaLibComponent} from "./components/media/app.media-lib";
 import {MediaPublisherComponent} from "./components/media/app.media-publisher";
 import {DialogModule} from "primeng/dialog";
+import {MediaRendererComponent} from "./components/media/app.media-renderer";
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -49,7 +50,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     CharactersComponent,
     EditCharacterComponent,
     MediaLibComponent,
-    MediaPublisherComponent
+    MediaPublisherComponent,
+    MediaRendererComponent
   ],
   imports: [
     BrowserModule,

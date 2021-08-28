@@ -708,15 +708,35 @@
         }
       }
     },
-    "/api/campaigns/asdsad": {
+    "/api/campaigns/{campaignId}/media/{mediaId}/download": {
       "get": {
         "tags": [
           "DocumentLib"
         ],
-        "operationId": "DocumentLib_Media",
+        "operationId": "DocumentLib_Download",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "mediaId",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          }
+        ],
         "responses": {
           "200": {
-            "description": ""
+            "x-nullable": true,
+            "description": "",
+            "schema": {
+              "type": "file"
+            }
           }
         }
       }
@@ -1016,6 +1036,12 @@
           "type": "string"
         },
         "label": {
+          "type": "string"
+        },
+        "filename": {
+          "type": "string"
+        },
+        "contentType": {
           "type": "string"
         },
         "creationDate": {

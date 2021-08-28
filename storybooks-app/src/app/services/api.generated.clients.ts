@@ -1074,48 +1074,56 @@ export class DocumentLibApiClient {
         return _observableOf<MediaDto>(<any>null);
     }
 
-    media(): Observable<void> {
-        let url_ = this.baseUrl + "/api/campaigns/asdsad";
+    download(campaignId: string, mediaId: string): Observable<FileResponse | null> {
+        let url_ = this.baseUrl + "/api/campaigns/{campaignId}/media/{mediaId}/download";
+        if (campaignId === undefined || campaignId === null)
+            throw new Error("The parameter 'campaignId' must be defined.");
+        url_ = url_.replace("{campaignId}", encodeURIComponent("" + campaignId));
+        if (mediaId === undefined || mediaId === null)
+            throw new Error("The parameter 'mediaId' must be defined.");
+        url_ = url_.replace("{mediaId}", encodeURIComponent("" + mediaId));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Accept": "application/octet-stream"
             })
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processMedia(response_);
+            return this.processDownload(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processMedia(<any>response_);
+                    return this.processDownload(<any>response_);
                 } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
+                    return <Observable<FileResponse | null>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<void>><any>_observableThrow(response_);
+                return <Observable<FileResponse | null>><any>_observableThrow(response_);
         }));
     }
 
-    protected processMedia(response: HttpResponseBase): Observable<void> {
+    protected processDownload(response: HttpResponseBase): Observable<FileResponse | null> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
-            }));
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(<any>null);
+        return _observableOf<FileResponse | null>(<any>null);
     }
 }
 
@@ -1616,6 +1624,8 @@ export class MediaDto implements IMediaDto {
     externalUri?: string | null;
     documentId?: string | null;
     label?: string | null;
+    filename?: string | null;
+    contentType?: string | null;
     creationDate!: Date;
     modificationDate!: Date;
 
@@ -1636,6 +1646,8 @@ export class MediaDto implements IMediaDto {
             this.externalUri = _data["externalUri"] !== undefined ? _data["externalUri"] : <any>null;
             this.documentId = _data["documentId"] !== undefined ? _data["documentId"] : <any>null;
             this.label = _data["label"] !== undefined ? _data["label"] : <any>null;
+            this.filename = _data["filename"] !== undefined ? _data["filename"] : <any>null;
+            this.contentType = _data["contentType"] !== undefined ? _data["contentType"] : <any>null;
             this.creationDate = _data["creationDate"] ? new Date(_data["creationDate"].toString()) : <any>null;
             this.modificationDate = _data["modificationDate"] ? new Date(_data["modificationDate"].toString()) : <any>null;
         }
@@ -1656,6 +1668,8 @@ export class MediaDto implements IMediaDto {
         data["externalUri"] = this.externalUri !== undefined ? this.externalUri : <any>null;
         data["documentId"] = this.documentId !== undefined ? this.documentId : <any>null;
         data["label"] = this.label !== undefined ? this.label : <any>null;
+        data["filename"] = this.filename !== undefined ? this.filename : <any>null;
+        data["contentType"] = this.contentType !== undefined ? this.contentType : <any>null;
         data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
         data["modificationDate"] = this.modificationDate ? this.modificationDate.toISOString() : <any>null;
         return data; 
@@ -1669,6 +1683,8 @@ export interface IMediaDto {
     externalUri?: string | null;
     documentId?: string | null;
     label?: string | null;
+    filename?: string | null;
+    contentType?: string | null;
     creationDate: Date;
     modificationDate: Date;
 }
@@ -1681,6 +1697,13 @@ export enum MediaStorageType {
 export interface FileParameter {
     data: any;
     fileName: string;
+}
+
+export interface FileResponse {
+    data: Blob;
+    status: number;
+    fileName?: string;
+    headers?: { [name: string]: any };
 }
 
 export class SwaggerException extends Error {

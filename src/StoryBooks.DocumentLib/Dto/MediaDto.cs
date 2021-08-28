@@ -16,6 +16,10 @@ namespace StoryBooks.DocumentLib.Dto
         public string? DocumentId { get; set; }
         
         public string? Label { get; set; }
+        
+        public string? Filename { get; set; }
+        
+        public string? ContentType { get; set; }
 
         public DateTime CreationDate { get; set; }
         
@@ -32,7 +36,9 @@ namespace StoryBooks.DocumentLib.Dto
                 DocumentId = media.Document?.Id,
                 ExternalUri = media.ExternalUri,
                 StorageType = media.StorageType,
-                Label = media.Label
+                Label = media.Label,
+                Filename = media.Document?.Filename,
+                ContentType = media.Document?.ContentType
             };
         }
     }

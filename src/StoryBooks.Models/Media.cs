@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace StoryBooks.Models
 {
@@ -14,6 +15,8 @@ namespace StoryBooks.Models
         
         public string? Label { get; set; }
 
+        
+        [JsonConverter(typeof(StringEnumConverter))]
         public MediaStorageType StorageType { get; set; } = MediaStorageType.Document;
         
         public Uri? ExternalUri { get; set; }

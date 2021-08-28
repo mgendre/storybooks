@@ -86,6 +86,7 @@ namespace StoryBooks.DocumentLib.Business
             var doc = new Document
             {
                 Filename = file.FileName,
+                ContentType = file.ContentType
             };
 
             await using var stream = file.OpenReadStream();
@@ -105,6 +106,7 @@ namespace StoryBooks.DocumentLib.Business
             }
 
             media.Document.Filename = file.FileName;
+            media.Document.ContentType = file.ContentType;
 
             await using var stream = file.OpenReadStream();
             await _documentLibService.UploadMedia(media.CampaignId, media.Document.Id, stream);

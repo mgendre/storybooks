@@ -1,5 +1,7 @@
 import {Subscription} from "rxjs";
 import {Component, OnDestroy} from "@angular/core";
+import {MediaDatastore} from "../../datastores/MediaDatastore";
+import {MediaDto} from "../../services/api.generated.clients";
 
 
 @Component({
@@ -9,12 +11,19 @@ import {Component, OnDestroy} from "@angular/core";
 })
 export class MediaLibComponent implements OnDestroy {
 
+  mediaItems: MediaDto[] = [];
+
   private readonly subscriptions: Subscription[] = [];
 
-  constructor() {
-
+  constructor(private readonly mediaDatastore: MediaDatastore) {
+    this.subscriptions.push(this.mediaDatastore.mediaItems.subscribe(items => {
+      this.mediaItems = items;
+    }));
   }
 
   ngOnDestroy(): void {
+    this.subscriptions.forEach(s => {
+      s.unsubscribe();
+    });
   }
 }

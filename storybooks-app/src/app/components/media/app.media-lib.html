@@ -1,8 +1,22 @@
 <div class="media-lib">
   <h1 translate>mediaLib.title</h1>
-  <app-media-publisher>
-    <button type="button" class="btn btn-primary">
-      <i class="bi bi-plus-lg"></i>
-    </button>
-  </app-media-publisher>
+  <div class="mb-3">
+    <app-media-publisher>
+      <button type="button" class="btn btn-primary">
+        <i class="bi bi-plus"></i>
+        <span translate>mediaLib.add</span>
+      </button>
+    </app-media-publisher>
+  </div>
+
+  <div class="media-list">
+    <div class="card media-item" *ngFor="let media of mediaItems">
+      <div class="card-img-container">
+        <app-media-renderer [class]="'card-img'" [media]="media"></app-media-renderer>
+      </div>
+      <div class="card-footer" *ngIf="media.label">
+        <span class="card-text">{{media.label}}</span>
+      </div>
+    </div>
+  </div>
 </div>

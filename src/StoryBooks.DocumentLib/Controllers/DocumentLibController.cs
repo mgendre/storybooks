@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using StoryBooks.DocumentLib.Business;
 using StoryBooks.DocumentLib.Dto;
 using StoryBooks.DocumentLib.Service;
@@ -69,19 +71,26 @@ namespace StoryBooks.DocumentLib.Controllers
             
             return await MediatR.Send(new ListMediaHandler.ListMediaQuery(campaignId));
         }
-
-        [HttpGet("asdsad")]
-        public async Task Media()
+        
+        [AllowAnonymous] // TODO: Change how it's done in angular to pass the token
+        [HttpGet("{campaignId}/media/{mediaId}/download")]
+        public async Task<FileStreamResult> Download(string campaignId, string mediaId)
         {
-            await VerifyCurrentUserCampaignAccess("ef0fd7b1-3b2a-4121-9e62-8465a129bb51");
+            // TODO: Change how it's done in angular to pass the token
+            //await VerifyCurrentUserCampaignAccess(campaignId);
             
-            string content = "OK asdsadasd";
+            var media = await MediatR.Send(new GetMediaHandler.GetMediaQuery(campaignId, mediaId));
+
             var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            await writer.WriteAsync(content);
-            await writer.FlushAsync();
+            await _documentLibService.DownloadMedia(media.CampaignId, media.DocumentId ?? "", stream);
+            stream.Flush();
             stream.Position = 0;
-            await _documentLibService.UploadMedia("test", "test2.txt", stream);
+
+            var contentType = media.ContentType ?? "image/jpeg";
+            return new FileStreamResult(stream, new MediaTypeHeaderValue(contentType))
+            {
+                FileDownloadName = media.Filename
+            };
         }
     }
 }
