@@ -121,16 +121,24 @@ namespace StoryBooks.DocumentLib.Business
 
             public string? MediaId { get; }
             
+            public string? Label { get; }
+            
             public Uri? ExternalUri { get; }
             
             public IFormFile? File { get; }
 
-            public SaveMediaCommand(string campaignId, string? mediaId, IFormFile? file, Uri? externalUri)
+            public SaveMediaCommand(
+                string campaignId, 
+                string? mediaId, 
+                IFormFile? file, 
+                Uri? externalUri = null, 
+                string? label = null)
             {
                 CampaignId = campaignId;
                 MediaId = mediaId;
                 File = file;
                 ExternalUri = externalUri;
+                Label = label;
             }
         }
     }

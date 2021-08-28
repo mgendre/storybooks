@@ -16,6 +16,7 @@ namespace StoryBooks.DocumentLib.Controllers
 {
     [Authorize]
     [ApiController]
+    [Route("api/campaigns")]
     public class DocumentLibController : ControllerBase
     {
 
@@ -30,35 +31,43 @@ namespace StoryBooks.DocumentLib.Controllers
         }
 
         [HttpPost("{campaignId}/media/upload")]
-        public async Task<MediaDto> UploadAndCreate(string campaignId, IEnumerable<IFormFile> files)
+        public async Task<MediaDto> UploadAndCreate(string campaignId, IEnumerable<IFormFile> files, string? label)
         {
             await VerifyCurrentUserCampaignAccess(campaignId);
             
-            return await MediatR.Send(new SaveMediaHandler.SaveMediaCommand(campaignId, null, files.First(), null)); 
+            return await MediatR.Send(new SaveMediaHandler.SaveMediaCommand(campaignId, null, files.First(), null, label)); 
         }
         
         [HttpPost("{campaignId}/media/{mediaId}/upload")]
-        public async Task<MediaDto> UploadAndReplace(string campaignId, string mediaId, IEnumerable<IFormFile> files)
+        public async Task<MediaDto> UploadAndReplace(string campaignId, string mediaId, IEnumerable<IFormFile> files, string? label)
         {
             await VerifyCurrentUserCampaignAccess(campaignId);
             
-            return await MediatR.Send(new SaveMediaHandler.SaveMediaCommand(campaignId, mediaId, files.First(), null)); 
+            return await MediatR.Send(new SaveMediaHandler.SaveMediaCommand(campaignId, mediaId, files.First(), null, label)); 
         }
         
         [HttpPost("{campaignId}/media")]
-        public async Task<MediaDto> Create(string campaignId, Uri externalUri)
+        public async Task<MediaDto> Create(string campaignId, Uri externalUri, string? label)
         {
             await VerifyCurrentUserCampaignAccess(campaignId);
             
-            return await MediatR.Send(new SaveMediaHandler.SaveMediaCommand(campaignId, null, null, externalUri));
+            return await MediatR.Send(new SaveMediaHandler.SaveMediaCommand(campaignId, null, null, externalUri, label));
         }
         
         [HttpPut("{campaignId}/media/{mediaId}")]
-        public async Task<MediaDto> Update(string campaignId, string mediaId, Uri externalUri)
+        public async Task<MediaDto> Update(string campaignId, string mediaId, Uri externalUri, string? label)
         {
             await VerifyCurrentUserCampaignAccess(campaignId);
 
-            return await MediatR.Send(new SaveMediaHandler.SaveMediaCommand(campaignId, mediaId, null, externalUri));
+            return await MediatR.Send(new SaveMediaHandler.SaveMediaCommand(campaignId, mediaId, null, externalUri, label));
+        }
+
+        [HttpGet("{campaignId}/media")]
+        public async Task<IEnumerable<MediaDto>> List(string campaignId)
+        {
+            await VerifyCurrentUserCampaignAccess(campaignId);
+            
+            return await MediatR.Send(new ListMediaHandler.ListMediaQuery(campaignId));
         }
 
         [HttpGet("asdsad")]

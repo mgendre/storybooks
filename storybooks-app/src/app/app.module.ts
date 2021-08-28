@@ -26,6 +26,9 @@ import {ToastModule} from "primeng/toast";
 import {AppErrorHandler} from "./shared/AppErrorHandler";
 import {CharactersComponent} from "./components/actors/app.characters";
 import {EditCharacterComponent} from "./components/actors/app.edit-character";
+import {MediaLibComponent} from "./components/media/app.media-lib";
+import {MediaPublisherComponent} from "./components/media/app.media-publisher";
+import {DialogModule} from "primeng/dialog";
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -44,7 +47,9 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     ScenariosComponent,
     EditScenarioComponent,
     CharactersComponent,
-    EditCharacterComponent
+    EditCharacterComponent,
+    MediaLibComponent,
+    MediaPublisherComponent
   ],
   imports: [
     BrowserModule,
@@ -67,7 +72,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
       }
     }),
     ConfirmDialogModule,
-    ToastModule
+    ToastModule,
+    DialogModule
   ],
   providers: [
     {

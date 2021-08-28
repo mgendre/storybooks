@@ -11,6 +11,8 @@ namespace StoryBooks.Models
         public string PartitionKey => CampaignId;
 
         public string CampaignId { get; set; } = string.Empty;
+        
+        public string? Label { get; set; }
 
         public MediaStorageType StorageType { get; set; } = MediaStorageType.Document;
         

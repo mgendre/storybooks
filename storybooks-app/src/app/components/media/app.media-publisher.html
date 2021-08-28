@@ -1,0 +1,33 @@
+<div class="media-publisher" (click)="openDialog()">
+  <ng-content></ng-content>
+</div>
+
+<p-dialog [(visible)]="dialogOpened" [modal]="true">
+  <ng-template pTemplate="header" class="">
+    <span class="p-dialog-title">
+      <span *ngIf="existingDocument" translate>media.publish.edit</span>
+      <span *ngIf="!existingDocument" translate>media.publish.create</span>
+    </span>
+  </ng-template>
+
+  <form>
+    <input type="file"
+           class="form-control"
+           #fileUpload
+           (change)="onFileSelected($event)">
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button class="btn btn-primary"
+            [disabled]="!selectedFile"
+            (click)="publish()">
+      <i class="bi bi-plus"></i>
+      <span translate>media.publish.button</span>
+    </button>
+    <button class="btn btn-secondary"
+            (click)="close()">
+      <i class="bi bi-x"></i>
+      <span translate>common.button.close</span>
+    </button>
+  </ng-template>
+</p-dialog>

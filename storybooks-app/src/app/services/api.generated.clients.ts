@@ -768,11 +768,15 @@ export class DocumentLibApiClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    uploadAndCreate(campaignId: string, files: FileParameter[]): Observable<MediaDto> {
-        let url_ = this.baseUrl + "/{campaignId}/media/upload";
+    uploadAndCreate(campaignId: string, files: FileParameter[], label: string | null): Observable<MediaDto> {
+        let url_ = this.baseUrl + "/api/campaigns/{campaignId}/media/upload?";
         if (campaignId === undefined || campaignId === null)
             throw new Error("The parameter 'campaignId' must be defined.");
         url_ = url_.replace("{campaignId}", encodeURIComponent("" + campaignId));
+        if (label === undefined)
+            throw new Error("The parameter 'label' must be defined.");
+        else if(label !== null)
+            url_ += "label=" + encodeURIComponent("" + label) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = new FormData();
@@ -826,18 +830,18 @@ export class DocumentLibApiClient {
         return _observableOf<MediaDto>(<any>null);
     }
 
-    uploadAndReplace(campaignId: string, mediaId: string, files: FileParameter[], mediaUd: string): Observable<MediaDto> {
-        let url_ = this.baseUrl + "/{campaignId}/media/{mediaUd}/upload?";
+    uploadAndReplace(campaignId: string, mediaId: string, files: FileParameter[], label: string | null): Observable<MediaDto> {
+        let url_ = this.baseUrl + "/api/campaigns/{campaignId}/media/{mediaId}/upload?";
         if (campaignId === undefined || campaignId === null)
             throw new Error("The parameter 'campaignId' must be defined.");
         url_ = url_.replace("{campaignId}", encodeURIComponent("" + campaignId));
-        if (mediaUd === undefined || mediaUd === null)
-            throw new Error("The parameter 'mediaUd' must be defined.");
-        url_ = url_.replace("{mediaUd}", encodeURIComponent("" + mediaUd));
         if (mediaId === undefined || mediaId === null)
-            throw new Error("The parameter 'mediaId' must be defined and cannot be null.");
-        else
-            url_ += "mediaId=" + encodeURIComponent("" + mediaId) + "&";
+            throw new Error("The parameter 'mediaId' must be defined.");
+        url_ = url_.replace("{mediaId}", encodeURIComponent("" + mediaId));
+        if (label === undefined)
+            throw new Error("The parameter 'label' must be defined.");
+        else if(label !== null)
+            url_ += "label=" + encodeURIComponent("" + label) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = new FormData();
@@ -891,8 +895,8 @@ export class DocumentLibApiClient {
         return _observableOf<MediaDto>(<any>null);
     }
 
-    create(campaignId: string, externalUri: string): Observable<MediaDto> {
-        let url_ = this.baseUrl + "/{campaignId}/media?";
+    create(campaignId: string, externalUri: string, label: string | null): Observable<MediaDto> {
+        let url_ = this.baseUrl + "/api/campaigns/{campaignId}/media?";
         if (campaignId === undefined || campaignId === null)
             throw new Error("The parameter 'campaignId' must be defined.");
         url_ = url_.replace("{campaignId}", encodeURIComponent("" + campaignId));
@@ -900,6 +904,10 @@ export class DocumentLibApiClient {
             throw new Error("The parameter 'externalUri' must be defined and cannot be null.");
         else
             url_ += "externalUri=" + encodeURIComponent("" + externalUri) + "&";
+        if (label === undefined)
+            throw new Error("The parameter 'label' must be defined.");
+        else if(label !== null)
+            url_ += "label=" + encodeURIComponent("" + label) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -946,8 +954,66 @@ export class DocumentLibApiClient {
         return _observableOf<MediaDto>(<any>null);
     }
 
-    update(campaignId: string, mediaId: string, externalUri: string): Observable<MediaDto> {
-        let url_ = this.baseUrl + "/{campaignId}/media/{mediaId}?";
+    list(campaignId: string): Observable<MediaDto[]> {
+        let url_ = this.baseUrl + "/api/campaigns/{campaignId}/media";
+        if (campaignId === undefined || campaignId === null)
+            throw new Error("The parameter 'campaignId' must be defined.");
+        url_ = url_.replace("{campaignId}", encodeURIComponent("" + campaignId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processList(<any>response_);
+                } catch (e) {
+                    return <Observable<MediaDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<MediaDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processList(response: HttpResponseBase): Observable<MediaDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(MediaDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<MediaDto[]>(<any>null);
+    }
+
+    update(campaignId: string, mediaId: string, externalUri: string, label: string | null): Observable<MediaDto> {
+        let url_ = this.baseUrl + "/api/campaigns/{campaignId}/media/{mediaId}?";
         if (campaignId === undefined || campaignId === null)
             throw new Error("The parameter 'campaignId' must be defined.");
         url_ = url_.replace("{campaignId}", encodeURIComponent("" + campaignId));
@@ -958,6 +1024,10 @@ export class DocumentLibApiClient {
             throw new Error("The parameter 'externalUri' must be defined and cannot be null.");
         else
             url_ += "externalUri=" + encodeURIComponent("" + externalUri) + "&";
+        if (label === undefined)
+            throw new Error("The parameter 'label' must be defined.");
+        else if(label !== null)
+            url_ += "label=" + encodeURIComponent("" + label) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1005,7 +1075,7 @@ export class DocumentLibApiClient {
     }
 
     media(): Observable<void> {
-        let url_ = this.baseUrl + "/asdsad";
+        let url_ = this.baseUrl + "/api/campaigns/asdsad";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1545,6 +1615,7 @@ export class MediaDto implements IMediaDto {
     storageType!: MediaStorageType;
     externalUri?: string | null;
     documentId?: string | null;
+    label?: string | null;
     creationDate!: Date;
     modificationDate!: Date;
 
@@ -1564,6 +1635,7 @@ export class MediaDto implements IMediaDto {
             this.storageType = _data["storageType"] !== undefined ? _data["storageType"] : <any>null;
             this.externalUri = _data["externalUri"] !== undefined ? _data["externalUri"] : <any>null;
             this.documentId = _data["documentId"] !== undefined ? _data["documentId"] : <any>null;
+            this.label = _data["label"] !== undefined ? _data["label"] : <any>null;
             this.creationDate = _data["creationDate"] ? new Date(_data["creationDate"].toString()) : <any>null;
             this.modificationDate = _data["modificationDate"] ? new Date(_data["modificationDate"].toString()) : <any>null;
         }
@@ -1583,6 +1655,7 @@ export class MediaDto implements IMediaDto {
         data["storageType"] = this.storageType !== undefined ? this.storageType : <any>null;
         data["externalUri"] = this.externalUri !== undefined ? this.externalUri : <any>null;
         data["documentId"] = this.documentId !== undefined ? this.documentId : <any>null;
+        data["label"] = this.label !== undefined ? this.label : <any>null;
         data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
         data["modificationDate"] = this.modificationDate ? this.modificationDate.toISOString() : <any>null;
         return data; 
@@ -1595,6 +1668,7 @@ export interface IMediaDto {
     storageType: MediaStorageType;
     externalUri?: string | null;
     documentId?: string | null;
+    label?: string | null;
     creationDate: Date;
     modificationDate: Date;
 }

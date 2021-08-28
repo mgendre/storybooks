@@ -5,6 +5,7 @@ import {ScenariosComponent} from "./components/scenarios/app.scenarios";
 import {EditScenarioComponent} from "./components/scenarios/app.edit-scenario";
 import {CharactersComponent} from "./components/actors/app.characters";
 import {EditCharacterComponent} from "./components/actors/app.edit-character";
+import {MediaLibComponent} from "./components/media/app.media-lib";
 
 const routes: Routes = [
   { path: '', redirectTo: 'campaigns', pathMatch: 'full' },
@@ -14,7 +15,8 @@ const routes: Routes = [
   { path: 'scenarios/edit/:scenarioId', component: EditScenarioComponent },
   { path: 'characters', component: CharactersComponent },
   { path: 'characters/new', component: EditCharacterComponent },
-  { path: 'characters/edit/:characterId', component: EditCharacterComponent }
+  { path: 'characters/edit/:characterId', component: EditCharacterComponent },
+  { path: 'media-lib', component: MediaLibComponent },
 ];
 
 @NgModule({
