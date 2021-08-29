@@ -40,8 +40,9 @@ export class MediaDatastore implements HasInitialization {
       data: file,
       fileName: file.name
     };
-    await this.mediaLibClient.uploadAndCreate(campaignId, [fileParam], label).toPromise();
+    const published = await this.mediaLibClient.uploadAndCreate(campaignId, [fileParam], label).toPromise();
     await this.reload(campaignId);
+    return published;
   }
 
   public findMedia(mediaId: string) : MediaDto | null {

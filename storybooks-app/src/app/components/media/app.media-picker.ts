@@ -1,13 +1,12 @@
-import {Subscription} from "rxjs";
-import {Component, ElementRef, Input, ViewChild} from "@angular/core";
-import {DocumentLibApiClient, MediaDto} from "../../services/api.generated.clients";
+import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from "@angular/core";
+import {MediaDto} from "../../services/api.generated.clients";
 import {MediaDatastore} from "../../datastores/MediaDatastore";
 
 
 @Component({
-  selector: 'app-media-publisher',
-  templateUrl: './app.media-publisher.html',
-  styleUrls: ['./app.media-publisher.scss']
+  selector: 'app-media-picker',
+  templateUrl: './app.media-picker.html',
+  styleUrls: ['./app.media-picker.scss']
 })
 export class MediaPublisherComponent {
 
@@ -22,6 +21,8 @@ export class MediaPublisherComponent {
     // Clear the file upload
     this.fileUpload.nativeElement.value = "";
   }
+
+  @Output() onMediaPicked: EventEmitter<MediaDto> = new EventEmitter();
 
   @Input()
   existingDocument : MediaDto | null = null;
@@ -44,7 +45,8 @@ export class MediaPublisherComponent {
 
   async publish() {
     if (this.selectedFile) {
-      await this.mediaDatastore.upload(this.selectedFile, '');
+      const published = await this.mediaDatastore.upload(this.selectedFile, '');
+      this.onMediaPicked.emit(published);
     }
     this.close();
   }

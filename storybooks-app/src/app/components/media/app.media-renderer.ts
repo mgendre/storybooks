@@ -14,9 +14,9 @@ export class MediaRendererComponent implements OnDestroy {
   imgUrl = '';
 
   @Input()
-  class: any;
+  imageClass: any;
 
-  private _mediaToRender: MediaDto | null = null;
+  _mediaToRender: MediaDto | null = null;
 
   private _media: MediaDto | null = null;
   get media() {
@@ -42,9 +42,9 @@ export class MediaRendererComponent implements OnDestroy {
   subscriptions: Subscription[] = [];
 
   constructor(private readonly mediaDatastore: MediaDatastore) {
-    this.mediaDatastore.mediaItems.subscribe(() => {
+    this.subscriptions.push(this.mediaDatastore.mediaItems.subscribe(() => {
       this.reloadMedia();
-    });
+    }));
   }
 
   private createUrl() {
@@ -68,5 +68,6 @@ export class MediaRendererComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 }

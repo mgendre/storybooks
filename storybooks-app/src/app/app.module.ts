@@ -27,7 +27,7 @@ import {AppErrorHandler} from "./shared/AppErrorHandler";
 import {CharactersComponent} from "./components/actors/app.characters";
 import {EditCharacterComponent} from "./components/actors/app.edit-character";
 import {MediaLibComponent} from "./components/media/app.media-lib";
-import {MediaPublisherComponent} from "./components/media/app.media-publisher";
+import {MediaPublisherComponent} from "./components/media/app.media-picker";
 import {DialogModule} from "primeng/dialog";
 import {MediaRendererComponent} from "./components/media/app.media-renderer";
 

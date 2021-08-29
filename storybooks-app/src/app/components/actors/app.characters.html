@@ -18,7 +18,12 @@
     <div class="card" [class]="{expanded: actor.expanded}" *ngFor="let actor of actors">
       <div class="card-body">
         <div class="row">
-          <div class="col-md-9">
+          <div class="col-md-2">
+            <app-media-renderer [mediaId]="actor?.actor?.portraitMediaId" class="actor-portrait actor-portrait-small" imageClass="card-img">
+              <i class="bi bi-person-fill no-portrait"></i>
+            </app-media-renderer>
+          </div>
+          <div class="col-md-7">
             <h5>
               <a (click)="actor.expanded = !actor.expanded" class="link-icon">
                 <i class="bi" [class]="{'bi-plus': !actor.expanded, 'bi-dash': actor.expanded}"></i>

@@ -1,4 +1,4 @@
-import {CharacterDto, CharacterUpdateDto} from "../../services/api.generated.clients";
+import {CharacterDto, CharacterUpdateDto, MediaDto} from "../../services/api.generated.clients";
 import {Subscription} from "rxjs";
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {ActivatedRoute, Params, Router} from "@angular/router";
@@ -37,6 +37,8 @@ export class EditCharacterComponent implements OnInit, OnDestroy {
 
   private readonly subscriptions: Subscription[] = [];
 
+  private portraitMedia: MediaDto | null = null;
+
   constructor(private readonly actorsDatastore: ActorsDatastore,
               private router: Router,
               private route: ActivatedRoute) {
@@ -47,6 +49,7 @@ export class EditCharacterComponent implements OnInit, OnDestroy {
     toUpdate.firstname = this.actorForm.get('firstname')?.value ?? '';
     toUpdate.lastname = this.actorForm.get('lastname')?.value ?? '';
     toUpdate.descriptionMarkdown = this.actor.descriptionMarkdown;
+    toUpdate.portraitMediaId = this.portraitMedia?.id;
     await this.actorsDatastore.saveCharacter(toUpdate, this.actor.id);
     await this.close();
   }
@@ -76,6 +79,11 @@ export class EditCharacterComponent implements OnInit, OnDestroy {
         this.actor = this.actorsDatastore.getCharacter(id);
       }
     }));
+  }
+
+  mediaPicked(media: MediaDto) {
+    this.portraitMedia = media;
+    this._actor.portraitMediaId = media.id;
   }
 
   ngOnDestroy(): void {

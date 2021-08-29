@@ -8,16 +8,23 @@
 
   <form class="edit-form" [formGroup]="actorForm" (submit)="save()">
     <div class="row">
-      <div class="col-lg-4">
-        <app-media-renderer [mediaId]="actor?.portraitMediaId" class="actor-portrait">
-          <i class="bi bi-person-fill no-portrait"></i>
-        </app-media-renderer>
+      <div class="col-lg-2">
+        <div class="card">
+          <app-media-renderer [mediaId]="actor?.portraitMediaId" class="actor-portrait" imageClass="card-img">
+            <i class="bi bi-person-fill no-portrait"></i>
+          </app-media-renderer>
+        </div>
+        <app-media-picker (onMediaPicked)="mediaPicked($event)">
+          <button class="btn btn-primary" type="button">
+            <i class="bi bi-cloud-upload"></i>
+          </button>
+        </app-media-picker>
       </div>
-      <div class="col-lg-4">
+      <div class="col-lg-5">
         <label for="actor-firstname" class="form-label" translate>character.edit.form.firstname</label>
         <input type="text" class="form-control" id="actor-firstname" formControlName="firstname">
       </div>
-      <div class="col-lg-4">
+      <div class="col-lg-5">
         <label for="actor-lastname" class="form-label" translate>character.edit.form.lastname</label>
         <input type="text" class="form-control" id="actor-lastname" formControlName="lastname">
       </div>
@@ -32,20 +39,20 @@
 
     <div class="row">
       <div class="col-md-6">
-          <button class="btn btn-secondary"
-                  type="button"
-                  (click)="close()">
-            <i class="bi bi-x"></i>
-            <span translate>common.button.cancel</span>
-          </button>
+        <button class="btn btn-secondary"
+                type="button"
+                (click)="close()">
+          <i class="bi bi-x"></i>
+          <span translate>common.button.cancel</span>
+        </button>
       </div>
       <div class="col-md-6 text-end">
-          <button class="btn btn-icon btn-primary"
-                  type="submit"
-                  [disabled]="actorForm.invalid">
-            <i class="bi bi-save"></i>
-            <span translate>common.button.save</span>
-          </button>
+        <button class="btn btn-icon btn-primary"
+                type="submit"
+                [disabled]="actorForm.invalid">
+          <i class="bi bi-save"></i>
+          <span translate>common.button.save</span>
+        </button>
       </div>
     </div>
   </form>
