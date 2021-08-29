@@ -44,6 +44,10 @@ export class MediaDatastore implements HasInitialization {
     await this.reload(campaignId);
   }
 
+  public findMedia(mediaId: string) : MediaDto | null {
+    return this._mediaItems.value.find(m => m.id === mediaId) ?? null;
+  }
+
   isReady(): boolean {
     return this._ready.value;
   }

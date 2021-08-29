@@ -1371,6 +1371,7 @@ export abstract class AbstractActorDto implements IAbstractActorDto {
     creationDate!: Date;
     modificationDate!: Date;
     type!: string;
+    portraitMediaId?: string | null;
 
     constructor(data?: IAbstractActorDto) {
         if (data) {
@@ -1390,6 +1391,7 @@ export abstract class AbstractActorDto implements IAbstractActorDto {
             this.creationDate = _data["creationDate"] ? new Date(_data["creationDate"].toString()) : <any>null;
             this.modificationDate = _data["modificationDate"] ? new Date(_data["modificationDate"].toString()) : <any>null;
             this.type = _data["type"] !== undefined ? _data["type"] : <any>null;
+            this.portraitMediaId = _data["portraitMediaId"] !== undefined ? _data["portraitMediaId"] : <any>null;
         }
     }
 
@@ -1407,6 +1409,7 @@ export abstract class AbstractActorDto implements IAbstractActorDto {
         data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>null;
         data["modificationDate"] = this.modificationDate ? this.modificationDate.toISOString() : <any>null;
         data["type"] = this.type !== undefined ? this.type : <any>null;
+        data["portraitMediaId"] = this.portraitMediaId !== undefined ? this.portraitMediaId : <any>null;
         return data; 
     }
 }
@@ -1419,6 +1422,7 @@ export interface IAbstractActorDto {
     creationDate: Date;
     modificationDate: Date;
     type: string;
+    portraitMediaId?: string | null;
 }
 
 export class CharacterDto extends AbstractActorDto implements ICharacterDto {
@@ -1465,6 +1469,7 @@ export interface ICharacterDto extends IAbstractActorDto {
 export class AbstractActorUpdateDto implements IAbstractActorUpdateDto {
     name!: string;
     descriptionMarkdown!: string;
+    portraitMediaId?: string | null;
 
     constructor(data?: IAbstractActorUpdateDto) {
         if (data) {
@@ -1479,6 +1484,7 @@ export class AbstractActorUpdateDto implements IAbstractActorUpdateDto {
         if (_data) {
             this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
             this.descriptionMarkdown = _data["descriptionMarkdown"] !== undefined ? _data["descriptionMarkdown"] : <any>null;
+            this.portraitMediaId = _data["portraitMediaId"] !== undefined ? _data["portraitMediaId"] : <any>null;
         }
     }
 
@@ -1493,6 +1499,7 @@ export class AbstractActorUpdateDto implements IAbstractActorUpdateDto {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name !== undefined ? this.name : <any>null;
         data["descriptionMarkdown"] = this.descriptionMarkdown !== undefined ? this.descriptionMarkdown : <any>null;
+        data["portraitMediaId"] = this.portraitMediaId !== undefined ? this.portraitMediaId : <any>null;
         return data; 
     }
 }
@@ -1500,6 +1507,7 @@ export class AbstractActorUpdateDto implements IAbstractActorUpdateDto {
 export interface IAbstractActorUpdateDto {
     name: string;
     descriptionMarkdown: string;
+    portraitMediaId?: string | null;
 }
 
 export class CharacterUpdateDto extends AbstractActorUpdateDto implements ICharacterUpdateDto {

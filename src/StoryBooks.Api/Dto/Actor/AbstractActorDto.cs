@@ -17,6 +17,8 @@ namespace StoryBooks.Api.Dto.Actor
 
         public string Type { get; set; } = string.Empty;
         
+        public string? PortraitMediaId { get; set; }
+        
         
         protected void LoadFromModel(AbstractActor model)
         {
@@ -27,6 +29,7 @@ namespace StoryBooks.Api.Dto.Actor
             CampaignId = model.CampaignId;
             Id = model.Id;
             Type = model.Type;
+            PortraitMediaId = model.PortraitMediaId;
         }
     }
 }

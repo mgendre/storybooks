@@ -8,11 +8,16 @@
 
   <form class="edit-form" [formGroup]="actorForm" (submit)="save()">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-lg-4">
+        <app-media-renderer [mediaId]="actor?.portraitMediaId" class="actor-portrait">
+          <i class="bi bi-person-fill no-portrait"></i>
+        </app-media-renderer>
+      </div>
+      <div class="col-lg-4">
         <label for="actor-firstname" class="form-label" translate>character.edit.form.firstname</label>
         <input type="text" class="form-control" id="actor-firstname" formControlName="firstname">
       </div>
-      <div class="col-md-6">
+      <div class="col-lg-4">
         <label for="actor-lastname" class="form-label" translate>character.edit.form.lastname</label>
         <input type="text" class="form-control" id="actor-lastname" formControlName="lastname">
       </div>

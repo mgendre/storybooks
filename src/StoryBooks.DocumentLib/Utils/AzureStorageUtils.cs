@@ -23,7 +23,7 @@ namespace StoryBooks.DocumentLib.Utils
             
             var blobClient = containerClient.GetBlobClient(blobName);
             var response = await blobClient.DownloadToAsync(stream);
-            if (response.Status != 200)
+            if (response.Status != 200 && response.Status != 206)
             {
                 throw new DocumentLibException($"Could not download blob {blobName}, " +
                                             $"response status is: {response.Status}");

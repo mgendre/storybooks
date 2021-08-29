@@ -1,1 +1,5 @@
 <img *ngIf="media" [class]="class" [src]="imgUrl" [alt]="media.label"/>
+
+<ng-content *ngIf="!media" class="renderer-no-media">
+
+</ng-content>

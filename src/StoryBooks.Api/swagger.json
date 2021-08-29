@@ -927,6 +927,9 @@
         },
         "type": {
           "type": "string"
+        },
+        "portraitMediaId": {
+          "type": "string"
         }
       }
     },
@@ -967,6 +970,9 @@
           "type": "string"
         },
         "descriptionMarkdown": {
+          "type": "string"
+        },
+        "portraitMediaId": {
           "type": "string"
         }
       }

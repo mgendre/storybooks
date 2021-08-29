@@ -1,0 +1,14 @@
+.actor-portrait {
+  border: 1px solid black;
+  border-radius: 5px;
+  text-align: center;
+  display: block;
+  height: 180px;
+  width: 180px;
+
+  i, img {
+    display: inline-block;
+    height: 100%;
+    font-size: 120px;
+  }
+}
