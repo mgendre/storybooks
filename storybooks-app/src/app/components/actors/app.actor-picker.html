@@ -1,0 +1,31 @@
+<div class="actor-picker">
+
+  <p-dialog [(visible)]="dialogOpened" [modal]="true" [style]="{width: '600px'}">
+    <ng-template pTemplate="header" class="">
+    </ng-template>
+
+    <p-tabView>
+      <p-tabPanel [header]="'actorPicker.tabs.character' | translate">
+        <p-autoComplete [suggestions]="characters" (completeMethod)="picked($event)" [dropdown]="true">
+          <ng-template let-group pTemplate="item">
+
+          </ng-template>
+        </p-autoComplete>
+      </p-tabPanel>
+      <p-tabPanel [header]="'actorPicker.tabs.place' | translate">
+        Content 2
+      </p-tabPanel>
+    </p-tabView>
+
+    <ng-template pTemplate="footer">
+      <button class="btn btn-secondary"
+              type="button"
+              (click)="close()">
+        <i class="bi bi-x"></i>
+        <span translate>common.button.close</span>
+      </button>
+    </ng-template>
+  </p-dialog>
+
+</div>
+

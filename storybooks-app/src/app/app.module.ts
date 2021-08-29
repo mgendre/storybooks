@@ -30,6 +30,9 @@ import {MediaLibComponent} from "./components/media/app.media-lib";
 import {MediaPublisherComponent} from "./components/media/app.media-picker";
 import {DialogModule} from "primeng/dialog";
 import {MediaRendererComponent} from "./components/media/app.media-renderer";
+import {ActorPickerComponent} from "./components/actors/app.actor-picker";
+import {TabViewModule} from "primeng/tabview";
+import {AutoCompleteModule} from "primeng/autocomplete";
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -49,6 +52,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     EditScenarioComponent,
     CharactersComponent,
     EditCharacterComponent,
+    ActorPickerComponent,
     MediaLibComponent,
     MediaPublisherComponent,
     MediaRendererComponent
@@ -75,7 +79,9 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     }),
     ConfirmDialogModule,
     ToastModule,
-    DialogModule
+    DialogModule,
+    TabViewModule,
+    AutoCompleteModule
   ],
   providers: [
     {

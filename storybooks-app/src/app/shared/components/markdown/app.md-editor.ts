@@ -1,6 +1,8 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core";
+import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from "@angular/core";
 import {Subject, Subscription} from "rxjs";
 import {debounceTime, distinctUntilChanged} from "rxjs/operators";
+import {ActorPickerComponent} from "../../../components/actors/app.actor-picker";
+import {AbstractActorDto, CharacterDto} from "../../../services/api.generated.clients";
 
 @Component({
   selector: 'app-markdown-editor',
@@ -16,7 +18,12 @@ export class MarkdownEditor implements OnInit, OnDestroy {
 
   @Input()
   markdown: string | null = '';
+
   @Output('markdownChange') markdownChangeEmitter = new EventEmitter<string>();
+
+  @ViewChild("textAreaElement") textAreaElement!: ElementRef;
+
+  @ViewChild("actorPicker") actorPicker!: ActorPickerComponent;
 
   markdownValueChanged = new Subject<string>();
 
@@ -43,6 +50,17 @@ export class MarkdownEditor implements OnInit, OnDestroy {
     this.subscriptions.forEach(s => {
       s.unsubscribe();
     })
+  }
+
+  selectCharacter() {
+    this.actorPicker.pickCharacter();
+  }
+
+  actorPicked(actor: AbstractActorDto) {
+    alert('Type: ' + (actor instanceof CharacterDto));
+
+    // InputUtils.insertAtCaret(this.textAreaElement.nativeElement, 'ads');
+    // this.textAreaElement.nativeElement.focus();
   }
 }
 
