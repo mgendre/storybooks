@@ -45,16 +45,27 @@ export class ActorsDatastore implements HasInitialization {
     return this._ready.value;
   }
 
-  public async saveCharacter(actor: CharacterUpdateDto, actorId: string | null = null) {
+  allCharacters() {
+    return this._characters.value;
+  }
+
+  async saveCharacter(actor: CharacterUpdateDto, actorId: string | null = null) {
     const campaignId = this.campaignsDatastore.selectedCampaignValue.id;
 
+    if (!actor.descriptionMarkdown) {
+      actor.descriptionMarkdown = '';
+    }
+
+    let result: CharacterDto;
     if (actorId) {
-      await this.charactersApiClient.update(campaignId, actorId, actor).toPromise();
+      result = await this.charactersApiClient.update(campaignId, actorId, actor).toPromise();
     } else {
-      await this.charactersApiClient.create(campaignId, actor).toPromise();
+      result = await this.charactersApiClient.create(campaignId, actor).toPromise();
     }
 
     await this.reloadCharacters(campaignId);
+
+    return result;
   }
 
   async deleteCharacter(id: string) {

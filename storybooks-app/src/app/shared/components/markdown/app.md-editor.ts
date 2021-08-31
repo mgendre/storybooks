@@ -62,6 +62,10 @@ export class MarkdownEditor implements OnInit, OnDestroy {
     // InputUtils.insertAtCaret(this.textAreaElement.nativeElement, 'ads');
     // this.textAreaElement.nativeElement.focus();
   }
+
+  interceptEnter(event: Event) {
+    event.preventDefault();
+  }
 }
 
 export enum PreviewMode {

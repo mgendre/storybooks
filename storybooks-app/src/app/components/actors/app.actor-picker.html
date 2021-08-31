@@ -6,11 +6,28 @@
 
     <p-tabView>
       <p-tabPanel [header]="'actorPicker.tabs.character' | translate">
-        <p-autoComplete [suggestions]="characters" (completeMethod)="picked($event)" [dropdown]="true">
-          <ng-template let-group pTemplate="item">
-
+        <p-autoComplete [suggestions]="filteredCharacters"
+                        [(ngModel)]="selectedCharacter"
+                        [placeholder]="'actorPicker.characters.autoComplete.placeholder' | translate"
+                        [baseZIndex]="900"
+                        [delay]="100"
+                        appendTo="body"
+                        (completeMethod)="filterCharacters($event)"
+                        (onSelect)="characterPicked($event)"
+                        field="name"
+                        [dropdown]="true"
+                        #characterAutoComplete>
+          <ng-template let-item pTemplate="item">
+            <span>{{item.name}}</span>
           </ng-template>
         </p-autoComplete>
+        <div class="create-character">
+          <a *ngIf="lastCharacterInputValue"
+             (click)="createNewCharacter()"
+             translate [translateParams]="{name: lastCharacterInputValue}" class="">
+            actorPicker.characters.new.action
+          </a>
+        </div>
       </p-tabPanel>
       <p-tabPanel [header]="'actorPicker.tabs.place' | translate">
         Content 2

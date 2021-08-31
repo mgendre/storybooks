@@ -33,6 +33,7 @@ import {MediaRendererComponent} from "./components/media/app.media-renderer";
 import {ActorPickerComponent} from "./components/actors/app.actor-picker";
 import {TabViewModule} from "primeng/tabview";
 import {AutoCompleteModule} from "primeng/autocomplete";
+import {PreventDefaultEnter} from "./shared/Utils/prevent-default.directive";
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -46,6 +47,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     MainSidebarComponent,
     MarkdownEditor,
     MarkdownView,
+    PreventDefaultEnter,
     CampaignsComponent,
     CurrentCampaignName,
     ScenariosComponent,

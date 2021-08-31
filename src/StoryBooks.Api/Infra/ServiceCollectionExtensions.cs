@@ -28,32 +28,32 @@ namespace StoryBooks.Api.Infra
         private static async Task InitializeCosmos(IServiceCollection services, CosmosDbSettings settings)
         {
             
-            await Initialize(services, await CosmosUtils.CreateDataBaseIfNotExists(settings));
+            await Initialize(services, CosmosUtils.CreateClient(settings).GetDatabase(settings.DatabaseName));
         }
 
-        private static async Task Initialize(IServiceCollection services, DatabaseResponse db)
+        private static async Task Initialize(IServiceCollection services, Database db)
         {
             var campaignContainer = new CampaignContainer(
-                await db.Database.CreateContainerIfNotExistsAsync(
+                await db.CreateContainerIfNotExistsAsync(
                     nameof(Campaign), "/PartitionKey")
             );
             services.AddSingleton(campaignContainer);
-            services.AddSingleton<ICampaignRepository, CampaignRepository>();
+            services.AddTransient<ICampaignRepository, CampaignRepository>();
             
             var scenarioContainer = new ScenarioContainer(
-                await db.Database.CreateContainerIfNotExistsAsync(
+                await db.CreateContainerIfNotExistsAsync(
                     nameof(Scenario), "/PartitionKey")
             );
             services.AddSingleton(scenarioContainer);
-            services.AddSingleton<IScenarioRepository, ScenarioRepository>();
+            services.AddTransient<IScenarioRepository, ScenarioRepository>();
             
             var actorContainer = new ActorContainer(
-                await db.Database.CreateContainerIfNotExistsAsync(
+                await db.CreateContainerIfNotExistsAsync(
                     "Actor", "/PartitionKey")
             );
             services.AddSingleton(actorContainer);
-            services.AddSingleton<IActorRepository<Character>, ActorRepository<Character>>();
-            services.AddSingleton<IActorRepository<Place>, ActorRepository<Place>>();
+            services.AddTransient<IActorRepository<Character>, ActorRepository<Character>>();
+            services.AddTransient<IActorRepository<Place>, ActorRepository<Place>>();
         }
     }
 }

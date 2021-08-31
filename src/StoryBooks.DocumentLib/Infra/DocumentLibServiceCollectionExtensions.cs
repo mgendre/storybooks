@@ -26,15 +26,15 @@ namespace StoryBooks.DocumentLib.Infra
         {
             services.Configure<DocumentLibOptions>(mediaLibConfigurationSection);
 
-            services.AddSingleton<IDocumentLibService, DocumentLibService>();
+            services.AddTransient<IDocumentLibService, DocumentLibService>();
 
-            var db = await CosmosUtils.CreateDataBaseIfNotExists(settings);
+            var db = CosmosUtils.CreateClient(settings).GetDatabase(settings.DatabaseName);
             var mediaContainer = new MediaContainer(
-                await db.Database.CreateContainerIfNotExistsAsync(
+                await db.CreateContainerIfNotExistsAsync(
                     nameof(Media), "/PartitionKey")
             );
             services.AddSingleton(mediaContainer);
-            services.AddSingleton<IMediaRepository, MediaRepository>();
+            services.AddTransient<IMediaRepository, MediaRepository>();
 
             services.AddMediatR(typeof(DocumentLibServiceCollectionExtensions));
         }

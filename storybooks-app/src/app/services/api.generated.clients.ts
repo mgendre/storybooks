@@ -1426,9 +1426,6 @@ export interface IAbstractActorDto {
 }
 
 export class CharacterDto extends AbstractActorDto implements ICharacterDto {
-    firstname!: string;
-    lastname!: string;
-    name!: string;
 
     constructor(data?: ICharacterDto) {
         super(data);
@@ -1436,11 +1433,6 @@ export class CharacterDto extends AbstractActorDto implements ICharacterDto {
 
     init(_data?: any) {
         super.init(_data);
-        if (_data) {
-            this.firstname = _data["firstname"] !== undefined ? _data["firstname"] : <any>null;
-            this.lastname = _data["lastname"] !== undefined ? _data["lastname"] : <any>null;
-            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
-        }
     }
 
     static fromJS(data: any): CharacterDto {
@@ -1452,18 +1444,12 @@ export class CharacterDto extends AbstractActorDto implements ICharacterDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["firstname"] = this.firstname !== undefined ? this.firstname : <any>null;
-        data["lastname"] = this.lastname !== undefined ? this.lastname : <any>null;
-        data["name"] = this.name !== undefined ? this.name : <any>null;
         super.toJSON(data);
         return data; 
     }
 }
 
 export interface ICharacterDto extends IAbstractActorDto {
-    firstname: string;
-    lastname: string;
-    name: string;
 }
 
 export class AbstractActorUpdateDto implements IAbstractActorUpdateDto {
@@ -1511,9 +1497,6 @@ export interface IAbstractActorUpdateDto {
 }
 
 export class CharacterUpdateDto extends AbstractActorUpdateDto implements ICharacterUpdateDto {
-    firstname!: string;
-    lastname!: string;
-    name!: string;
 
     constructor(data?: ICharacterUpdateDto) {
         super(data);
@@ -1521,11 +1504,6 @@ export class CharacterUpdateDto extends AbstractActorUpdateDto implements IChara
 
     init(_data?: any) {
         super.init(_data);
-        if (_data) {
-            this.firstname = _data["firstname"] !== undefined ? _data["firstname"] : <any>null;
-            this.lastname = _data["lastname"] !== undefined ? _data["lastname"] : <any>null;
-            this.name = _data["name"] !== undefined ? _data["name"] : <any>null;
-        }
     }
 
     static fromJS(data: any): CharacterUpdateDto {
@@ -1537,18 +1515,12 @@ export class CharacterUpdateDto extends AbstractActorUpdateDto implements IChara
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["firstname"] = this.firstname !== undefined ? this.firstname : <any>null;
-        data["lastname"] = this.lastname !== undefined ? this.lastname : <any>null;
-        data["name"] = this.name !== undefined ? this.name : <any>null;
         super.toJSON(data);
         return data; 
     }
 }
 
 export interface ICharacterUpdateDto extends IAbstractActorUpdateDto {
-    firstname: string;
-    lastname: string;
-    name: string;
 }
 
 export class UserProfileDto implements IUserProfileDto {

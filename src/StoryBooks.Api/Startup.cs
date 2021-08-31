@@ -68,12 +68,13 @@ namespace StoryBooks.Api
             try
             {
                 var cosmosDbConfig = _configuration.GetSection("CosmosDb").Get<CosmosDbSettings>();
+                
+                services.AddSharedModule(cosmosDbConfig);
+                
                 services.AddCosmosDb(cosmosDbConfig);
                 
                 var mediaLibOptions = _configuration.GetSection("MediaLib");
                 services.AddMediaLib(mediaLibOptions, cosmosDbConfig);
-                
-                services.AddSharedModule(cosmosDbConfig);
             }
             catch (Exception e)
             {

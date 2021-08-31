@@ -17,8 +17,7 @@ export class EditCharacterComponent implements OnInit, OnDestroy {
   set actor(actor: CharacterDto) {
     this._actor = actor;
     this.actorForm.setValue({
-      'firstname': actor.firstname ?? '',
-      'lastname': actor.lastname ?? ''
+      'name': actor.name ?? ''
     });
   }
   get actor() {
@@ -27,10 +26,7 @@ export class EditCharacterComponent implements OnInit, OnDestroy {
 
 
   actorForm = new FormGroup({
-    firstname: new FormControl('', [
-      Validators.required,
-    ]),
-    lastname: new FormControl('', [
+    name: new FormControl('', [
       Validators.required,
     ])
   });
@@ -46,8 +42,7 @@ export class EditCharacterComponent implements OnInit, OnDestroy {
 
   async save() {
     const toUpdate = new CharacterUpdateDto();
-    toUpdate.firstname = this.actorForm.get('firstname')?.value ?? '';
-    toUpdate.lastname = this.actorForm.get('lastname')?.value ?? '';
+    toUpdate.name = this.actorForm.get('name')?.value ?? '';
     toUpdate.descriptionMarkdown = this.actor.descriptionMarkdown;
     toUpdate.portraitMediaId = this.portraitMedia?.id;
     await this.actorsDatastore.saveCharacter(toUpdate, this.actor.id);

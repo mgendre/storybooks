@@ -872,23 +872,7 @@
           "$ref": "#/definitions/AbstractActorDto"
         },
         {
-          "type": "object",
-          "required": [
-            "firstname",
-            "lastname",
-            "name"
-          ],
-          "properties": {
-            "firstname": {
-              "type": "string"
-            },
-            "lastname": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            }
-          }
+          "type": "object"
         }
       ]
     },
@@ -939,23 +923,7 @@
           "$ref": "#/definitions/AbstractActorUpdateDto"
         },
         {
-          "type": "object",
-          "required": [
-            "firstname",
-            "lastname",
-            "name"
-          ],
-          "properties": {
-            "firstname": {
-              "type": "string"
-            },
-            "lastname": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            }
-          }
+          "type": "object"
         }
       ]
     },
