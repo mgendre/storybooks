@@ -2,7 +2,7 @@ import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, V
 import {Subject, Subscription} from "rxjs";
 import {debounceTime, distinctUntilChanged} from "rxjs/operators";
 import {ActorPickerComponent} from "../../../components/actors/app.actor-picker";
-import {AbstractActorDto, CharacterDto} from "../../../services/api.generated.clients";
+import {AbstractActorDto} from "../../../services/api.generated.clients";
 import {InputUtils} from "../../Utils/InputUtils";
 import {MarkdownService} from "./MarkdownService";
 

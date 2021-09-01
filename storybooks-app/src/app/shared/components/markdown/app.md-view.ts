@@ -43,9 +43,9 @@ export class MarkdownView implements OnDestroy, OnInit {
               private readonly actorsDatastore: ActorsDatastore,
               private readonly logger: NGXLogger) {
     this.markdownRenderer = this.createMarkdownRenderer();
-    this.actorsDatastore.actors.subscribe(() => {
+    this.subscriptions.push(this.actorsDatastore.actors.subscribe(() => {
       this.renderMarkdown();
-    });
+    }));
   }
 
   ngOnInit(): void {
@@ -83,8 +83,7 @@ export class MarkdownView implements OnDestroy, OnInit {
     userInput += this.markdownService.getAllActorLinks();
 
     if (this.renderer) {
-      let html = this.markdownRenderer.render(userInput);
-      this.renderer.nativeElement.innerHTML = html;
+      this.renderer.nativeElement.innerHTML = this.markdownRenderer.render(userInput);
     }
   }
 

@@ -1,5 +1,5 @@
 import {Component, OnDestroy} from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {ActorsDatastore} from "../../datastores/ActorDatastore";
 import {Subscription} from "rxjs";
 import {AbstractActorDto, CharacterDto} from "../../services/api.generated.clients";
