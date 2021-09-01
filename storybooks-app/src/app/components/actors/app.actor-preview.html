@@ -1,0 +1,15 @@
+<p-dialog [(visible)]="actor" [modal]="true" [header]="actor?.name ?? ''" [style]="{width: '600px'}">
+  <div class="actor-dialog-content" *ngIf="actor">
+    <div class="row">
+      <div class="col-md-4">
+        <app-media-renderer [mediaId]="actor.portraitMediaId" class="actor-portrait actor-portrait-small"
+                            imageClass="card-img">
+          <i class="bi bi-person-fill no-portrait"></i>
+        </app-media-renderer>
+      </div>
+      <div class="col-md-8">
+        <app-markdown-view [markdown]="actor.descriptionMarkdown"></app-markdown-view>
+      </div>
+    </div>
+  </div>
+</p-dialog>

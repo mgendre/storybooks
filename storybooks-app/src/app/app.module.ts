@@ -34,6 +34,7 @@ import {ActorPickerComponent} from "./components/actors/app.actor-picker";
 import {TabViewModule} from "primeng/tabview";
 import {AutoCompleteModule} from "primeng/autocomplete";
 import {PreventDefaultEnter} from "./shared/Utils/prevent-default.directive";
+import {ActorPreviewComponent} from "./components/actors/app.actor-preview";
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -55,6 +56,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     CharactersComponent,
     EditCharacterComponent,
     ActorPickerComponent,
+    ActorPreviewComponent,
     MediaLibComponent,
     MediaPublisherComponent,
     MediaRendererComponent
