@@ -12,4 +12,19 @@
       </div>
     </div>
   </div>
+
+  <ng-template pTemplate="footer">
+    <button class="btn btn-secondary btn-icon"
+            type="button"
+            (click)="edit()">
+      <i class="bi bi-pencil"></i>
+      <span translate>common.button.edit</span>
+    </button>
+    <button class="btn btn-secondary"
+            type="button"
+            (click)="close()">
+      <i class="bi bi-x"></i>
+      <span translate>common.button.close</span>
+    </button>
+  </ng-template>
 </p-dialog>

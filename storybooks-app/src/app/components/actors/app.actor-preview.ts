@@ -2,7 +2,7 @@ import {Component, OnDestroy} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ActorsDatastore} from "../../datastores/ActorDatastore";
 import {Subscription} from "rxjs";
-import {AbstractActorDto} from "../../services/api.generated.clients";
+import {AbstractActorDto, CharacterDto} from "../../services/api.generated.clients";
 
 
 @Component({
@@ -17,8 +17,7 @@ export class ActorPreviewComponent implements OnDestroy {
   actor: AbstractActorDto | null = null;
 
   constructor(private readonly actorsDatastore: ActorsDatastore,
-              private router: Router,
-              private route: ActivatedRoute) {
+              private router: Router) {
     this.subscriptions.push(this.actorsDatastore.actorSelectedForPreview.subscribe((actor: AbstractActorDto) => {
       this.actor = actor;
     }));
@@ -26,5 +25,20 @@ export class ActorPreviewComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe());
+  }
+
+  close() {
+    this.actor = null;
+  }
+
+  async edit() {
+    if (this.actor) {
+      let link = 'actors';
+      if (this.actor instanceof CharacterDto) {
+        link = 'characters';
+      }
+      await this.router.navigate([`/${link}/edit/${this.actor.id}`]);
+      this.close();
+    }
   }
 }
