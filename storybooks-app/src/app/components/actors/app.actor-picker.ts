@@ -60,7 +60,6 @@ export class ActorPickerComponent implements OnDestroy {
 
   doFilterCharacters() {
     const filtered: CharacterDto[] = [];
-    console.log(this.actorsDatastore.allCharacters);
     this.actorsDatastore.allCharacters().forEach(c => {
       if (c.name.toLowerCase().indexOf(this.lastCharacterInputValue.toLowerCase()) >= 0) {
         filtered.push(c);

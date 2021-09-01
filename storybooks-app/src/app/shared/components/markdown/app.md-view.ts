@@ -1,13 +1,30 @@
-import {Component, Input} from "@angular/core";
+import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import md from 'markdown-it';
+import {MarkdownService} from "./MarkdownService";
+import {ActorsDatastore} from "../../../datastores/ActorDatastore";
+import {Subscription} from "rxjs";
+import {NGXLogger} from "ngx-logger";
 
 @Component({
   selector: 'app-markdown-view',
   templateUrl: './app.md-view.html',
   styleUrls: ['./app.md-view.scss']
 })
-export class MarkdownView {
-  private readonly markdownRenderer = MarkdownView.createMarkdownRenderer();
+export class MarkdownView implements OnDestroy, OnInit {
+  private readonly markdownRenderer;
+
+  private subscriptions: Subscription[] = [];
+
+  private _renderer!: ElementRef;
+
+  @ViewChild("renderer")
+  set renderer(elt: ElementRef) {
+    this._renderer = elt;
+    this.renderMarkdown();
+  }
+  get renderer() {
+    return this._renderer;
+  }
 
   _markdown = '';
 
@@ -15,26 +32,65 @@ export class MarkdownView {
   set markdown(value: string) {
     this._markdown = value;
     this.renderMarkdown();
+    console.log(value);
   }
+
   get markdown(): string {
     return this._markdown;
   }
 
-  constructor() {
+  constructor(private readonly markdownService: MarkdownService,
+              private readonly actorsDatastore: ActorsDatastore,
+              private readonly logger: NGXLogger) {
+    this.markdownRenderer = this.createMarkdownRenderer();
+    this.actorsDatastore.actors.subscribe(() => {
+      this.renderMarkdown();
+    });
+  }
+
+  ngOnInit(): void {
     this.renderMarkdown();
   }
 
-  markdownHtml = '';
-
-  private static createMarkdownRenderer() {
-    return md({
+  private createMarkdownRenderer() {
+    const editor = md({
       breaks: true,
       xhtmlOut: true,
       html: true
     });
+    editor.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+      try {
+        const linkOpen = tokens[idx];
+        const linkContent = tokens[idx].attrGet('href')?.split('/');
+        if (linkContent) {
+          const type = linkContent[0];
+          const id = linkContent[1];
+          linkOpen.attrSet('onclick', `event.preventDefault(); window.openActor("${type}", "${id}");`);
+        }
+      }
+      catch(e) {
+        this.logger.error(e, 'Could not create link')
+      }
+      return self.renderToken(tokens, idx, options);
+    }
+    return editor;
   }
 
   private renderMarkdown() {
-    this.markdownHtml = this.markdownRenderer.render(this._markdown);
+
+    let userInput = this._markdown;
+    userInput += '\n\n\n\n';
+    userInput += this.markdownService.getAllActorLinks();
+
+    if (this.renderer) {
+      let html = this.markdownRenderer.render(userInput);
+      this.renderer.nativeElement.innerHTML = html;
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(s => {
+      s.unsubscribe();
+    });
   }
 }

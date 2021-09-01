@@ -1,6 +1,11 @@
 import {HasInitialization} from "../services/HasInitialization";
 import {BehaviorSubject} from "rxjs";
-import {CharacterApiClient, CharacterDto, CharacterUpdateDto} from "../services/api.generated.clients";
+import {
+  AbstractActorDto,
+  CharacterApiClient,
+  CharacterDto,
+  CharacterUpdateDto
+} from "../services/api.generated.clients";
 import {Injectable} from "@angular/core";
 import {CampaignsDatastore} from "./CampaignsDatastore";
 
@@ -13,6 +18,9 @@ export class ActorsDatastore implements HasInitialization {
 
   private readonly _characters = new BehaviorSubject<CharacterDto[]>([]);
   public readonly characters = this._characters.asObservable();
+
+  private readonly _actors = new BehaviorSubject<AbstractActorDto[]>([]);
+  public readonly actors = this._characters.asObservable();
 
   constructor(private readonly charactersApiClient: CharacterApiClient,
               private readonly campaignsDatastore: CampaignsDatastore) {
@@ -39,14 +47,20 @@ export class ActorsDatastore implements HasInitialization {
     } else {
       this._characters.next([]);
     }
+    this._actors.next(this.allActors());
   }
 
   isReady(): boolean {
     return this._ready.value;
   }
 
-  allCharacters() {
+  allCharacters(): CharacterDto[] {
     return this._characters.value;
+  }
+
+  allActors(): AbstractActorDto[] {
+    return this.allCharacters();
+    // TODO: Add future elements
   }
 
   async saveCharacter(actor: CharacterUpdateDto, actorId: string | null = null) {

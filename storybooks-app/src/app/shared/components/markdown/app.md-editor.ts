@@ -3,6 +3,8 @@ import {Subject, Subscription} from "rxjs";
 import {debounceTime, distinctUntilChanged} from "rxjs/operators";
 import {ActorPickerComponent} from "../../../components/actors/app.actor-picker";
 import {AbstractActorDto, CharacterDto} from "../../../services/api.generated.clients";
+import {InputUtils} from "../../Utils/InputUtils";
+import {MarkdownService} from "./MarkdownService";
 
 @Component({
   selector: 'app-markdown-editor',
@@ -16,8 +18,16 @@ export class MarkdownEditor implements OnInit, OnDestroy {
 
   private readonly subscriptions: Subscription[] = [];
 
+
+  _markdown: string | null = '';
   @Input()
-  markdown: string | null = '';
+  set markdown(markdown: string | null) {
+    this._markdown = markdown;
+    this.markdownValueChanged.next(this.markdown ?? '');
+  }
+  get markdown() {
+    return this._markdown;
+  }
 
   @Output('markdownChange') markdownChangeEmitter = new EventEmitter<string>();
 
@@ -28,6 +38,9 @@ export class MarkdownEditor implements OnInit, OnDestroy {
   markdownValueChanged = new Subject<string>();
 
   markdownPreview = '';
+
+  constructor(private readonly markdownService: MarkdownService) {
+  }
 
   markdownInputChanged() {
     this.markdownValueChanged.next(this.markdown ?? '');
@@ -57,14 +70,14 @@ export class MarkdownEditor implements OnInit, OnDestroy {
   }
 
   actorPicked(actor: AbstractActorDto) {
-    alert('Type: ' + (actor instanceof CharacterDto));
+    const actorKey = this.markdownService.actor2Key(actor);
+    InputUtils.insertAtCaret(this.textAreaElement.nativeElement, actorKey);
+    this.markdown = this.textAreaElement.nativeElement.value;
+    this.markdownInputChanged();
 
-    // InputUtils.insertAtCaret(this.textAreaElement.nativeElement, 'ads');
-    // this.textAreaElement.nativeElement.focus();
-  }
-
-  interceptEnter(event: Event) {
-    event.preventDefault();
+    setTimeout(() => {
+      this.textAreaElement.nativeElement.focus();
+    }, 50);
   }
 }
 
