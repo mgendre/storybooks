@@ -33,7 +33,7 @@ export class EditCharacterComponent implements OnInit, OnDestroy {
 
   private readonly subscriptions: Subscription[] = [];
 
-  private portraitMedia: MediaDto | null = null;
+  private portraitMediaId: string | null = null;
 
   constructor(private readonly actorsDatastore: ActorsDatastore,
               private router: Router,
@@ -44,7 +44,7 @@ export class EditCharacterComponent implements OnInit, OnDestroy {
     const toUpdate = new CharacterUpdateDto();
     toUpdate.name = this.actorForm.get('name')?.value ?? '';
     toUpdate.descriptionMarkdown = this.actor.descriptionMarkdown;
-    toUpdate.portraitMediaId = this.portraitMedia?.id;
+    toUpdate.portraitMediaId = this.portraitMediaId;
     await this.actorsDatastore.saveCharacter(toUpdate, this.actor.id);
     await this.close();
   }
@@ -64,6 +64,7 @@ export class EditCharacterComponent implements OnInit, OnDestroy {
 
       if (id) {
         this.actor = this.actorsDatastore.getCharacter(id);
+        this.portraitMediaId = this.actor.portraitMediaId ?? null;
       } else {
         this.actor = new CharacterDto();
       }
@@ -77,7 +78,7 @@ export class EditCharacterComponent implements OnInit, OnDestroy {
   }
 
   mediaPicked(media: MediaDto) {
-    this.portraitMedia = media;
+    this.portraitMediaId = media.id;
     this._actor.portraitMediaId = media.id;
   }
 
