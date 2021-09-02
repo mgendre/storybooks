@@ -1,5 +1,5 @@
-import {Component, Input, OnDestroy} from "@angular/core";
-import {MediaDto, MediaStorageType} from "../../services/api.generated.clients";
+import {Component, Inject, Input, OnDestroy} from "@angular/core";
+import {BASE_URL, MediaDto, MediaStorageType} from "../../services/api.generated.clients";
 import {MediaDatastore} from "../../datastores/MediaDatastore";
 import {Subscription} from "rxjs";
 
@@ -41,7 +41,8 @@ export class MediaRendererComponent implements OnDestroy {
 
   subscriptions: Subscription[] = [];
 
-  constructor(private readonly mediaDatastore: MediaDatastore) {
+  constructor(private readonly mediaDatastore: MediaDatastore,
+              @Inject(BASE_URL) private readonly baseUrl: string) {
     this.subscriptions.push(this.mediaDatastore.mediaItems.subscribe(() => {
       this.reloadMedia();
     }));
@@ -49,7 +50,7 @@ export class MediaRendererComponent implements OnDestroy {
 
   private createUrl() {
     if (this._mediaToRender?.storageType === MediaStorageType.Document) {
-      this.imgUrl = `/api/campaigns/${this._mediaToRender?.campaignId}/media/${this._mediaToRender?.id}/download`;
+      this.imgUrl = `${this.baseUrl}/api/campaigns/${this._mediaToRender?.campaignId}/media/${this._mediaToRender?.id}/download`;
     } else {
       this.imgUrl = this._mediaToRender?.externalUri ?? '';
     }
