@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoryBooks.Models", "src\St
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoryBooks.DocumentLib", "src\StoryBooks.DocumentLib\StoryBooks.DocumentLib.csproj", "{509F921C-8F37-41BD-833B-0ECB5B8319B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoryBooks.Shared", "StoryBooks.Shared\StoryBooks.Shared.csproj", "{1E654267-7204-4A40-A95E-D51AD8ADC6F2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoryBooks.Shared", "src\StoryBooks.Shared\StoryBooks.Shared.csproj", "{1E654267-7204-4A40-A95E-D51AD8ADC6F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

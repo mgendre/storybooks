@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +11,7 @@ using Microsoft.Net.Http.Headers;
 using StoryBooks.DocumentLib.Business;
 using StoryBooks.DocumentLib.Dto;
 using StoryBooks.DocumentLib.Service;
-using ControllerBase = StoryBooks.Api.Controllers.ControllerBase;
+using ControllerBase = StoryBooks.Shared.Controllers.ControllerBase;
 
 namespace StoryBooks.DocumentLib.Controllers
 {

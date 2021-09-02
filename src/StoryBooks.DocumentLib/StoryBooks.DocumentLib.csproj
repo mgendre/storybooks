@@ -10,6 +10,7 @@
     <ItemGroup>
         <PackageReference Include="Azure.Storage.Blobs" Version="12.9.1" />
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+        <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.20.1" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
@@ -17,12 +18,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\..\StoryBooks.Shared\StoryBooks.Shared.csproj" />
         <ProjectReference Include="..\StoryBooks.Models\StoryBooks.Models.csproj" />
+        <ProjectReference Include="..\StoryBooks.Shared\StoryBooks.Shared.csproj" />
     </ItemGroup>
 
 </Project>

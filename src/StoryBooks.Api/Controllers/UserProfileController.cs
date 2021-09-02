@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StoryBooks.Infra.Controllers.Dto;
 using StoryBooks.Shared.UserProfile;
+using ControllerBase = StoryBooks.Shared.Controllers.ControllerBase;
 
 namespace StoryBooks.Api.Controllers
 {

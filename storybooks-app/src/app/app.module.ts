@@ -35,6 +35,8 @@ import {TabViewModule} from "primeng/tabview";
 import {AutoCompleteModule} from "primeng/autocomplete";
 import {PreventDefaultEnter} from "./shared/Utils/prevent-default.directive";
 import {ActorPreviewComponent} from "./components/actors/app.actor-preview";
+import {BASE_URL} from "./services/api.generated.clients";
+import {environment} from "../environments/environment";
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -109,6 +111,9 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     },
     {
       provide: ErrorHandler, useClass: AppErrorHandler, deps: [MessageService, TranslateService, NGXLogger, NgZone]
+    },
+    {
+      provide: BASE_URL, useValue: environment.baseUrl
     },
     ConfirmationService,
     MessageService

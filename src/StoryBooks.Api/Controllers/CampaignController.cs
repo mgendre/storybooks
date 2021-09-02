@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using StoryBooks.Api.Business.Campaign;
 using StoryBooks.Api.Business.Scenario;
 using StoryBooks.Api.Dto;
+using ControllerBase = StoryBooks.Shared.Controllers.ControllerBase;
 
 namespace StoryBooks.Api.Controllers
 {

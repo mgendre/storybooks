@@ -35,7 +35,7 @@
     </Target>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\StoryBooks.Shared\StoryBooks.Shared.csproj" />
+        <ProjectReference Include="..\StoryBooks.Shared\StoryBooks.Shared.csproj" />
         <ProjectReference Include="..\StoryBooks.DocumentLib\StoryBooks.DocumentLib.csproj" />
         <ProjectReference Include="..\StoryBooks.Models\StoryBooks.Models.csproj" />
     </ItemGroup>

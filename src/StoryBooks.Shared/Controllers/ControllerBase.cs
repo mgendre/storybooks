@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using StoryBooks.Infra.Controllers.Dto;
 using StoryBooks.Shared.UserProfile;
 
-namespace StoryBooks.Api.Controllers
+namespace StoryBooks.Shared.Controllers
 {
     public abstract class ControllerBase
     {
